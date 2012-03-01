@@ -26,11 +26,7 @@ public class NumberPickerTests extends TestCase {
 		
 		// Test the entire size
 		for(int i = 1; i <= NumberPickerSize; i += 1) {
-			try {
-				numberPicker.GetNext();
-			} catch (Throwable t) {
-				fail("GetNext through unexpected exception.");
-			}
+			numberPicker.GetNext();
 			assertEquals(NumberPickerSize - i, numberPicker.GetRemaining());
 		}
 	}
@@ -45,28 +41,17 @@ public class NumberPickerTests extends TestCase {
 		Set<Integer> receivedIntegers = new HashSet<Integer>();
 		
 		for(int i = 0; i < NumberPickerSize; i += 1) {
-			try {
-				int receivedInteger = this.numberPicker.GetNext();
-				
-				// Assert that the integer we got out is in the correct range
-				assert(receivedInteger > 0 && receivedInteger <= NumberPickerSize);
-				
-				// If the insertion into the set fails, then the class is bad.
-				assert(receivedIntegers.add(receivedInteger));
-				
-			} catch (Throwable t) {
-				// If an exception was thrown... then bad
-				fail("GetNext through unexpected exception.");
-			}
+			int receivedInteger = this.numberPicker.GetNext();
+			
+			// Assert that the integer we got out is in the correct range
+			assert(receivedInteger > 0 && receivedInteger <= NumberPickerSize);
+			
+			// If the insertion into the set fails, then the class is bad.
+			assert(receivedIntegers.add(receivedInteger));
 		}
 		
 		// Make sure that the numberPicker throws an exception when empty
-		try {
-			this.numberPicker.GetNext();
-			fail("Failed to Throw Exception when empty.");
-		} catch(Exception e) {
-			// Everything is OK!
-		}
+		assertEquals(-1, this.numberPicker.GetNext());
 	}
 
 	@Test
@@ -79,12 +64,8 @@ public class NumberPickerTests extends TestCase {
 		assertEquals(NumberPickerSize, this.numberPicker.GetRemaining());
 		
 		// Eat two numbers
-		try {
-			numberPicker.GetNext();
-			numberPicker.GetNext();
-		} catch (Throwable t) {
-			fail("GetNext through unexpected exception.");
-		}
+		numberPicker.GetNext();
+		numberPicker.GetNext();
 		
 		// reset and check
 		this.numberPicker.Reset();
