@@ -22,21 +22,19 @@ public class SignNumber {
 	public Sign getSign() {
 		return this.sign;
 	}
-	public void setSign(Sign sign) {
-		this.sign = sign;
-	}
 	
 	private int number;
 	public int getNumber() {
 		return this.number;
 	}
-	public void setNumber(int number) {
-		this.number = number;
-	}
 	
 	@Override
-	public String toString()
-    {
+	public String toString() {
         return this.number + " " + SignNumber.toSignString(this.sign);
     }
+	
+	public SignNumber(Sign sign, int number) {
+		this.sign = sign;
+		this.number = number;
+	}
 }
