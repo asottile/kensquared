@@ -15,10 +15,10 @@ public class NumberPicker {
 		return this.length - this.attempted;
 	}
 
-    public int GetNext() throws Exception
+    public int GetNext()
     {
         if (this.attempted == this.length)
-            throw new Exception("None Left!");
+            return -1;
 
         int lastCardIndex = this.length - this.attempted - 1;
 
