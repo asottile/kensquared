@@ -3,10 +3,46 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-
-    <TextView
+
+    <LinearLayout
+        android:id="@+id/candidatesLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello" />
+        android:layout_weight="0.09" >
+
+        <Button
+            android:id="@+id/allButton"
+            android:layout_width="44dp"
+            android:layout_height="34dp"
+            android:text="@string/plus" />
+
+        <Button
+            android:id="@+id/noneButton"
+            android:layout_width="44dp"
+            android:layout_height="34dp"
+            android:text="@string/minus" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/gameLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="145dp"
+        android:layout_weight="0.67" >
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/valuesLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/clearButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/clear" />
+
+    </LinearLayout>
 
 </LinearLayout>

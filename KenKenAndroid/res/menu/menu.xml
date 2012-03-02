@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/newGame" android:title="@string/newGame"></item>
+    <item android:id="@+id/preferences" android:title="@string/preferences"></item>
+    <item android:id="@+id/statistics" android:title="@string/statistics"></item>
+    <item android:id="@+id/about" android:title="@string/about"></item>
+    
+
+</menu>
