@@ -2,24 +2,32 @@ package com.anthonysottile.kenken.cages;
 
 import android.graphics.Point;
 
-import com.anthonysottile.kenken.ICageFactory;
-import com.anthonysottile.kenken.KenKenGame;
+import com.anthonysottile.kenken.*;
 
 public class ThreeSquareVerticalFactory implements ICageFactory {
 
-	public boolean CanFit(KenKenGame game, Point location) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    private static ICageFactory factoryInstance;
 
-	public void ApplyCage(KenKenGame game, Point location) {
-		// TODO Auto-generated method stub
+    public static ICageFactory GetInstance() {
+        if (factoryInstance == null)
+            factoryInstance = new ThreeSquareVerticalFactory();
 
-	}
+        return factoryInstance;
+    }
 
-	public static ICageFactory GetInstance() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
+    public boolean CanFit(KenKenGame game, Point location) {
+        Point secondSquare = Points.add(location, Points.Down);
+        Point thirdSquare = Points.add(secondSquare, Points.Down);
+
+        return
+            game.squareIsValid(location) &&
+            game.squareIsValid(secondSquare) &&
+            game.squareIsValid(thirdSquare);
+    }
+
+    public void ApplyCage(KenKenGame game, Point location) {
+        game.getCages().add(new ThreeSquareLineCage(game, location, false));
+    }
+
+    private ThreeSquareVerticalFactory() { }
 }
