@@ -72,8 +72,8 @@ public class KenKenGame {
 		}
 		
 		this.cages = new ArrayList<ICage>();
-		
-		// TODO: cage generation
+
+		CageGenerator.Generate(this);
 		
 		this.gameStartTime = new Date();
 	}
