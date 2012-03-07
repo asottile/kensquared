@@ -95,6 +95,34 @@ public class UserSquare {
 	public void removeChangedEventHandler(IGenericEventHandler handler) {
 		this.changedHandlers.remove(handler);
 	}
+
+	public class ValueSetEventArgs {
+		
+		private int x;
+		public int getX() {
+			return this.x;
+		}
+		
+		private int y;
+		public int getY() {
+			return this.y;
+		}
+		
+		private int value;
+		public int getValue() {
+			return this.value;
+		}
+		
+		public ValueSetEventArgs(int x, int y, int value) {
+			this.x = x;
+			this.y = y;
+			this.value = value;
+		}
+	}
+	
+	public interface IValueSetEventHandler {
+		public void HandleValueSetEvent(Object sender, ValueSetEventArgs e);
+	}
 	
 	private List<IValueSetEventHandler> valueSetHandlers = new ArrayList<IValueSetEventHandler>();
 	private void triggerValueSetEvent(ValueSetEventArgs e) {

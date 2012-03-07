@@ -10,5 +10,6 @@
     <string name="preferences">Preferences</string>
     <string name="statistics">Statistics</string>
     <string name="about">About</string>
+    <string name="ok">OK</string>
 
 </resources>
