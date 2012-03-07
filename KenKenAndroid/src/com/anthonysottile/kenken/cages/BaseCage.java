@@ -1,5 +1,6 @@
 package com.anthonysottile.kenken.cages;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.anthonysottile.kenken.RenderLine;
@@ -10,7 +11,7 @@ import android.graphics.Point;
 public abstract class BaseCage implements ICage {
 
 	protected SignNumber signNumber;
-	protected List<RenderLine> renderLines;
+	protected List<RenderLine> renderLines = new ArrayList<RenderLine>();
 	protected Point signLocation;
 	
 	public SignNumber getSignNumber() {

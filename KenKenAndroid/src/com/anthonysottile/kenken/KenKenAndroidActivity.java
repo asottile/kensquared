@@ -1,5 +1,7 @@
 package com.anthonysottile.kenken;
 
+import com.anthonysottile.kenken.ui.*;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -10,6 +12,8 @@ import android.view.MenuItem;
 
 public class KenKenAndroidActivity extends Activity {
 
+	private static final String Preferences = "com.anthonysottile.kenken";
+	
 	private void showMessageBox(String message) {
 		AlertDialog ad = new AlertDialog.Builder(this).create();
 		ad.setCancelable(false);
@@ -27,6 +31,9 @@ public class KenKenAndroidActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
+        // Give a reference to settings
+        SettingsProvider.Initialize(this.getSharedPreferences(Preferences, 0));
     }
     
     @Override
@@ -38,6 +45,8 @@ public class KenKenAndroidActivity extends Activity {
     
     private void newGame() {
     	this.showMessageBox("New Game Clicked");
+    	((GameComponent)this.findViewById(R.id.gameComponent))
+    		.NewGame(SettingsProvider.GetGameSize());
     }
     
     private void showPreferences() {

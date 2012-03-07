@@ -29,6 +29,11 @@
         android:layout_width="fill_parent"
         android:layout_height="145dp"
         android:layout_weight="0.67" >
+
+        <com.anthonysottile.kenken.ui.GameComponent
+            android:id="@+id/gameComponent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
 
     </FrameLayout>
 

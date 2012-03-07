@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.anthonysottile.kenken.KenKenGame;
 import com.anthonysottile.kenken.RenderLine;
+import com.anthonysottile.kenken.SettingsProvider;
 import com.anthonysottile.kenken.SquareDrawingDimensions;
 import com.anthonysottile.kenken.cages.ICage;
 
@@ -13,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.util.AttributeSet;
 import android.view.View;
 
 public class GameComponent extends View implements KenKenSquare.IRequestRedrawEventHandler {
@@ -86,16 +88,19 @@ public class GameComponent extends View implements KenKenSquare.IRequestRedrawEv
 	}
 
 	public void Clear() {
-		// remove event stuff
-		int order = this.game.getLatinSquare().getOrder();
-		for(int i = 0; i < order; i += 1) {
-			for(int j = 0; j < order; j += 1) {
-				this.uiSquares[i][j].clearChangedEventHandlers();
-			}
-		}
 		
-		this.game = null;
-		this.uiSquares = null;
+		if(this.game != null) {
+			// remove event stuff
+			int order = this.game.getLatinSquare().getOrder();
+			for(int i = 0; i < order; i += 1) {
+				for(int j = 0; j < order; j += 1) {
+					this.uiSquares[i][j].clearChangedEventHandlers();
+				}
+			}
+			
+			this.game = null;
+			this.uiSquares = null;
+		}
 		
 		// Invalidate the drawn canvas
 		this.postInvalidate();
@@ -108,12 +113,18 @@ public class GameComponent extends View implements KenKenSquare.IRequestRedrawEv
 		this.postInvalidate();
 	}
 	
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		this.setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
+	}
 	
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
+				
+		canvas.drawColor(UIConstants.GetBackgroundColor().getColor());
 		
-		int order = this.game.getLatinSquare().getOrder();
+		int order = SettingsProvider.GetGameSize();
 		int boardWidth = this.getWidth();
 		int boardHeight = this.getHeight();
 		// Adjust height / width for borders
@@ -146,44 +157,48 @@ public class GameComponent extends View implements KenKenSquare.IRequestRedrawEv
 			gridLinesDrawn = true;
 		}
 		
-		// Draw Cages
-		if(!cagesDrawn) {
-			
-			List<ICage> cages = this.game.getCages();
-			int cagesSize = cages.size();
-			for(int i = 0; i < cagesSize; i += 1) {
-				ICage cage = cages.get(i);
-				List<RenderLine> renderLines = cage.getRenderLines();
-				int renderLinesSize = renderLines.size();
-				for(int j = 0; j < renderLinesSize; j += 1) {
-					RenderLine line = renderLines.get(j);
-
-                    int startX = line.getPosition().x * (squareWidth + UIConstants.BorderWidth);
-                    int startY = line.getPosition().y * (squareHeight + UIConstants.BorderWidth);
-
-                    int endX = startX;
-                    int endY = startY;
-
-                    if (line.getHorizontal()) {
-                        endX += line.getLength() * (squareWidth + UIConstants.BorderWidth);
-                    } else {
-                        endY += line.getLength() * (squareHeight + UIConstants.BorderWidth);
-                    }
-                    
-                    canvas.drawLine(startX, startY, endX, endY, UIConstants.GetCageColor());				}
-			}
-			cagesDrawn = true;
-		}
+		if(game != null) {
 		
-		// draw the squares themselves
-		for(int i = 0; i < order; i += 1) {
-			for(int j = 0; j < order; j += 1) {
-				this.uiSquares[i][j].drawSquare(canvas);
+			// Draw Cages
+			if(!cagesDrawn) {
+				
+				List<ICage> cages = this.game.getCages();
+				int cagesSize = cages.size();
+				for(int i = 0; i < cagesSize; i += 1) {
+					ICage cage = cages.get(i);
+					List<RenderLine> renderLines = cage.getRenderLines();
+					int renderLinesSize = renderLines.size();
+					for(int j = 0; j < renderLinesSize; j += 1) {
+						RenderLine line = renderLines.get(j);
+	
+	                    int startX = line.getPosition().x * (squareWidth + UIConstants.BorderWidth);
+	                    int startY = line.getPosition().y * (squareHeight + UIConstants.BorderWidth);
+	
+	                    int endX = startX;
+	                    int endY = startY;
+	
+	                    if (line.getHorizontal()) {
+	                        endX += line.getLength() * (squareWidth + UIConstants.BorderWidth);
+	                    } else {
+	                        endY += line.getLength() * (squareHeight + UIConstants.BorderWidth);
+	                    }
+	                    
+	                    canvas.drawLine(startX, startY, endX, endY, UIConstants.GetCageColor());				}
+				}
+				cagesDrawn = true;
+			}
+			
+			// draw the squares themselves
+			for(int i = 0; i < order; i += 1) {
+				for(int j = 0; j < order; j += 1) {
+					this.uiSquares[i][j].drawSquare(canvas);
+				}
 			}
 		}
 	}
 
-	public GameComponent(Context context) {
-		super(context);
+	public GameComponent(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		this.postInvalidate();
 	}	
 }
