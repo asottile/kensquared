@@ -1,4 +1,4 @@
-package com.anthonysottile.kenken;
+package com.anthonysottile.kenken.ui;
 
 import android.graphics.Color;
 import android.graphics.Paint;

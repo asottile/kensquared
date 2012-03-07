@@ -1,4 +1,6 @@
-package com.anthonysottile.kenken;
+package com.anthonysottile.kenken.cages;
+
+import com.anthonysottile.kenken.KenKenGame;
 
 import android.graphics.Point;
 

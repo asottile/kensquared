@@ -1,6 +1,7 @@
-package com.anthonysottile.kenken;
+package com.anthonysottile.kenken.cages;
 
 import java.util.Random;
+
 
 public class CageFactorySet {
 

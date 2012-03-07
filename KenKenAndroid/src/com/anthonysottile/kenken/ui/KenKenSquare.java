@@ -1,7 +1,10 @@
-package com.anthonysottile.kenken;
+package com.anthonysottile.kenken.ui;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.anthonysottile.kenken.SquareDrawingDimensions;
+import com.anthonysottile.kenken.UserSquare;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;

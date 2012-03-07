@@ -1,6 +1,9 @@
-package com.anthonysottile.kenken;
+package com.anthonysottile.kenken.cages;
 
 import java.util.List;
+
+import com.anthonysottile.kenken.RenderLine;
+import com.anthonysottile.kenken.SignNumber;
 
 import android.graphics.Point;
 

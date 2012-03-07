@@ -2,7 +2,6 @@ package com.anthonysottile.kenken.cages;
 
 import android.graphics.Point;
 
-import com.anthonysottile.kenken.ICageFactory;
 import com.anthonysottile.kenken.KenKenGame;
 
 public class OneSquareCageFactory implements ICageFactory {

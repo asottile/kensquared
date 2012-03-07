@@ -1,8 +1,11 @@
-package com.anthonysottile.kenken;
+package com.anthonysottile.kenken.ui;
 
 import java.util.List;
 
-import com.anthonysottile.kenken.KenKenSquare.RequestRedrawEventArgs;
+import com.anthonysottile.kenken.KenKenGame;
+import com.anthonysottile.kenken.RenderLine;
+import com.anthonysottile.kenken.SquareDrawingDimensions;
+import com.anthonysottile.kenken.cages.ICage;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -101,8 +104,7 @@ public class GameComponent extends View implements KenKenSquare.IRequestRedrawEv
 	boolean gridLinesDrawn = false;
 	boolean cagesDrawn = false;
 	
-	public void HandleRequestRedrawEvent(Object sender, RequestRedrawEventArgs e) {
-		// TODO: for now request a full redraw
+	public void HandleRequestRedrawEvent(Object sender, KenKenSquare.RequestRedrawEventArgs e) {
 		this.postInvalidate();
 	}
 	

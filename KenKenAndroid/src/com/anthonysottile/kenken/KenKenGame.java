@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.anthonysottile.kenken.cages.CageGenerator;
+import com.anthonysottile.kenken.cages.ICage;
+
 import android.graphics.Point;
 
 public class KenKenGame {
