@@ -19,6 +19,8 @@ import android.view.View;
 
 public class GameComponent extends View implements KenKenSquare.IRequestRedrawEventHandler {
 
+	private final static int DefaultSize = 100;
+	
 	private KenKenSquare[][] uiSquares = null;
 	
 	private KenKenGame game = null;
@@ -32,8 +34,8 @@ public class GameComponent extends View implements KenKenSquare.IRequestRedrawEv
 		
 		this.game = new KenKenGame(order);
 		
-		int boardWidth = this.getWidth();
-		int boardHeight = this.getHeight();
+		int boardWidth = this.getMeasuredWidth();
+		int boardHeight = this.getMeasuredHeight();
 		// Adjust height / width for borders
 		int borders = UIConstants.BorderWidth * (order + 1);
 		boardWidth -= borders;
@@ -105,17 +107,37 @@ public class GameComponent extends View implements KenKenSquare.IRequestRedrawEv
 		// Invalidate the drawn canvas
 		this.postInvalidate();
 	}
-	
-	boolean gridLinesDrawn = false;
-	boolean cagesDrawn = false;
-	
+		
 	public void HandleRequestRedrawEvent(Object sender, KenKenSquare.RequestRedrawEventArgs e) {
 		this.postInvalidate();
 	}
 	
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		this.setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+		
+        int width = -1, height = -1;
+        if (widthMode == MeasureSpec.EXACTLY) {
+        	width = widthSize;
+        } else {
+        	width = GameComponent.DefaultSize;
+        	if (widthMode == MeasureSpec.AT_MOST && width > widthSize ) {
+        		width = widthSize;
+        	}
+        }
+        if (heightMode == MeasureSpec.EXACTLY) {
+        	height = heightSize;
+        } else {
+        	height = GameComponent.DefaultSize;
+        	if (heightMode == MeasureSpec.AT_MOST && height > heightSize ) {
+        		height = heightSize;
+        	}
+        }
+        
+		this.setMeasuredDimension(width, height);
 	}
 	
 	@Override
@@ -125,8 +147,9 @@ public class GameComponent extends View implements KenKenSquare.IRequestRedrawEv
 		canvas.drawColor(UIConstants.GetBackgroundColor().getColor());
 		
 		int order = SettingsProvider.GetGameSize();
-		int boardWidth = this.getWidth();
-		int boardHeight = this.getHeight();
+				
+		int boardWidth = this.getMeasuredWidth();
+		int boardHeight = this.getMeasuredHeight();
 		// Adjust height / width for borders
 		int borders = UIConstants.BorderWidth * (order + 1);
 		boardWidth -= borders;
@@ -136,56 +159,48 @@ public class GameComponent extends View implements KenKenSquare.IRequestRedrawEv
 		int squareHeight = boardHeight / order;
 			
 		// Draw grids and cages first
-		if(!gridLinesDrawn) {
+		for(int i = 0; i <= order; i += 1) {
+			// horizontal grid line
+			canvas.drawLine(
+				0, i * (squareHeight + UIConstants.BorderWidth),
+				this.getMeasuredWidth(), i * (squareHeight + UIConstants.BorderWidth),
+				UIConstants.GetGridColor()
+			);
 			
-			for(int i = 0; i <= order; i += 1) {
-				// horizontal grid line
-				canvas.drawLine(
-					0, i * (squareHeight + UIConstants.BorderWidth),
-					this.getWidth(), i * (squareHeight + UIConstants.BorderWidth),
-					UIConstants.GetGridColor()
-				);
-				
-				// vertical grid line
-				canvas.drawLine(
-					i * (squareWidth + UIConstants.BorderWidth), 0,
-					i * (squareWidth + UIConstants.BorderWidth), this.getHeight(),
-					UIConstants.GetGridColor()
-				);
-			}
-			
-			gridLinesDrawn = true;
+			// vertical grid line
+			canvas.drawLine(
+				i * (squareWidth + UIConstants.BorderWidth), 0,
+				i * (squareWidth + UIConstants.BorderWidth), this.getMeasuredHeight(),
+				UIConstants.GetGridColor()
+			);
 		}
 		
 		if(game != null) {
 		
 			// Draw Cages
-			if(!cagesDrawn) {
-				
-				List<ICage> cages = this.game.getCages();
-				int cagesSize = cages.size();
-				for(int i = 0; i < cagesSize; i += 1) {
-					ICage cage = cages.get(i);
-					List<RenderLine> renderLines = cage.getRenderLines();
-					int renderLinesSize = renderLines.size();
-					for(int j = 0; j < renderLinesSize; j += 1) {
-						RenderLine line = renderLines.get(j);
-	
-	                    int startX = line.getPosition().x * (squareWidth + UIConstants.BorderWidth);
-	                    int startY = line.getPosition().y * (squareHeight + UIConstants.BorderWidth);
-	
-	                    int endX = startX;
-	                    int endY = startY;
-	
-	                    if (line.getHorizontal()) {
-	                        endX += line.getLength() * (squareWidth + UIConstants.BorderWidth);
-	                    } else {
-	                        endY += line.getLength() * (squareHeight + UIConstants.BorderWidth);
-	                    }
-	                    
-	                    canvas.drawLine(startX, startY, endX, endY, UIConstants.GetCageColor());				}
-				}
-				cagesDrawn = true;
+			List<ICage> cages = this.game.getCages();
+			int cagesSize = cages.size();
+			for(int i = 0; i < cagesSize; i += 1) {
+				ICage cage = cages.get(i);
+				List<RenderLine> renderLines = cage.getRenderLines();
+				int renderLinesSize = renderLines.size();
+				for(int j = 0; j < renderLinesSize; j += 1) {
+					RenderLine line = renderLines.get(j);
+
+                    int startX = line.getPosition().x * (squareWidth + UIConstants.BorderWidth);
+                    int startY = line.getPosition().y * (squareHeight + UIConstants.BorderWidth);
+
+                    int endX = startX;
+                    int endY = startY;
+
+                    if (line.getHorizontal()) {
+                        endX += line.getLength() * (squareWidth + UIConstants.BorderWidth);
+                    } else {
+                        endY += line.getLength() * (squareHeight + UIConstants.BorderWidth);
+                    }
+                    
+                    canvas.drawLine(startX, startY, endX, endY, UIConstants.GetCageColor());				
+                }
 			}
 			
 			// draw the squares themselves

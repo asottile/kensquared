@@ -7,7 +7,6 @@ import android.graphics.Point;
 import com.anthonysottile.kenken.KenKenGame;
 import com.anthonysottile.kenken.Sign;
 import com.anthonysottile.kenken.SignNumber;
-import com.anthonysottile.kenken.cages.*;
 
 public final class CageGenerator {
 	

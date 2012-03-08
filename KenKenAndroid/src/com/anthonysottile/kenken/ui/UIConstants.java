@@ -24,7 +24,7 @@ public final class UIConstants {
 		if(UIConstants.cageColor == null) {
 			UIConstants.cageColor = new Paint();
 			UIConstants.cageColor.setColor(Color.rgb(0x00, 0x00, 0x00));
-			UIConstants.gridColor.setStrokeWidth(2);
+			UIConstants.gridColor.setStrokeWidth(3);
 			UIConstants.gridColor.setStyle(Style.STROKE);
 		}
 		return UIConstants.cageColor;
@@ -52,7 +52,7 @@ public final class UIConstants {
 	public static Paint GetBackgroundColor() {
 		if(UIConstants.backgroundColor == null) {
 			UIConstants.backgroundColor = new Paint();
-			UIConstants.backgroundColor.setColor(Color.rgb(0xff, 0xff, 0xff));
+			UIConstants.backgroundColor.setColor(Color.rgb(0x33, 0xff, 0xff));
 		}
 		return UIConstants.backgroundColor;
 	}
