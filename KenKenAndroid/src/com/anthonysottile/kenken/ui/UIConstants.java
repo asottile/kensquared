@@ -2,7 +2,6 @@ package com.anthonysottile.kenken.ui;
 
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Paint.Style;
 
 public final class UIConstants {
 
@@ -13,8 +12,6 @@ public final class UIConstants {
 		if(UIConstants.gridColor == null) {
 			UIConstants.gridColor = new Paint();
 			UIConstants.gridColor.setColor(Color.rgb(0xCC, 0xCC, 0xCC));
-			UIConstants.gridColor.setStrokeWidth(2);
-			UIConstants.gridColor.setStyle(Style.STROKE);
 		}
 		return UIConstants.gridColor;
 	}
@@ -24,8 +21,6 @@ public final class UIConstants {
 		if(UIConstants.cageColor == null) {
 			UIConstants.cageColor = new Paint();
 			UIConstants.cageColor.setColor(Color.rgb(0x00, 0x00, 0x00));
-			UIConstants.gridColor.setStrokeWidth(3);
-			UIConstants.gridColor.setStyle(Style.STROKE);
 		}
 		return UIConstants.cageColor;
 	}
@@ -52,10 +47,10 @@ public final class UIConstants {
 	public static Paint GetBackgroundColor() {
 		if(UIConstants.backgroundColor == null) {
 			UIConstants.backgroundColor = new Paint();
-			UIConstants.backgroundColor.setColor(Color.rgb(0x33, 0xff, 0xff));
+			UIConstants.backgroundColor.setColor(Color.rgb(0xff, 0xff, 0xff));
 		}
 		return UIConstants.backgroundColor;
-	}
+	}	
 	
 	private static Paint markedIncorrectColor = null;
 	public static Paint GetMarkedIncorrectColor() {

@@ -44,7 +44,6 @@ public class KenKenAndroidActivity extends Activity {
     }
     
     private void newGame() {
-    	this.showMessageBox("New Game Clicked");
     	((GameComponent)this.findViewById(R.id.gameComponent))
     		.NewGame(SettingsProvider.GetGameSize());
     }

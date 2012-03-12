@@ -52,7 +52,7 @@ public class GameComponent extends View implements KenKenSquare.IRequestRedrawEv
 				int left = UIConstants.BorderWidth * (i + 1) + i * squareWidth;
 				int top = UIConstants.BorderWidth * (j + 1) + j * squareHeight;
 				int right = left + squareWidth;
-				int bottom = left + squareHeight;
+				int bottom = top + squareHeight;
 				
 				Rect squareRect = new Rect(left, top, right, bottom);
 				Point cageTextPosition = new Point(left + 5, top + 5);
@@ -84,7 +84,7 @@ public class GameComponent extends View implements KenKenSquare.IRequestRedrawEv
 				this.uiSquares[i][j].addRequestRedrawEventHandler(this);
 			}
 		}
-
+		
 		// Invalidate the drawn canvas
 		this.postInvalidate();
 	}
@@ -144,7 +144,7 @@ public class GameComponent extends View implements KenKenSquare.IRequestRedrawEv
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 				
-		canvas.drawColor(UIConstants.GetBackgroundColor().getColor());
+		//canvas.drawColor(UIConstants.GetBackgroundColor().getColor());
 		
 		int order = SettingsProvider.GetGameSize();
 				
@@ -157,20 +157,23 @@ public class GameComponent extends View implements KenKenSquare.IRequestRedrawEv
 		
 		int squareWidth = boardWidth / order;
 		int squareHeight = boardHeight / order;
+		
+		int drawnBoardWidth = order * squareWidth + (order + 1) * UIConstants.BorderWidth;
+		int drawnBoardHeight = order * squareHeight + (order + 1) * UIConstants.BorderWidth;
 			
 		// Draw grids and cages first
 		for(int i = 0; i <= order; i += 1) {
 			// horizontal grid line
-			canvas.drawLine(
+			canvas.drawRect(
 				0, i * (squareHeight + UIConstants.BorderWidth),
-				this.getMeasuredWidth(), i * (squareHeight + UIConstants.BorderWidth),
+				drawnBoardWidth, i * squareHeight + (i + 1) * UIConstants.BorderWidth,
 				UIConstants.GetGridColor()
 			);
 			
 			// vertical grid line
-			canvas.drawLine(
+			canvas.drawRect( 
 				i * (squareWidth + UIConstants.BorderWidth), 0,
-				i * (squareWidth + UIConstants.BorderWidth), this.getMeasuredHeight(),
+				i * squareWidth + (i + 1) * UIConstants.BorderWidth, drawnBoardHeight,
 				UIConstants.GetGridColor()
 			);
 		}
@@ -199,7 +202,14 @@ public class GameComponent extends View implements KenKenSquare.IRequestRedrawEv
                         endY += line.getLength() * (squareHeight + UIConstants.BorderWidth);
                     }
                     
-                    canvas.drawLine(startX, startY, endX, endY, UIConstants.GetCageColor());				
+                    canvas.drawRect(
+                		startX, startY,
+                		endX + UIConstants.BorderWidth, endY + UIConstants.BorderWidth,
+                		UIConstants.GetCageColor()
+            		);
+                    
+                    
+                    //canvas.drawLine(startX, startY, endX, endY, UIConstants.GetCageColor());				
                 }
 			}
 			
