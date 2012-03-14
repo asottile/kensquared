@@ -11,5 +11,7 @@
     <string name="statistics">Statistics</string>
     <string name="about">About</string>
     <string name="ok">OK</string>
+    <string name="preference_category">Game Preferences</string>
+    <string name="gameSize">Game Size</string>
 
 </resources>

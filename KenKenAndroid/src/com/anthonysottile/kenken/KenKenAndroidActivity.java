@@ -5,6 +5,7 @@ import com.anthonysottile.kenken.ui.*;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,7 +50,8 @@ public class KenKenAndroidActivity extends Activity {
     }
     
     private void showPreferences() {
-    	this.showMessageBox("Show Preferences Clicked");
+    	Intent settingsActivity = new Intent(getBaseContext(), KenKenPreferences.class);
+        startActivity(settingsActivity);
     }
     
     private void showStatistics() {

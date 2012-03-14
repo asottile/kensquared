@@ -2,6 +2,7 @@ package com.anthonysottile.kenken.ui;
 
 import java.util.List;
 
+import com.anthonysottile.kenken.IGenericEventHandler;
 import com.anthonysottile.kenken.KenKenGame;
 import com.anthonysottile.kenken.RenderLine;
 import com.anthonysottile.kenken.SettingsProvider;
@@ -17,7 +18,8 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 
-public class GameComponent extends View implements KenKenSquare.IRequestRedrawEventHandler {
+public class GameComponent extends View
+	implements KenKenSquare.IRequestRedrawEventHandler, IGenericEventHandler {
 
 	private final static int DefaultSize = 100;
 	
@@ -253,8 +255,17 @@ public class GameComponent extends View implements KenKenSquare.IRequestRedrawEv
 		}
 	}
 
+	public void HandleGenericEvent(Object sender) {
+		// Used to handle the SettingsProvider's set events
+		this.Clear();
+	}	
+	
 	public GameComponent(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		
+		// Attach to the event listener on the game size changed
+		SettingsProvider.AddGameSizeChangedEventListener(this);
+		
 		this.postInvalidate();
-	}	
+	}
 }
