@@ -28,6 +28,16 @@ public class GameComponent extends View implements KenKenSquare.IRequestRedrawEv
 		return this.game;
 	}
 	
+	private final int CageFontSizeBase = 24;
+	private int getCageTextFontSize(int order) {
+		return this.CageFontSizeBase - order;
+	}
+	
+	private final int ValueFontSizeBase = 30;
+	private int getValueTextFontSize(int order) {
+		return this.ValueFontSizeBase - order;
+	}
+	
 	public void NewGame(int order) {
 		
 		this.Clear();
@@ -54,16 +64,19 @@ public class GameComponent extends View implements KenKenSquare.IRequestRedrawEv
 				int right = left + squareWidth;
 				int bottom = top + squareHeight;
 				
+				int cageTextFontSize = this.getCageTextFontSize(order);
+				int valueTextFontSize = this.getValueTextFontSize(order);
+				
 				Rect squareRect = new Rect(left, top, right, bottom);
-				Point cageTextPosition = new Point(left + 5, top + 5);
-				int squareTextOffset = 15;
+				Point cageTextPosition = new Point(left + 5, top + cageTextFontSize);
+				int squareTextOffset = 5 + cageTextFontSize + valueTextFontSize;
 				
 				Paint cageTextPaint = new Paint();
-				cageTextPaint.setTextSize(12);
+				cageTextPaint.setTextSize(cageTextFontSize);
 				cageTextPaint.setColor(Color.rgb(0, 0, 0));
 				
 				Paint valueTextPaint = new Paint();
-				valueTextPaint.setTextSize(10);
+				valueTextPaint.setTextSize(valueTextFontSize);
 				valueTextPaint.setColor(Color.rgb(0, 0, 0));
 				
 				Paint candidateTextPaint = new Paint();
@@ -82,6 +95,24 @@ public class GameComponent extends View implements KenKenSquare.IRequestRedrawEv
 				
 				this.uiSquares[i][j] = new KenKenSquare(this.game.getUserSquares()[i][j], dimensions);
 				this.uiSquares[i][j].addRequestRedrawEventHandler(this);
+			}
+		}
+		
+		// Pass cage texts into the squares
+		List<ICage> cages = this.game.getCages();
+		int cagesSize = cages.size();
+		for(int i = 0; i < cagesSize; i += 1) {
+			ICage cage = cages.get(i);
+			Point location = cage.getSignLocation();
+			this.uiSquares[location.x][location.y].setCageText(cage.getSignNumber().toString());
+		}
+		
+		// Test values
+		for(int i = 0; i < order; i += 1) {
+			for(int j = 0; j < order; j += 1) {
+				this.uiSquares[i][j].getUserSquare().setValue(
+					this.game.getLatinSquare().getValues()[i][j]
+				);
 			}
 		}
 		

@@ -6,10 +6,10 @@ public final class SettingsProvider {
 
 	private static SharedPreferences preferences = null;
 	
-	private static int gameSize = 4;
+	private static int gameSize = 9;
 	
 	private static final String GameSize = "GameSize";
-	private static final int DefaultGameSize = 4;
+	private static final int DefaultGameSize = 9;
 	
 	
 	public static int GetGameSize() {
