@@ -256,7 +256,7 @@ public class GameComponent extends View
 	}
 
 	public void HandleGenericEvent(Object sender) {
-		// Used to handle the SettingsProvider's set events
+		// Used to handle the SettingsProvider's game size changed events
 		this.Clear();
 	}	
 	
