@@ -4,44 +4,17 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-
-    <LinearLayout
+    <com.anthonysottile.kenken.ui.CandidatesLayout
         android:id="@+id/candidatesLayout"
         android:layout_width="fill_parent"
         android:layout_height="32dp"
-        android:layout_weight="0" >
-
-        <Button
-            android:id="@+id/allButton"
-            android:layout_width="44dp"
-            android:layout_height="34dp"
-            android:text="@string/plus" />
-
-        <Button
-            android:id="@+id/noneButton"
-            android:layout_width="44dp"
-            android:layout_height="34dp"
-            android:text="@string/minus" />
-
-        <com.anthonysottile.kenken.ui.CustomButton
-            android:id="@+id/customButton1"
-            android:layout_width="20dp"
-            android:layout_height="28dp"
-            kenken:checked="true"
-            kenken:has_left_curve="true"
-            kenken:has_right_curve="true"
-            kenken:is_checkable="true"
-            kenken:text="@string/plus" />
-            
-
-    </LinearLayout>
-
+        android:layout_weight="0" />
     <FrameLayout
         android:id="@+id/gameLayout"
         android:layout_width="fill_parent"
         android:layout_height="145dp"
         android:layout_weight="1" >
-
+
         <com.anthonysottile.kenken.ui.GameComponent
             android:id="@+id/gameComponent"
             android:layout_width="fill_parent"

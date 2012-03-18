@@ -1,5 +1,10 @@
 package com.anthonysottile.kenken.ui;
 
+import java.util.ArrayList;
+import java.util.EventListener;
+import java.util.EventObject;
+import java.util.List;
+
 import com.anthonysottile.kenken.R;
 
 import android.content.Context;
@@ -16,8 +21,77 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public class CustomButton extends View {
-	
+
 	private final static int DefaultSize = 28;
+	
+	public class CheckChangedEvent extends EventObject {
+		
+		private static final long serialVersionUID = 5703235645865455757L;
+		
+		private boolean checked = false;
+		public boolean getChecked() {
+			return this.checked;
+		}
+		
+		public CheckChangedEvent(Object object, boolean checked) {
+			super(object);
+			this.checked = checked;
+		}
+	}
+	public interface CheckChangedListener extends EventListener {
+		
+		public void onCheckChanged(CheckChangedEvent event);
+	}
+	private List<CheckChangedListener> checkChangedListeners =
+			new ArrayList<CheckChangedListener>();
+	public void AddCheckChangedListener(CheckChangedListener listener) {
+		this.checkChangedListeners.add(listener);
+	}
+	public void RemoveCheckChangedListener(CheckChangedListener listener) {
+		this.checkChangedListeners.remove(listener);
+	}
+	public void ClearCheckChangedListeners() {
+		this.checkChangedListeners.clear();
+	}
+	private void triggerCheckChanged() {
+        CheckChangedEvent event = new CheckChangedEvent(this, this.checked);
+        
+        int size = this.checkChangedListeners.size();
+        for(int i = 0; i < size; i += 1) {
+        	this.checkChangedListeners.get(i).onCheckChanged(event);
+        }
+	}
+	
+	
+	public interface ClickListener extends EventListener {
+		
+		public void onClick(EventObject event);
+	}
+	private List<ClickListener> clickListeners = new ArrayList<ClickListener>();
+	public void AddClickListener(ClickListener listener) {
+		this.clickListeners.add(listener);
+	}
+	public void RemoveClickListener(ClickListener listener) {
+		this.clickListeners.remove(listener);
+	}
+	public void ClearClickListeners() {
+		this.clickListeners.clear();
+	}
+	private void triggerClick() {
+		EventObject event = new EventObject(this);
+		int size = this.clickListeners.size();
+		for(int i = 0; i < size; i += 1) {
+			this.clickListeners.get(i).onClick(event);
+		}
+	}
+	
+	private int value = 0;
+	public int getValue() {
+		return this.value;
+	}
+	public void setValue(int value) {
+		this.value = value;
+	}
 	
 	private boolean enabled = false;
 	public boolean getEnabled() {
@@ -74,7 +148,7 @@ public class CustomButton extends View {
 		if(this.checked != checked) {
 			this.checked = checked;
 			
-			// TODO: trigger check changed
+			this.triggerCheckChanged();
 			
 			// Need to redraw
 			this.postInvalidate();
@@ -87,6 +161,9 @@ public class CustomButton extends View {
 			// Need to redraw
 			this.postInvalidate();
 		}
+	}
+	public void toggleChecked() {
+		this.setChecked(!this.checked);
 	}
 	
 	private String text = "";
@@ -106,31 +183,38 @@ public class CustomButton extends View {
 	public boolean onTouchEvent(MotionEvent event) {
 		
 		// Click event
+		if(this.enabled) {
 		
-		float x = event.getX();
-		float y = event.getY();
-		
-		// Determine if the click position is inside the control
-		boolean isInsideControl =
-			(x >= 0 && x <= this.getMeasuredWidth())
-			&& (y >= 0 && y <= this.getMeasuredHeight());
-		
-		switch(event.getAction()) {
-			case MotionEvent.ACTION_DOWN:
-			case MotionEvent.ACTION_MOVE:
-				
-				break;
-			case MotionEvent.ACTION_UP:
-				
-				if(isInsideControl && this.isCheckable) {
-					// If we are checkable then change the checked state
-					this.setChecked(!this.checked);
-				}
-				
-				break;
+			float x = event.getX();
+			float y = event.getY();
+			
+			// Determine if the click position is inside the control
+			boolean isInsideControl =
+				(x >= 0 && x <= this.getMeasuredWidth())
+				&& (y >= 0 && y <= this.getMeasuredHeight());
+			
+			switch(event.getAction()) {
+				case MotionEvent.ACTION_DOWN:
+				case MotionEvent.ACTION_MOVE:
+					
+					break;
+				case MotionEvent.ACTION_UP:
+					
+					if(isInsideControl) {
+						
+						if(this.isCheckable) {
+							// If we are checkable then change the checked state
+							this.setChecked(!this.checked);
+						}
+						
+						this.triggerClick();
+					}
+					
+					break;
+			}
 		}
 
-		return true;
+		return this.enabled;
 	}
 	
 	@Override
@@ -168,33 +252,34 @@ public class CustomButton extends View {
 		int start = 1;
 		int end = this.getMeasuredWidth() - 1;
 
-		Rect srcRect = null;
-		
 		Resources res = this.getContext().getResources();
 		
 		Paint p = new Paint();
 		p.setColor(Color.rgb(0, 0, 0));
 		
+		// Draw left curve
 		if(this.hasLeftCurve) {
 			start += 7;
 			Rect destReg = new Rect(0, 0, 8, this.getMeasuredHeight());
 			
 			Bitmap bitmap;
-			if(this.checked) {
+			if(!this.enabled) {
+				bitmap = BitmapFactory.decodeResource(res, R.drawable.left_disabled);
+			} else if(this.checked) {
 				bitmap = BitmapFactory.decodeResource(res, R.drawable.left_selected);
 			} else {
 				bitmap = BitmapFactory.decodeResource(res, R.drawable.left);
 			}
 			
-			
 			// Draw left curve
-			canvas.drawBitmap(bitmap, srcRect, destReg, p);
+			canvas.drawBitmap(bitmap, null, destReg, p);
 				
 		} else {
 			// Draw 1px left border
 			canvas.drawLine(0, 0, 0, this.getMeasuredHeight(), p);
 		}
 		
+		// Draw right curve
 		if(this.hasRightCurve) {
 			end -= 7;
 			Rect destReg = new Rect(
@@ -205,14 +290,16 @@ public class CustomButton extends View {
 			);
 			
 			Bitmap bitmap;
-			if(this.checked) {
+			if(!this.enabled) {
+				bitmap = BitmapFactory.decodeResource(res, R.drawable.right_disabled);
+			} else if(this.checked) {
 				bitmap = BitmapFactory.decodeResource(res, R.drawable.right_selected);
 			} else {
 				bitmap = BitmapFactory.decodeResource(res, R.drawable.right);
 			}
 			
 			// Draw right curve
-			canvas.drawBitmap(bitmap, srcRect, destReg, p);
+			canvas.drawBitmap(bitmap, null, destReg, p);
 			
 		} else {
 			// Draw 1px right border
@@ -225,9 +312,12 @@ public class CustomButton extends View {
 			);
 		}
 		
-
+		// Draw the background
+		
 		Bitmap bitmap;
-		if(this.checked) {
+		if(!this.enabled) {
+			bitmap = BitmapFactory.decodeResource(res, R.drawable.middle_disabled);
+		} else if(this.checked) {
 			bitmap = BitmapFactory.decodeResource(res, R.drawable.middle_selected);
 		} else {
 			bitmap = BitmapFactory.decodeResource(res, R.drawable.middle);
@@ -240,11 +330,15 @@ public class CustomButton extends View {
 			this.getMeasuredHeight()
 		);
 		
-		canvas.drawBitmap(bitmap, srcRect, destReg, p);
+		canvas.drawBitmap(bitmap, null, destReg, p);
+		
+		// Paint the text
 		
 		Paint textPaint = new Paint();
 		textPaint.setTextSize(20);
-		if(checked) {
+		if(!this.enabled) {
+			textPaint.setColor(Color.rgb(0x99, 0x99, 0x99));
+		} else if(checked) {
 			textPaint.setColor(Color.rgb(0, 0, 0));
 		} else {
 			textPaint.setColor(Color.rgb(0xff, 0xff, 0xff));
@@ -271,4 +365,10 @@ public class CustomButton extends View {
 
 		this.postInvalidate();
 	}
+	
+	public CustomButton(Context context) {
+		super(context);
+		
+		this.postInvalidate();
+	}	
 }

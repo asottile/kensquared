@@ -47,6 +47,11 @@ public class KenKenAndroidActivity extends Activity {
     private void newGame() {
     	((GameComponent)this.findViewById(R.id.gameComponent))
     		.NewGame(SettingsProvider.GetGameSize());
+    	
+    	((CandidatesLayout)this.findViewById(R.id.candidatesLayout))
+    		.NewGame(SettingsProvider.GetGameSize());
+    	
+    	// TODO: handle game size changed event at this level instead of at each level
     }
     
     private void showPreferences() {
