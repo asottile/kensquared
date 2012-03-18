@@ -8,8 +8,8 @@
     <LinearLayout
         android:id="@+id/candidatesLayout"
         android:layout_width="fill_parent"
-        android:layout_height="28dp"
-        android:layout_weight="0.09" >
+        android:layout_height="32dp"
+        android:layout_weight="0" >
 
         <Button
             android:id="@+id/allButton"
@@ -25,12 +25,12 @@
 
         <com.anthonysottile.kenken.ui.CustomButton
             android:id="@+id/customButton1"
-            android:layout_width="28dp"
+            android:layout_width="20dp"
             android:layout_height="28dp"
             kenken:checked="true"
             kenken:has_left_curve="true"
             kenken:has_right_curve="true"
-            kenken:is_checkable="false"
+            kenken:is_checkable="true"
             kenken:text="@string/plus" />
             
 
@@ -40,7 +40,7 @@
         android:id="@+id/gameLayout"
         android:layout_width="fill_parent"
         android:layout_height="145dp"
-        android:layout_weight="0.67" >
+        android:layout_weight="1" >
 
         <com.anthonysottile.kenken.ui.GameComponent
             android:id="@+id/gameComponent"
@@ -52,13 +52,13 @@
     <LinearLayout
         android:id="@+id/valuesLayout"
         android:layout_width="fill_parent"
-        android:layout_height="28dp"
-        android:layout_weight="0.09" >
+        android:layout_height="32dp"
+        android:layout_weight="0" >
 
         <Button
             android:id="@+id/clearButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="34dp"
             android:text="@string/clear" />
     </LinearLayout>
 

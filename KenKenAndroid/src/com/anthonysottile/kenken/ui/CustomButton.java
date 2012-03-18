@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class CustomButton extends View {
@@ -99,6 +100,37 @@ public class CustomButton extends View {
 			// Redraw
 			this.postInvalidate();
 		}
+	}
+	
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		
+		// Click event
+		
+		float x = event.getX();
+		float y = event.getY();
+		
+		// Determine if the click position is inside the control
+		boolean isInsideControl =
+			(x >= 0 && x <= this.getMeasuredWidth())
+			&& (y >= 0 && y <= this.getMeasuredHeight());
+		
+		switch(event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+			case MotionEvent.ACTION_MOVE:
+				
+				break;
+			case MotionEvent.ACTION_UP:
+				
+				if(isInsideControl && this.isCheckable) {
+					// If we are checkable then change the checked state
+					this.setChecked(!this.checked);
+				}
+				
+				break;
+		}
+
+		return true;
 	}
 	
 	@Override
