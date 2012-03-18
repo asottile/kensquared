@@ -159,6 +159,9 @@ public class CandidatesLayout extends LinearLayout {
 			);
 			this.addView(this.candidates[i], 30, ViewGroup.LayoutParams.FILL_PARENT);
 		}
+		
+		this.candidates[0].setHasLeftCurve(true);
+		this.candidates[this.candidates.length - 1].setHasRightCurve(true);
 	}
 	
 	public void Clear() {
