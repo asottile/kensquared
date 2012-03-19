@@ -134,8 +134,6 @@ public class CandidatesLayout extends LinearLayout {
 	public void NewGame(int order) {
 		this.Clear();
 		
-		// TODO: bug in this guy when New game, change size, new game
-
 		final CandidatesLayout self = this;
 		
 		plusButton.setEnabled(true);
@@ -177,6 +175,8 @@ public class CandidatesLayout extends LinearLayout {
 			for(int i = 0; i < candidates.length; i += 1) {
 				this.candidates[i].ClearCheckChangedListeners();
 			}
+			
+			this.candidates = null;
 		}
 		
 		plusButton.setEnabled(false);
