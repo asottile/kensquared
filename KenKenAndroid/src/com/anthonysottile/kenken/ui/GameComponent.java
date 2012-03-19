@@ -2,12 +2,12 @@ package com.anthonysottile.kenken.ui;
 
 import java.util.List;
 
-import com.anthonysottile.kenken.IGenericEventHandler;
 import com.anthonysottile.kenken.KenKenGame;
 import com.anthonysottile.kenken.RenderLine;
 import com.anthonysottile.kenken.SettingsProvider;
 import com.anthonysottile.kenken.SquareDrawingDimensions;
 import com.anthonysottile.kenken.cages.ICage;
+import com.anthonysottile.kenken.ui.KenKenSquare.SquareTouchState;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -16,14 +16,22 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class GameComponent extends View
-	implements KenKenSquare.IRequestRedrawEventHandler, IGenericEventHandler {
+	implements KenKenSquare.IRequestRedrawEventHandler {
 
 	private final static int DefaultSize = 100;
 	
+	private int squareWidth = -1;
+	private int squareWidthPlusBorder = -1;
+	private int squareHeight = -1;
+	private int squareHeightPlusBorder = -1;
+	
 	private KenKenSquare[][] uiSquares = null;
+	private KenKenSquare currentSelectedSquare = null;
+	private KenKenSquare currentHoverSquare = null;
 	
 	private KenKenGame game = null;
 	public KenKenGame getGame() {
@@ -53,18 +61,20 @@ public class GameComponent extends View
 		boardWidth -= borders;
 		boardHeight -= borders;
 		
-		int squareWidth = boardWidth / order;
-		int squareHeight = boardHeight / order;
+		this.squareWidth = boardWidth / order;
+		this.squareHeight = boardHeight / order;
+		this.squareWidthPlusBorder = squareWidth + UIConstants.BorderWidth;
+		this.squareHeightPlusBorder = squareHeight + UIConstants.BorderWidth;
 		
 		this.uiSquares = new KenKenSquare[order][];
 		for(int i = 0; i < order; i += 1) {
 			this.uiSquares[i] = new KenKenSquare[order];
 			for(int j = 0; j < order; j += 1) {
 				
-				int left = UIConstants.BorderWidth * (i + 1) + i * squareWidth;
-				int top = UIConstants.BorderWidth * (j + 1) + j * squareHeight;
-				int right = left + squareWidth;
-				int bottom = top + squareHeight;
+				int left = UIConstants.BorderWidth * (i + 1) + i * this.squareWidth;
+				int top = UIConstants.BorderWidth * (j + 1) + j * this.squareHeight;
+				int right = left + this.squareWidth;
+				int bottom = top + this.squareHeight;
 				
 				int cageTextFontSize = this.getCageTextFontSize(order);
 				int valueTextFontSize = this.getValueTextFontSize(order);
@@ -109,6 +119,10 @@ public class GameComponent extends View
 			this.uiSquares[location.x][location.y].setCageText(cage.getSignNumber().toString());
 		}
 		
+		// Set the first square to be selected
+		this.currentSelectedSquare = this.uiSquares[0][0];
+		this.currentSelectedSquare.setTouchState(SquareTouchState.Selected);
+		
 		// Test values
 		for(int i = 0; i < order; i += 1) {
 			for(int j = 0; j < order; j += 1) {
@@ -144,6 +158,75 @@ public class GameComponent extends View
 	public void HandleRequestRedrawEvent(Object sender, KenKenSquare.RequestRedrawEventArgs e) {
 		this.postInvalidate();
 	}
+
+	private KenKenSquare getSquareFromPosition(int x, int y) {
+		
+		int xIndex = (x - UIConstants.BorderWidth) / this.squareWidthPlusBorder;
+		int yIndex = (y - UIConstants.BorderWidth) / this.squareHeightPlusBorder;
+
+		int order = this.game.getLatinSquare().getOrder();
+		if(xIndex < 0) {
+			xIndex = 0;
+		}
+		if(yIndex < 0) {
+			yIndex = 0;
+		}
+		if(xIndex >= order) {
+			xIndex = order - 1;
+		}
+		if(yIndex >= order) {
+			yIndex = order - 1;
+		}
+		
+		return this.uiSquares[xIndex][yIndex];
+	}
+	
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		
+		// Click event
+		
+		if(this.game != null) {
+			
+			float x = event.getX();
+			float y = event.getY();
+			
+			KenKenSquare targetSquare = getSquareFromPosition((int)x, (int)y);
+			
+			switch(event.getAction()) {
+				case MotionEvent.ACTION_DOWN:
+				case MotionEvent.ACTION_MOVE:
+					
+					if(this.currentHoverSquare != null && this.currentHoverSquare != targetSquare) {
+						this.currentHoverSquare.setTouchState(SquareTouchState.None);
+					}
+
+					if(targetSquare.getTouchState() != SquareTouchState.Selected) {
+						this.currentHoverSquare = targetSquare;
+						this.currentHoverSquare.setTouchState(SquareTouchState.Touching);
+					}
+					
+					break;
+				case MotionEvent.ACTION_UP:
+					
+					if(this.currentHoverSquare != null) {
+						this.currentHoverSquare.setTouchState(SquareTouchState.None);
+						this.currentHoverSquare = null;
+					}
+					
+					this.currentSelectedSquare.setTouchState(SquareTouchState.None);
+					this.currentSelectedSquare = targetSquare;
+					this.currentSelectedSquare.setTouchState(SquareTouchState.Selected);
+					
+					break;
+			}
+			
+			return true;
+		}
+
+		return false;
+	}
+	
 	
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -254,17 +337,9 @@ public class GameComponent extends View
 			}
 		}
 	}
-
-	public void HandleGenericEvent(Object sender) {
-		// Used to handle the SettingsProvider's game size changed events
-		this.Clear();
-	}	
 	
 	public GameComponent(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		
-		// Attach to the event listener on the game size changed
-		SettingsProvider.AddGameSizeChangedEventListener(this);
 		
 		this.postInvalidate();
 	}

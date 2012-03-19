@@ -1,6 +1,8 @@
 package com.anthonysottile.kenken;
 
 import java.util.ArrayList;
+import java.util.EventListener;
+import java.util.EventObject;
 import java.util.List;
 
 import android.content.SharedPreferences;
@@ -13,7 +15,29 @@ public final class SettingsProvider {
 	
 	private static final String GameSize = "GameSize";
 	private static final int DefaultGameSize = 4;
+
+	public interface GameSizeChangedListener extends EventListener {
 		
+		public void onGameSizeChanged(EventObject event);
+	}
+	
+	private static List<GameSizeChangedListener> gameSizeChangedListeners =
+		new ArrayList<GameSizeChangedListener>();
+	public static void AddGameSizeChangedListener(GameSizeChangedListener listener) {
+		SettingsProvider.gameSizeChangedListeners.add(listener);
+	}
+	public static void RemoveGameSizeChangedListener(GameSizeChangedListener listener) {
+		SettingsProvider.gameSizeChangedListeners.remove(listener);
+	}
+	private static void triggerGameSizeChanged() {
+		EventObject event = new EventObject(new Object());
+		
+		int size = SettingsProvider.gameSizeChangedListeners.size();
+		for(int i = 0; i < size; i += 1) { 
+			SettingsProvider.gameSizeChangedListeners.get(i).onGameSizeChanged(event);
+		}
+	}
+	
 	public static int GetGameSize() {
 		return SettingsProvider.gameSize;
 	}
@@ -36,21 +60,6 @@ public final class SettingsProvider {
 				SettingsProvider.DefaultGameSize
 			);
 	}
-	
-	private static List<IGenericEventHandler> gameSizeChangedHandlers = new ArrayList<IGenericEventHandler>();
-	private static void triggerGameSizeChanged() {
-		int handlersSize = SettingsProvider.gameSizeChangedHandlers.size();
-		for(int i = 0 ; i < handlersSize; i += 1) {
-			IGenericEventHandler handler = SettingsProvider.gameSizeChangedHandlers.get(i);
-			handler.HandleGenericEvent((Integer)SettingsProvider.gameSize);
-		}
-	}
-	public static void AddGameSizeChangedEventListener(IGenericEventHandler handler) {
-		SettingsProvider.gameSizeChangedHandlers.add(handler);
-	}
-	public static void RemoveGameSizeChangedEventListener(IGenericEventHandler handler) {
-		SettingsProvider.gameSizeChangedHandlers.remove(handler);
-	} 
 	
 	private SettingsProvider() { }
 }

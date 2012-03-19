@@ -33,6 +33,9 @@ public class KenKenSquare {
 	}
 	
 	private SquareTouchState touchState = SquareTouchState.None;
+	public SquareTouchState getTouchState() {
+		return this.touchState;
+	}
 	public void setTouchState(SquareTouchState touchState) {
 		this.touchState = touchState;
 		this.triggerRequestRedrawEvent();

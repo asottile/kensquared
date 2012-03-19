@@ -62,7 +62,6 @@ public class CustomButton extends View {
         }
 	}
 	
-	
 	public interface ClickListener extends EventListener {
 		
 		public void onClick(EventObject event);

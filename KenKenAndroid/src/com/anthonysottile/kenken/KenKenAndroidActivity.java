@@ -1,5 +1,7 @@
 package com.anthonysottile.kenken;
 
+import java.util.EventObject;
+
 import com.anthonysottile.kenken.ui.*;
 
 import android.app.Activity;
@@ -28,13 +30,25 @@ public class KenKenAndroidActivity extends Activity {
 		ad.show();
 	}
 	
+	private void gameSizeChanged() {
+		((GameComponent)this.findViewById(R.id.gameComponent)).Clear();
+		((CandidatesLayout)this.findViewById(R.id.candidatesLayout)).Clear();
+	}
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        final KenKenAndroidActivity self = this;
+        
         // Give a reference to settings
         SettingsProvider.Initialize(this.getSharedPreferences(Preferences, 0));
+        SettingsProvider.AddGameSizeChangedListener(new SettingsProvider.GameSizeChangedListener() {
+        	public void onGameSizeChanged(EventObject event) {
+        		self.gameSizeChanged();
+        	}
+        });
     }
     
     @Override
@@ -45,13 +59,8 @@ public class KenKenAndroidActivity extends Activity {
     }
     
     private void newGame() {
-    	((GameComponent)this.findViewById(R.id.gameComponent))
-    		.NewGame(SettingsProvider.GetGameSize());
-    	
-    	((CandidatesLayout)this.findViewById(R.id.candidatesLayout))
-    		.NewGame(SettingsProvider.GetGameSize());
-    	
-    	// TODO: handle game size changed event at this level instead of at each level
+    	((GameComponent)this.findViewById(R.id.gameComponent)).NewGame(SettingsProvider.GetGameSize());
+    	((CandidatesLayout)this.findViewById(R.id.candidatesLayout)).NewGame(SettingsProvider.GetGameSize());
     }
     
     private void showPreferences() {

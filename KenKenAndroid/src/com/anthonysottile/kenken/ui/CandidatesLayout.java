@@ -70,7 +70,6 @@ public class CandidatesLayout extends LinearLayout {
 		}
 	}
 	
-	
 	private CustomButton plusButton = null;
 	private CustomButton minusButton = null;
 	private CustomButton[] candidates = null;
@@ -134,6 +133,8 @@ public class CandidatesLayout extends LinearLayout {
 	
 	public void NewGame(int order) {
 		this.Clear();
+		
+		// TODO: bug in this guy when New game, change size, new game
 
 		final CandidatesLayout self = this;
 		
@@ -157,7 +158,11 @@ public class CandidatesLayout extends LinearLayout {
 					}
 				}
 			);
-			this.addView(this.candidates[i], 30, ViewGroup.LayoutParams.FILL_PARENT);
+			
+			// weight the buttons so they stretch to the entire layout
+			LayoutParams p = new LinearLayout.LayoutParams(30, ViewGroup.LayoutParams.FILL_PARENT);
+			p.weight = 0.5f;
+			this.addView(this.candidates[i], p);
 		}
 		
 		this.candidates[0].setHasLeftCurve(true);
@@ -212,9 +217,9 @@ public class CandidatesLayout extends LinearLayout {
 			}
 		});
 		
-		this.addView(plusButton, 30, ViewGroup.LayoutParams.FILL_PARENT);
+		this.addView(plusButton, 40, ViewGroup.LayoutParams.FILL_PARENT);
 		this.addView(new TextView(context), 5, ViewGroup.LayoutParams.FILL_PARENT);
-		this.addView(minusButton, 30, ViewGroup.LayoutParams.FILL_PARENT);
+		this.addView(minusButton, 40, ViewGroup.LayoutParams.FILL_PARENT);
 		this.addView(new TextView(context), 5, ViewGroup.LayoutParams.FILL_PARENT);
 	}
 }
