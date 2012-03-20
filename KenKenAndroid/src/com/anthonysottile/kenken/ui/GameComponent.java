@@ -3,6 +3,7 @@ package com.anthonysottile.kenken.ui;
 import java.util.List;
 
 import com.anthonysottile.kenken.KenKenGame;
+import com.anthonysottile.kenken.R;
 import com.anthonysottile.kenken.RenderLine;
 import com.anthonysottile.kenken.SettingsProvider;
 import com.anthonysottile.kenken.SquareDrawingDimensions;
@@ -227,7 +228,6 @@ public class GameComponent extends View
 		return false;
 	}
 	
-	
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
@@ -260,8 +260,6 @@ public class GameComponent extends View
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 				
-		//canvas.drawColor(UIConstants.GetBackgroundColor().getColor());
-		
 		int order = SettingsProvider.GetGameSize();
 				
 		int boardWidth = this.getMeasuredWidth();
@@ -322,10 +320,7 @@ public class GameComponent extends View
                 		startX, startY,
                 		endX + UIConstants.BorderWidth, endY + UIConstants.BorderWidth,
                 		UIConstants.GetCageColor()
-            		);
-                    
-                    
-                    //canvas.drawLine(startX, startY, endX, endY, UIConstants.GetCageColor());				
+            		);			
                 }
 			}
 			
