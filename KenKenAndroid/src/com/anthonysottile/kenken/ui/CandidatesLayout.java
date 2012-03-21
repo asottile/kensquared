@@ -136,8 +136,8 @@ public class CandidatesLayout extends LinearLayout {
 		
 		final CandidatesLayout self = this;
 		
-		plusButton.setEnabled(true);
-		minusButton.setEnabled(true);
+		this.plusButton.setEnabled(true);
+		this.minusButton.setEnabled(true);
 		
 		this.candidates = new CustomButton[order];
 		for(int i = 0; i < order; i += 1) {
