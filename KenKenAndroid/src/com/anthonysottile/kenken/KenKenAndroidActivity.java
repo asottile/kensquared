@@ -16,6 +16,9 @@ import android.view.MenuItem;
 public class KenKenAndroidActivity extends Activity {
 
 	private static final String Preferences = "com.anthonysottile.kenken";
+
+	private GameComponent gameComponent = null;
+	private CandidatesLayout candidatesLayout = null;
 	
 	private void showMessageBox(String message) {
 		AlertDialog ad = new AlertDialog.Builder(this).create();
@@ -31,8 +34,8 @@ public class KenKenAndroidActivity extends Activity {
 	}
 	
 	private void gameSizeChanged() {
-		((GameComponent)this.findViewById(R.id.gameComponent)).Clear();
-		((CandidatesLayout)this.findViewById(R.id.candidatesLayout)).Clear();
+		this.gameComponent.Clear();
+		this.candidatesLayout.Clear();
 	}
 	
     @Override
@@ -49,6 +52,11 @@ public class KenKenAndroidActivity extends Activity {
         		self.gameSizeChanged();
         	}
         });
+        
+        this.candidatesLayout = (CandidatesLayout)this.findViewById(R.id.candidatesLayout);
+        this.gameComponent = (GameComponent)this.findViewById(R.id.gameComponent);
+        
+        this.gameComponent.Initialize(this.candidatesLayout);
     }
     
     @Override
@@ -59,8 +67,9 @@ public class KenKenAndroidActivity extends Activity {
     }
     
     private void newGame() {
-    	((GameComponent)this.findViewById(R.id.gameComponent)).NewGame(SettingsProvider.GetGameSize());
-    	((CandidatesLayout)this.findViewById(R.id.candidatesLayout)).NewGame(SettingsProvider.GetGameSize());
+    	int gameSize = SettingsProvider.GetGameSize();
+    	this.gameComponent.NewGame(gameSize);
+    	this.candidatesLayout.NewGame(gameSize);
     }
     
     private void showPreferences() {

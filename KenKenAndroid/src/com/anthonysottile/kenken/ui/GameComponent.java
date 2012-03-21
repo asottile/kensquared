@@ -3,7 +3,6 @@ package com.anthonysottile.kenken.ui;
 import java.util.List;
 
 import com.anthonysottile.kenken.KenKenGame;
-import com.anthonysottile.kenken.R;
 import com.anthonysottile.kenken.RenderLine;
 import com.anthonysottile.kenken.SettingsProvider;
 import com.anthonysottile.kenken.SquareDrawingDimensions;
@@ -20,10 +19,11 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class GameComponent extends View
-	implements KenKenSquare.IRequestRedrawEventHandler {
+public class GameComponent extends View	implements KenKenSquare.IRequestRedrawEventHandler {
 
 	private final static int DefaultSize = 100;
+	
+	private CandidatesLayout candidatesLayout = null;
 	
 	private int squareWidth = -1;
 	private int squareWidthPlusBorder = -1;
@@ -47,6 +47,28 @@ public class GameComponent extends View
 	private final int ValueFontSizeBase = 30;
 	private int getValueTextFontSize(int order) {
 		return this.ValueFontSizeBase - order;
+	}
+	
+	private void setFromSquare() {
+		this.candidatesLayout.SetValues(this.currentSelectedSquare.getUserSquare().getCandidates());
+	}
+	
+	public void Initialize(CandidatesLayout candidatesLayout) {
+		this.candidatesLayout = candidatesLayout;
+		
+		final GameComponent self = this;
+		
+		this.candidatesLayout.AddCandidateAddedListener(new CandidatesLayout.CandidateAddedListener() {
+			public void onCandidateAdded(CandidatesLayout.CandidateEvent event) {
+				self.currentSelectedSquare.getUserSquare().AddCandidate(event.getCandidate());
+			}
+		});
+		
+		this.candidatesLayout.AddCandidateRemovedListener(new CandidatesLayout.CandidateRemovedListener() {
+			public void onCandidateRemoved(CandidatesLayout.CandidateEvent event) {
+				self.currentSelectedSquare.getUserSquare().RemoveCandidate(event.getCandidate());
+			}
+		});
 	}
 	
 	public void NewGame(int order) {
@@ -124,6 +146,7 @@ public class GameComponent extends View
 		this.currentSelectedSquare = this.uiSquares[0][0];
 		this.currentSelectedSquare.setTouchState(SquareTouchState.Selected);
 		
+		/*
 		// Test values
 		for(int i = 0; i < order; i += 1) {
 			for(int j = 0; j < order; j += 1) {
@@ -132,6 +155,7 @@ public class GameComponent extends View
 				);
 			}
 		}
+		*/
 		
 		// Invalidate the drawn canvas
 		this.postInvalidate();
@@ -218,6 +242,8 @@ public class GameComponent extends View
 					this.currentSelectedSquare.setTouchState(SquareTouchState.None);
 					this.currentSelectedSquare = targetSquare;
 					this.currentSelectedSquare.setTouchState(SquareTouchState.Selected);
+					
+					this.setFromSquare();
 					
 					break;
 			}

@@ -1,6 +1,7 @@
 package com.anthonysottile.kenken;
 
 import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.List;
 
 public class UserSquare {
@@ -54,7 +55,7 @@ public class UserSquare {
 				if(!first) {
 					sb.append(' ');
 				}
-				sb.append(i);
+				sb.append(i + 1);
 				first = false;
 			}
 		}
@@ -82,18 +83,23 @@ public class UserSquare {
 		}	
 	}
 	
-	private List<IGenericEventHandler> changedHandlers = new ArrayList<IGenericEventHandler>();
-	private void triggerChangedEvent() {
-		int length = this.changedHandlers.size();
-		for(int i = 0; i < length; i += 1) {
-			this.changedHandlers.get(i).HandleGenericEvent(this);
-		}
+	public interface UserSquareChangedListener {
+		public void onUserSquareChanged(EventObject event);
 	}
-	public void addChangedEventHandler(IGenericEventHandler handler) {
+	private List<UserSquareChangedListener> changedHandlers = new ArrayList<UserSquareChangedListener>();
+	public void AddChangedEventHandler(UserSquareChangedListener handler) {
 		this.changedHandlers.add(handler);
 	}
-	public void removeChangedEventHandler(IGenericEventHandler handler) {
+	public void RemoveChangedEventHandler(UserSquareChangedListener handler) {
 		this.changedHandlers.remove(handler);
+	}
+	private void triggerChangedEvent() {
+		EventObject event = new EventObject(this);
+		
+		int length = this.changedHandlers.size();
+		for(int i = 0; i < length; i += 1) {
+			this.changedHandlers.get(i).onUserSquareChanged(event);
+		}
 	}
 
 	public class ValueSetEventArgs {

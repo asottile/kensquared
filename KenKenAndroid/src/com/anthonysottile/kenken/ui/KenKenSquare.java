@@ -1,6 +1,7 @@
 package com.anthonysottile.kenken.ui;
 
 import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.List;
 
 import com.anthonysottile.kenken.SquareDrawingDimensions;
@@ -126,6 +127,8 @@ public class KenKenSquare {
 					
 					// assign last into first to check for the next substring
 					first = last;
+					
+					line += 1;
 				}
 			}
 		}
@@ -134,6 +137,14 @@ public class KenKenSquare {
 	public KenKenSquare(UserSquare square, SquareDrawingDimensions dimensions) {
 		this.square = square;
 		this.dimensions = dimensions;
+		
+		final KenKenSquare self = this;
+		
+		this.square.AddChangedEventHandler(new UserSquare.UserSquareChangedListener() {
+			public void onUserSquareChanged(EventObject event) {
+				self.triggerRequestRedrawEvent();
+			}
+		});
 	}
 
 	public interface IRequestRedrawEventHandler {
