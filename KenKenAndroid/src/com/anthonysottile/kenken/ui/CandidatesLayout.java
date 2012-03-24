@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 public class CandidatesLayout extends LinearLayout {
 
+	//#region Events
+	
 	public class CandidateEvent extends EventObject {
 		
 		private static final long serialVersionUID = -5538360989234256662L;
@@ -69,6 +71,8 @@ public class CandidatesLayout extends LinearLayout {
 			this.candidateRemovedListeners.get(i).onCandidateRemoved(event);
 		}
 	}
+	
+	//#endregion
 	
 	private CustomButton plusButton = null;
 	private CustomButton minusButton = null;

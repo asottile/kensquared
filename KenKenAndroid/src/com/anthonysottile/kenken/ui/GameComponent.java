@@ -8,6 +8,7 @@ import com.anthonysottile.kenken.SettingsProvider;
 import com.anthonysottile.kenken.SquareDrawingDimensions;
 import com.anthonysottile.kenken.cages.ICage;
 import com.anthonysottile.kenken.ui.KenKenSquare.SquareTouchState;
+import com.anthonysottile.kenken.ui.ValuesLayout.ValueEvent;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -24,6 +25,7 @@ public class GameComponent extends View	implements KenKenSquare.IRequestRedrawEv
 	private final static int DefaultSize = 100;
 	
 	private CandidatesLayout candidatesLayout = null;
+	private ValuesLayout valuesLayout = null;
 	
 	private int squareWidth = -1;
 	private int squareWidthPlusBorder = -1;
@@ -50,25 +52,44 @@ public class GameComponent extends View	implements KenKenSquare.IRequestRedrawEv
 	}
 	
 	private void setFromSquare() {
-		this.candidatesLayout.SetValues(this.currentSelectedSquare.getUserSquare().getCandidates());
+		this.candidatesLayout.SetValues(
+			this.currentSelectedSquare.getUserSquare().getCandidates()
+		);
+		
+		this.valuesLayout.SetValue(
+			this.currentSelectedSquare.getUserSquare().getValue()
+		);
 	}
 	
-	public void Initialize(CandidatesLayout candidatesLayout) {
+	public void Initialize(CandidatesLayout candidatesLayout, ValuesLayout valuesLayout) {
 		this.candidatesLayout = candidatesLayout;
+		this.valuesLayout = valuesLayout;
 		
 		final GameComponent self = this;
 		
-		this.candidatesLayout.AddCandidateAddedListener(new CandidatesLayout.CandidateAddedListener() {
-			public void onCandidateAdded(CandidatesLayout.CandidateEvent event) {
-				self.currentSelectedSquare.getUserSquare().AddCandidate(event.getCandidate());
+		this.candidatesLayout.AddCandidateAddedListener(
+			new CandidatesLayout.CandidateAddedListener() {
+				public void onCandidateAdded(CandidatesLayout.CandidateEvent event) {
+					self.currentSelectedSquare.getUserSquare().AddCandidate(event.getCandidate());
+				}
 			}
-		});
+		);
 		
-		this.candidatesLayout.AddCandidateRemovedListener(new CandidatesLayout.CandidateRemovedListener() {
-			public void onCandidateRemoved(CandidatesLayout.CandidateEvent event) {
-				self.currentSelectedSquare.getUserSquare().RemoveCandidate(event.getCandidate());
+		this.candidatesLayout.AddCandidateRemovedListener(
+			new CandidatesLayout.CandidateRemovedListener() {
+				public void onCandidateRemoved(CandidatesLayout.CandidateEvent event) {
+					self.currentSelectedSquare.getUserSquare().RemoveCandidate(event.getCandidate());
+				}
 			}
-		});
+		);
+		
+		this.valuesLayout.AddValueChangedListener(
+			new ValuesLayout.ValueChangedListener() {
+				public void onValueChanged(ValueEvent event) {
+					self.currentSelectedSquare.getUserSquare().setValue(event.getValue());
+				}
+			}
+		);
 	}
 	
 	public void NewGame(int order) {

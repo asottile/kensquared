@@ -15,10 +15,11 @@ import android.view.MenuItem;
 
 public class KenKenAndroidActivity extends Activity {
 
-	private static final String Preferences = "com.anthonysottile.kenken";
+	private static final String preferences = "com.anthonysottile.kenken";
 
 	private GameComponent gameComponent = null;
 	private CandidatesLayout candidatesLayout = null;
+	private ValuesLayout valuesLayout = null;
 	
 	private void showMessageBox(String message) {
 		AlertDialog ad = new AlertDialog.Builder(this).create();
@@ -36,6 +37,7 @@ public class KenKenAndroidActivity extends Activity {
 	private void gameSizeChanged() {
 		this.gameComponent.Clear();
 		this.candidatesLayout.Clear();
+		this.valuesLayout.Clear();
 	}
 	
     @Override
@@ -43,20 +45,33 @@ public class KenKenAndroidActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        // This is used to give a closure (using JS terminology) reference
+        // See below when I instantiate an anonymous interface.
         final KenKenAndroidActivity self = this;
         
-        // Give a reference to settings
-        SettingsProvider.Initialize(this.getSharedPreferences(Preferences, 0));
-        SettingsProvider.AddGameSizeChangedListener(new SettingsProvider.GameSizeChangedListener() {
-        	public void onGameSizeChanged(EventObject event) {
-        		self.gameSizeChanged();
-        	}
-        });
+        // Give a reference to settings to our static settings manager
+        // Also attach to the settings's event handler
+        SettingsProvider.Initialize(
+    		this.getSharedPreferences(KenKenAndroidActivity.preferences, 0)
+		);
+        SettingsProvider.AddGameSizeChangedListener(
+    		new SettingsProvider.GameSizeChangedListener() {
+    			public void onGameSizeChanged(EventObject event) {
+    				self.gameSizeChanged();
+    			}
+    		}
+		);
         
-        this.candidatesLayout = (CandidatesLayout)this.findViewById(R.id.candidatesLayout);
-        this.gameComponent = (GameComponent)this.findViewById(R.id.gameComponent);
+        // Set up private references for convenience later
+        this.candidatesLayout =
+    		(CandidatesLayout)this.findViewById(R.id.candidatesLayout);
+        this.valuesLayout =
+    		(ValuesLayout)this.findViewById(R.id.valuesLayout);
+        this.gameComponent =
+    		(GameComponent)this.findViewById(R.id.gameComponent);
         
-        this.gameComponent.Initialize(this.candidatesLayout);
+        // Give the gameComponent references to layouts.
+        this.gameComponent.Initialize(this.candidatesLayout, this.valuesLayout);
     }
     
     @Override
@@ -70,6 +85,7 @@ public class KenKenAndroidActivity extends Activity {
     	int gameSize = SettingsProvider.GetGameSize();
     	this.gameComponent.NewGame(gameSize);
     	this.candidatesLayout.NewGame(gameSize);
+    	this.valuesLayout.NewGame(gameSize);
     }
     
     private void showPreferences() {

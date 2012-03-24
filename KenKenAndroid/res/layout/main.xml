@@ -21,18 +21,10 @@
             android:layout_height="fill_parent" />
 
     </FrameLayout>
-
-    <LinearLayout
+    <com.anthonysottile.kenken.ui.ValuesLayout
         android:id="@+id/valuesLayout"
         android:layout_width="fill_parent"
         android:layout_height="32dp"
-        android:layout_weight="0" >
-
-        <Button
-            android:id="@+id/clearButton"
-            android:layout_width="wrap_content"
-            android:layout_height="34dp"
-            android:text="@string/clear" />
-    </LinearLayout>
-
+        android:layout_weight="0" />
+    
 </LinearLayout>
