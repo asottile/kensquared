@@ -259,7 +259,7 @@ public class CustomButton extends View {
 		// Draw left curve
 		if(this.hasLeftCurve) {
 			start += 7;
-			Rect destReg = new Rect(0, 0, 8, this.getMeasuredHeight());
+			Rect destRect = new Rect(0, 0, 8, this.getMeasuredHeight());
 			
 			Bitmap bitmap;
 			if(!this.enabled) {
@@ -271,7 +271,7 @@ public class CustomButton extends View {
 			}
 			
 			// Draw left curve
-			canvas.drawBitmap(bitmap, null, destReg, p);
+			canvas.drawBitmap(bitmap, null, destRect, p);
 				
 		} else {
 			// Draw 1px left border

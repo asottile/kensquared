@@ -189,5 +189,7 @@ public class ValuesLayout extends LinearLayout {
 	
 	public ValuesLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		
+		this.setPadding(5, 15, 5, 15);
 	}
 }

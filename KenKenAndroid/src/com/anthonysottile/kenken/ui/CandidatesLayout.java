@@ -220,6 +220,6 @@ public class CandidatesLayout extends LinearLayout {
 	public CandidatesLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		
-		this.setPadding(5, 5, 5, 5);
+		this.setPadding(5, 15, 5, 15);
 	}
 }
