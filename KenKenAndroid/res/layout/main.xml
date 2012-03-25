@@ -3,7 +3,8 @@
     xmlns:kenken="http://schemas.android.com/apk/res/com.anthonysottile.kenken"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:baselineAligned="false" >
     <com.anthonysottile.kenken.ui.CandidatesLayout
         android:id="@+id/candidatesLayout"
         android:layout_width="fill_parent"

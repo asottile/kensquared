@@ -1,4 +1,4 @@
-package com.anthonysottile.kenken;
+package com.anthonysottile.kenken.settings;
 
 import java.util.ArrayList;
 import java.util.EventListener;
@@ -16,8 +16,9 @@ public final class SettingsProvider {
 	private static final String GameSize = "GameSize";
 	private static final int DefaultGameSize = 4;
 
+	// #region Game Size Changed Event
+	
 	public interface GameSizeChangedListener extends EventListener {
-		
 		public void onGameSizeChanged(EventObject event);
 	}
 	
@@ -37,6 +38,8 @@ public final class SettingsProvider {
 			SettingsProvider.gameSizeChangedListeners.get(i).onGameSizeChanged(event);
 		}
 	}
+	
+	// #endregion
 	
 	public static int GetGameSize() {
 		return SettingsProvider.gameSize;

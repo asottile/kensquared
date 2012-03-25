@@ -1,4 +1,7 @@
-package com.anthonysottile.kenken;
+package com.anthonysottile.kenken.ui;
+
+import com.anthonysottile.kenken.R;
+import com.anthonysottile.kenken.settings.SettingsProvider;
 
 import android.os.Bundle;
 import android.preference.ListPreference;

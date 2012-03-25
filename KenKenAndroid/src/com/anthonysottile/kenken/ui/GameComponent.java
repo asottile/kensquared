@@ -8,11 +8,11 @@ import java.util.List;
 
 import com.anthonysottile.kenken.KenKenGame;
 import com.anthonysottile.kenken.RenderLine;
-import com.anthonysottile.kenken.SettingsProvider;
 import com.anthonysottile.kenken.SquareDrawingDimensions;
 import com.anthonysottile.kenken.UserSquare;
 import com.anthonysottile.kenken.UserSquare.ValueSetEvent;
 import com.anthonysottile.kenken.cages.ICage;
+import com.anthonysottile.kenken.settings.SettingsProvider;
 import com.anthonysottile.kenken.ui.KenKenSquare.RequestRedrawEvent;
 import com.anthonysottile.kenken.ui.KenKenSquare.SquareTouchState;
 import com.anthonysottile.kenken.ui.ValuesLayout.ValueEvent;

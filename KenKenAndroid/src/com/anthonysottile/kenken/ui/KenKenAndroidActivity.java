@@ -1,9 +1,9 @@
-package com.anthonysottile.kenken;
+package com.anthonysottile.kenken.ui;
 
 import java.util.EventObject;
 
-import com.anthonysottile.kenken.ui.*;
-import com.anthonysottile.kenken.ui.GameComponent.GameWonEvent;
+import com.anthonysottile.kenken.R;
+import com.anthonysottile.kenken.settings.SettingsProvider;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -76,7 +76,7 @@ public class KenKenAndroidActivity extends Activity {
         
         this.gameComponent.AddGameWonListener(
     		new GameComponent.GameWonListener() {
-				public void onGameWon(GameWonEvent event) {
+				public void onGameWon(GameComponent.GameWonEvent event) {
 					self.showMessageBox("Game Won!");
 				}
 			}

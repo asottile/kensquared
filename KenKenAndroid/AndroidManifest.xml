@@ -10,15 +10,18 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         <activity
-            android:name=".KenKenAndroidActivity"
+            android:name=".ui.KenKenAndroidActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="KenKenPreferences"></activity>
+        <activity android:name=".ui.KenKenPreferences">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"></action>
+                <category android:name="android.intent.category.PREFERENC"></category>            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

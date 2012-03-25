@@ -62,7 +62,7 @@ public class ThreeSquareLineCage extends BaseCage {
                 {
                     game.getLatinSquare().getValues()[location.x][location.y],
                     game.getLatinSquare().getValues()[secondSquare.x][secondSquare.y],
-                    game.getLatinSquare().getValues()[thirdSquare.x][secondSquare.y]
+                    game.getLatinSquare().getValues()[thirdSquare.x][thirdSquare.y]
                 }
             );
     }
