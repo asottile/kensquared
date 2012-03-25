@@ -3,6 +3,7 @@ package com.anthonysottile.kenken;
 import java.util.EventObject;
 
 import com.anthonysottile.kenken.ui.*;
+import com.anthonysottile.kenken.ui.GameComponent.GameWonEvent;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -72,6 +73,14 @@ public class KenKenAndroidActivity extends Activity {
         
         // Give the gameComponent references to layouts.
         this.gameComponent.Initialize(this.candidatesLayout, this.valuesLayout);
+        
+        this.gameComponent.AddGameWonListener(
+    		new GameComponent.GameWonListener() {
+				public void onGameWon(GameWonEvent event) {
+					self.showMessageBox("Game Won!");
+				}
+			}
+		);
     }
     
     @Override

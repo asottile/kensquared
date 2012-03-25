@@ -1,6 +1,7 @@
 package com.anthonysottile.kenken.ui;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.EventObject;
 import java.util.List;
 
@@ -147,11 +148,11 @@ public class KenKenSquare {
 		});
 	}
 
-	public interface IRequestRedrawEventHandler {
-		public void HandleRequestRedrawEvent(Object sender, RequestRedrawEventArgs e);
-	}
+	// #region Request Redraw Event
 	
-	public class RequestRedrawEventArgs {
+	public class RequestRedrawEvent extends EventObject {
+		private static final long serialVersionUID = -8285430466228083088L;
+		
 		private int x;
 		public int getX() {
 			return this.x;
@@ -161,31 +162,41 @@ public class KenKenSquare {
 			return this.y;
 		}
 		
-		public RequestRedrawEventArgs(int x, int y) {
+		public RequestRedrawEvent(Object sender, int x, int y) {
+			super(sender);
 			this.x = x;
 			this.y = y;
 		}
 	}
+	public interface RequestRedrawListener extends EventListener {
+		public void onRequestRedraw(RequestRedrawEvent event);
+	}
 	
-	private List<IRequestRedrawEventHandler> requestRedrawHandlers =
-			new ArrayList<IRequestRedrawEventHandler>();
+	private List<RequestRedrawListener> requestRedrawListeners =
+			new ArrayList<RequestRedrawListener>();
+	public void AddRequestRedrawListener(RequestRedrawListener listener) {
+		this.requestRedrawListeners.add(listener);
+	}
+	public void RemoveRequestRedrawListener(RequestRedrawListener listener) {
+		this.requestRedrawListeners.remove(listener);
+	}
+	public void ClearRequestRedrawListeners() {
+		this.requestRedrawListeners.clear();
+	}
 	private void triggerRequestRedrawEvent() {
-		int length = this.requestRedrawHandlers.size();
-		for(int i = 0; i < length; i += 1) {
-			this.requestRedrawHandlers.get(i).HandleRequestRedrawEvent(
-				this, 
-				new RequestRedrawEventArgs(this.square.getX(), this.square.getY())
+		RequestRedrawEvent event =
+			new RequestRedrawEvent(
+				this,
+				this.square.getX(),
+				this.square.getY()
 			);
+		
+		int length = this.requestRedrawListeners.size();
+		for(int i = 0; i < length; i += 1) {
+			this.requestRedrawListeners.get(i).onRequestRedraw(event);
 		}
 	}
-	public void addRequestRedrawEventHandler(IRequestRedrawEventHandler handler) {
-		this.requestRedrawHandlers.add(handler);
-	}
-	public void removeChangedEventHandler(IRequestRedrawEventHandler handler) {
-		this.requestRedrawHandlers.remove(handler);
-	}
-	public void clearChangedEventHandlers() {
-		this.requestRedrawHandlers.clear();
-	}
+	
+	// #endregion
 	
 }

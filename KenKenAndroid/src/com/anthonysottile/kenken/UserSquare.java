@@ -1,6 +1,7 @@
 package com.anthonysottile.kenken;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.EventObject;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class UserSquare {
 		if(this.value != value) {
 			this.value = value;
 			
-			this.triggerValueSetEvent(new ValueSetEventArgs(this.x, this.y, this.value));
+			this.triggerValueSetEvent();
 
 			this.triggerChangedEvent();
 		}
@@ -83,10 +84,13 @@ public class UserSquare {
 		}	
 	}
 	
+	// #region UserSquareChanged Event
+	
 	public interface UserSquareChangedListener {
 		public void onUserSquareChanged(EventObject event);
 	}
-	private List<UserSquareChangedListener> changedHandlers = new ArrayList<UserSquareChangedListener>();
+	private List<UserSquareChangedListener> changedHandlers =
+			new ArrayList<UserSquareChangedListener>();
 	public void AddChangedEventHandler(UserSquareChangedListener handler) {
 		this.changedHandlers.add(handler);
 	}
@@ -102,7 +106,13 @@ public class UserSquare {
 		}
 	}
 
-	public class ValueSetEventArgs {
+	// #endregion
+	
+	// #region ValueSet Event
+	
+	public class ValueSetEvent extends EventObject {
+		
+		private static final long serialVersionUID = -2664136343305658114L;
 		
 		private int x;
 		public int getX() {
@@ -119,30 +129,38 @@ public class UserSquare {
 			return this.value;
 		}
 		
-		public ValueSetEventArgs(int x, int y, int value) {
+		public ValueSetEvent(Object sender, int x, int y, int value) {
+			super(sender);
+			
 			this.x = x;
 			this.y = y;
 			this.value = value;
 		}
 	}
-	
-	public interface IValueSetEventHandler {
-		public void HandleValueSetEvent(Object sender, ValueSetEventArgs e);
+	public interface ValueSetListener extends EventListener {
+		public void onValueSet(ValueSetEvent event);
 	}
-	
-	private List<IValueSetEventHandler> valueSetHandlers = new ArrayList<IValueSetEventHandler>();
-	private void triggerValueSetEvent(ValueSetEventArgs e) {
-		int length = this.valueSetHandlers.size();
+	private List<ValueSetListener> valueSetListeners =
+			new ArrayList<ValueSetListener>();
+	public void AddValueSetListener(ValueSetListener listener) {
+		this.valueSetListeners.add(listener);
+	}
+	public void RemoveValueSetListener(ValueSetListener listener) {
+		this.valueSetListeners.remove(listener);
+	}
+	public void ClearValueSetListeners() {
+		this.valueSetListeners.clear();
+	}
+	private void triggerValueSetEvent() {
+		ValueSetEvent event = new ValueSetEvent(this, this.x, this.y, this.value);
+		
+		int length = this.valueSetListeners.size();
 		for(int i = 0; i < length; i += 1) {
-			this.valueSetHandlers.get(i).HandleValueSetEvent(this, e);
+			this.valueSetListeners.get(i).onValueSet(event);
 		}
 	}
-	public void addValueSetEventHandler(IValueSetEventHandler handler) {
-		this.valueSetHandlers.add(handler);
-	}
-	public void removeValueSetEventHandler(IValueSetEventHandler handler) {
-		this.valueSetHandlers.remove(handler);
-	}
+	
+	// #endregion
 	
 	public UserSquare(int x, int y, int order) {
 			this.x = x;
