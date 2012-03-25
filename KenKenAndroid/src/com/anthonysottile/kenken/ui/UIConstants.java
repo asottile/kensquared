@@ -9,6 +9,8 @@ public final class UIConstants {
 	
 	public static final int BorderWidth = 2;
 	
+	public static final int StatisticsOneIndent = 20;
+	
 	private static Paint gridColor = null;
 	public static Paint GetGridColor() {
 		if(UIConstants.gridColor == null) {

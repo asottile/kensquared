@@ -43,6 +43,17 @@ public class KenKenAndroidActivity extends Activity {
 		this.valuesLayout.Clear();
 	}
 	
+	private void gameWon(GameComponent.GameWonEvent event) {
+		boolean highScore =
+			StatisticsManager.GameEnded(event.getSize(), event.getTicks());
+		
+		if(highScore) {
+			this.showMessageBox("New High Score Win!"); 
+		} else {
+			this.showMessageBox("Win but no new high score");
+		}
+	}
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +91,7 @@ public class KenKenAndroidActivity extends Activity {
         this.gameComponent.AddGameWonListener(
     		new GameComponent.GameWonListener() {
 				public void onGameWon(GameComponent.GameWonEvent event) {
-					self.showMessageBox("Game Won!");
+					self.gameWon(event);
 				}
 			}
 		);

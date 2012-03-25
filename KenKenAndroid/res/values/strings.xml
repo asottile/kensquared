@@ -13,5 +13,10 @@
     <string name="ok">OK</string>
     <string name="preference_category">Game Preferences</string>
     <string name="gameSize">Game Size</string>
-
+    <string name="gamesPlayed">Games Played:</string>
+    <string name="gamesWon">Games Won:</string>
+    <string name="averageTime">Average Time:</string>
+    <string name="bestTime">Best Time:</string>
+    <string name="bestTimeDate">Best Time Date:</string>
+    <string name="clearStatistics">Clear Statistics</string>
 </resources>

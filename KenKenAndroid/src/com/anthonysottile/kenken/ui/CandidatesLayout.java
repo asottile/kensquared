@@ -140,8 +140,37 @@ public class CandidatesLayout extends LinearLayout {
 		
 		final CandidatesLayout self = this;
 		
+		// Candidates layout... Add the + and - buttons
+		this.plusButton = new CustomButton(this.getContext());
 		this.plusButton.setEnabled(true);
+		this.plusButton.setHasLeftCurve(true);
+		this.plusButton.setHasRightCurve(true);
+		this.plusButton.setIsCheckable(false);
+		this.plusButton.setCheckedNoTrigger(true);
+		this.plusButton.setText(this.getContext().getString(R.string.plus));
+		this.plusButton.AddClickListener(new CustomButton.ClickListener() {
+			public void onClick(EventObject event) {
+				self.populateAllClicked();
+			}
+		});
+
+		this.minusButton = new CustomButton(this.getContext());
 		this.minusButton.setEnabled(true);
+		this.minusButton.setHasLeftCurve(true);
+		this.minusButton.setHasRightCurve(true);
+		this.minusButton.setIsCheckable(false);
+		this.minusButton.setCheckedNoTrigger(true);
+		this.minusButton.setText(this.getContext().getString(R.string.minus));
+		this.minusButton.AddClickListener(new CustomButton.ClickListener() {
+			public void onClick(EventObject event) {
+				self.clearAllClicked();
+			}
+		});
+		
+		this.addView(plusButton, 40, ViewGroup.LayoutParams.FILL_PARENT);
+		this.addView(new TextView(this.getContext()), 5, ViewGroup.LayoutParams.FILL_PARENT);
+		this.addView(minusButton, 40, ViewGroup.LayoutParams.FILL_PARENT);
+		this.addView(new TextView(this.getContext()), 5, ViewGroup.LayoutParams.FILL_PARENT);
 		
 		this.candidates = new CustomButton[order];
 		for(int i = 0; i < order; i += 1) {
@@ -162,13 +191,13 @@ public class CandidatesLayout extends LinearLayout {
 			);
 			
 			// weight the buttons so they stretch to the entire layout
-			LayoutParams p =
+			LayoutParams weightingLayoutParams =
 				new LinearLayout.LayoutParams(
 					30,
 					ViewGroup.LayoutParams.FILL_PARENT
 				);
-			p.weight = 0.5f;
-			this.addView(this.candidates[i], p);
+			weightingLayoutParams.weight = 0.5f;
+			this.addView(this.candidates[i], weightingLayoutParams);
 		}
 		
 		this.candidates[0].setHasLeftCurve(true);
@@ -178,7 +207,7 @@ public class CandidatesLayout extends LinearLayout {
 	public void Clear() {
 		// Remove candidate views if they are there
 		if(this.candidates != null) {
-			this.removeViews(4, this.candidates.length);
+			this.removeAllViews();
 			
 			for(int i = 0; i < candidates.length; i += 1) {
 				this.candidates[i].ClearCheckChangedListeners();
@@ -186,48 +215,11 @@ public class CandidatesLayout extends LinearLayout {
 			
 			this.candidates = null;
 		}
-		
-		plusButton.setEnabled(false);
-		minusButton.setEnabled(false);
 	}
 	
 	public CandidatesLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		
 		this.setPadding(5, 5, 5, 5);
-		
-		final CandidatesLayout self = this;
-		
-		// Candidates layout... Add the + and - buttons
-		plusButton = new CustomButton(context);
-		plusButton.setEnabled(false);
-		plusButton.setHasLeftCurve(true);
-		plusButton.setHasRightCurve(true);
-		plusButton.setIsCheckable(false);
-		plusButton.setCheckedNoTrigger(true);
-		plusButton.setText(context.getString(R.string.plus));
-		plusButton.AddClickListener(new CustomButton.ClickListener() {
-			public void onClick(EventObject event) {
-				self.populateAllClicked();
-			}
-		});
-
-		minusButton = new CustomButton(context);
-		minusButton.setEnabled(false);
-		minusButton.setHasLeftCurve(true);
-		minusButton.setHasRightCurve(true);
-		minusButton.setIsCheckable(false);
-		minusButton.setCheckedNoTrigger(true);
-		minusButton.setText(context.getString(R.string.minus));
-		minusButton.AddClickListener(new CustomButton.ClickListener() {
-			public void onClick(EventObject event) {
-				self.clearAllClicked();
-			}
-		});
-		
-		this.addView(plusButton, 40, ViewGroup.LayoutParams.FILL_PARENT);
-		this.addView(new TextView(context), 5, ViewGroup.LayoutParams.FILL_PARENT);
-		this.addView(minusButton, 40, ViewGroup.LayoutParams.FILL_PARENT);
-		this.addView(new TextView(context), 5, ViewGroup.LayoutParams.FILL_PARENT);
 	}
 }
