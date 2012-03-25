@@ -152,7 +152,7 @@ public class CandidatesLayout extends LinearLayout {
 			this.candidates[i].setIsCheckable(true);
 			this.candidates[i].setCheckedNoTrigger(false);
 			this.candidates[i].setValue(i + 1);
-			this.candidates[i].setText(((Integer)(i + 1)).toString());
+			this.candidates[i].setText(Integer.toString(i + 1, 10));
 			this.candidates[i].AddCheckChangedListener(
 				new CustomButton.CheckChangedListener() {
 					public void onCheckChanged(CustomButton.CheckChangedEvent event) {
@@ -162,7 +162,11 @@ public class CandidatesLayout extends LinearLayout {
 			);
 			
 			// weight the buttons so they stretch to the entire layout
-			LayoutParams p = new LinearLayout.LayoutParams(30, ViewGroup.LayoutParams.FILL_PARENT);
+			LayoutParams p =
+				new LinearLayout.LayoutParams(
+					30,
+					ViewGroup.LayoutParams.FILL_PARENT
+				);
 			p.weight = 0.5f;
 			this.addView(this.candidates[i], p);
 		}

@@ -17,11 +17,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.KenKenPreferences">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"></action>
-                <category android:name="android.intent.category.PREFERENC"></category>            </intent-filter>
-        </activity>
+        <activity android:name=".ui.KenKenPreferences" />
+        <activity android:name=".ui.KenKenStatistics" />
     </application>
 
 </manifest>

@@ -107,7 +107,8 @@ public class KenKenAndroidActivity extends Activity {
     }
     
     private void showStatistics() {
-    	this.showMessageBox("Show Statistics Clicked");
+    	Intent statisticsActivity = new Intent(getBaseContext(), KenKenStatistics.class);
+        startActivity(statisticsActivity);
     }
     
     private void showAbout() {

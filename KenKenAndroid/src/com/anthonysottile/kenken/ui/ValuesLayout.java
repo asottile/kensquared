@@ -163,7 +163,7 @@ public class ValuesLayout extends LinearLayout {
 			this.valueButtons[i].setIsCheckable(true);
 			this.valueButtons[i].setCheckedNoTrigger(false);
 			this.valueButtons[i].setValue(i + 1);
-			this.valueButtons[i].setText(((Integer)(i + 1)).toString());
+			this.valueButtons[i].setText(Integer.toString(i + 1, 10));
 			this.valueButtons[i].AddCheckChangedListener(
 				new CustomButton.CheckChangedListener() {
 					public void onCheckChanged(CustomButton.CheckChangedEvent event) {
