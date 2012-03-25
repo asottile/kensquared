@@ -4,11 +4,13 @@ import java.util.EventObject;
 
 import com.anthonysottile.kenken.R;
 import com.anthonysottile.kenken.settings.SettingsProvider;
+import com.anthonysottile.kenken.settings.StatisticsManager;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,9 +54,10 @@ public class KenKenAndroidActivity extends Activity {
         
         // Give a reference to settings to our static settings manager
         // Also attach to the settings's event handler
-        SettingsProvider.Initialize(
-    		this.getSharedPreferences(KenKenAndroidActivity.preferences, 0)
-		);
+        SharedPreferences preferences =
+    		this.getSharedPreferences(KenKenAndroidActivity.preferences, 0);
+        SettingsProvider.Initialize(preferences);
+        StatisticsManager.Initialize(preferences);
         SettingsProvider.AddGameSizeChangedListener(
     		new SettingsProvider.GameSizeChangedListener() {
     			public void onGameSizeChanged(EventObject event) {
@@ -92,6 +95,7 @@ public class KenKenAndroidActivity extends Activity {
     
     private void newGame() {
     	int gameSize = SettingsProvider.GetGameSize();
+    	StatisticsManager.GameStarted(gameSize);
     	this.gameComponent.NewGame(gameSize);
     	this.candidatesLayout.NewGame(gameSize);
     	this.valuesLayout.NewGame(gameSize);

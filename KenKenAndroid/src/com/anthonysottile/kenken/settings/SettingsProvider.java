@@ -5,16 +5,19 @@ import java.util.EventListener;
 import java.util.EventObject;
 import java.util.List;
 
+import com.anthonysottile.kenken.ui.UIConstants;
+
 import android.content.SharedPreferences;
 
 public final class SettingsProvider {
 
+	private static final String GameSize = "GameSize";
+	
 	private static SharedPreferences preferences = null;
 	
 	private static int gameSize = 4;
 	
-	private static final String GameSize = "GameSize";
-	private static final int DefaultGameSize = 4;
+	// TODO: implement dirty cache methodology
 
 	// #region Game Size Changed Event
 	
@@ -60,7 +63,7 @@ public final class SettingsProvider {
 		SettingsProvider.gameSize =
 			SettingsProvider.preferences.getInt(
 				SettingsProvider.GameSize,
-				SettingsProvider.DefaultGameSize
+				UIConstants.MinimumGameSize
 			);
 	}
 	

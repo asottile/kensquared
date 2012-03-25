@@ -5,6 +5,8 @@ import android.graphics.Paint;
 
 public final class UIConstants {
 
+	public static final int MinimumGameSize = 4;
+	
 	public static final int BorderWidth = 2;
 	
 	private static Paint gridColor = null;
