@@ -10,14 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class GameStatistics
-{
-	private final static String GameSize = "GameSize";
-	private final static String GamesPlayed = "GamesPlayed";
-	private final static String GamesWon = "GamesWon";
-	private final static String TotalSeconds = "TotalSeconds";
-	private final static String BestTime = "BestTime";
-	private final static String BestTimeDate = "BestTimeDate";
-			
+{			
 	// NOTE: According to http://developer.android.com/reference/java/util/Locale.html
 	//        Locale.US should be used like C#  CultureInfo.InvariantCulture
 	private final static DateFormat dateFormatter =
@@ -78,7 +71,16 @@ public class GameStatistics
 		this.bestTime = Integer.MAX_VALUE;
 		this.bestTimeDate = null;
 	}
+	
+	// #region JSON Serialization
 
+	private final static String GameSize = "GameSize";
+	private final static String GamesPlayed = "GamesPlayed";
+	private final static String GamesWon = "GamesWon";
+	private final static String TotalSeconds = "TotalSeconds";
+	private final static String BestTime = "BestTime";
+	private final static String BestTimeDate = "BestTimeDate";
+	
 	public JSONObject ToJson() {
 		JSONObject json = new JSONObject();
 		try {
@@ -132,4 +134,6 @@ public class GameStatistics
 			e.printStackTrace();
 		}
 	}
+	
+	// #endregion
 }
