@@ -1,5 +1,8 @@
 package com.anthonysottile.kenken.test;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.graphics.Point;
 
 import com.anthonysottile.kenken.Points;
@@ -88,5 +91,33 @@ public class PointsTests extends TestCase {
 		// Make sure original points were not altered
 		assertEquals(startPointX, point.x);
 		assertEquals(startPointY, point.y);
+	}
+	
+	public void testToJSON() {
+		
+		JSONObject json = Points.ToJson(point);
+		
+		try {
+			assertEquals(json.getInt("X"), startPointX);
+			assertEquals(json.getInt("Y"), startPointY);
+		} catch (JSONException e) {
+			fail("JSON Problem");
+		}
+	}
+	
+	public void testToPoint() {
+		
+		JSONObject json = new JSONObject();
+		
+		try {
+			json.put("X", startPointX);
+			json.put("Y", startPointY);
+		} catch (JSONException e) {
+			fail("JSON Problem");
+		}
+		
+		Point p = Points.ToPoint(json);
+		assertEquals(p.x, startPointX);
+		assertEquals(p.y, startPointY);
 	}
 }
