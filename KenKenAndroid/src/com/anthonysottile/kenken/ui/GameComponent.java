@@ -67,6 +67,23 @@ public class GameComponent extends View {
 		}
 		
 		int order = this.game.getLatinSquare().getOrder();
+		if(this.game.getSquaresWithValues() < order * order) {
+			return false;
+		}
+		
+		List<ICage> cages = this.game.getCages();
+		UserSquare[][] userSquares = this.game.getUserSquares();
+		int cagesSize = cages.size();
+		for(int i = 0; i < cagesSize; i += 1) {
+			if(!cages.get(i).cageIsValid(userSquares)) {
+				return false;
+			}
+		}
+		
+		return true;
+		
+		/*
+		int order = this.game.getLatinSquare().getOrder();
 		UserSquare[][] userSquares = this.game.getUserSquares();
 		int[][] latinSquare = this.game.getLatinSquare().getValues();
 		for(int i = 0; i < order; i += 1) {
@@ -78,6 +95,7 @@ public class GameComponent extends View {
 		}
 		
 		return true;
+		*/
 	}
 	
 	private void valueSetEvent(ValueSetEvent event) {
@@ -107,6 +125,8 @@ public class GameComponent extends View {
 				}
 			}
 			
+			this.candidatesLayout.SetDisabled();
+			
 			if(this.isGameWon()) {
 				// Disable stuff
 				this.valuesLayout.SetDisabled();
@@ -118,7 +138,11 @@ public class GameComponent extends View {
 				
 				this.triggerGameWon(ticks, order);
 			}
-		}		
+		} else {
+			this.candidatesLayout.SetDisabled(
+				this.getDisabled((UserSquare)event.getSource())
+			);
+		}
 	}
 	
 	private List<Integer> getDisabled(UserSquare square) {
@@ -369,7 +393,9 @@ public class GameComponent extends View {
 					}
 					
 					this.currentSelectedSquare.setTouchState(SquareTouchState.None);
-					this.currentSelectedSquare.getUserSquare().ClearValueSetListeners();
+					this.currentSelectedSquare.getUserSquare().RemoveValueSetListener(
+						this.valueSetEventListener
+					);
 					this.currentSelectedSquare = targetSquare;
 					this.currentSelectedSquare.setTouchState(SquareTouchState.Selected);
 					this.currentSelectedSquare.getUserSquare().AddValueSetListener(

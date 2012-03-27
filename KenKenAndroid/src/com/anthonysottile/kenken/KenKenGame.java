@@ -19,6 +19,9 @@ public class KenKenGame {
 	
 	// Update this as squares obtain values
 	private int squaresWithValues = 0;
+	public int getSquaresWithValues() {
+		return this.squaresWithValues;
+	}
 	
 	private Date gameStartTime;
 	public Date getGameStartTime() {

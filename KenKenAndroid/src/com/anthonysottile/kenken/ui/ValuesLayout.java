@@ -35,7 +35,7 @@ public class ValuesLayout extends LinearLayout {
 	}
 	
 	private List<ValueChangedListener> valueChangedListeners =
-			new ArrayList<ValueChangedListener>();
+		new ArrayList<ValueChangedListener>();
 	public void AddValueChangedListener(ValueChangedListener listener) {
 		this.valueChangedListeners.add(listener);
 	}
