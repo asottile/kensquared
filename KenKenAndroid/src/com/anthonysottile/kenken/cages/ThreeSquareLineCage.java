@@ -55,6 +55,10 @@ public class ThreeSquareLineCage extends BaseCage {
         game.setOccupied(secondSquare);
         game.setOccupied(thirdSquare);
 
+        this.squares.add(location);
+        this.squares.add(secondSquare);
+        this.squares.add(thirdSquare);
+        
         this.signNumber =
             CageGenerator.DetermineSign
             (

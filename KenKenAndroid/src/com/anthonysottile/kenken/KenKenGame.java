@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.anthonysottile.kenken.UserSquare.ValueSetEvent;
 import com.anthonysottile.kenken.cages.BaseCage;
 import com.anthonysottile.kenken.cages.CageGenerator;
 import com.anthonysottile.kenken.cages.ICage;
@@ -15,6 +16,9 @@ import com.anthonysottile.kenken.cages.ICage;
 import android.graphics.Point;
 
 public class KenKenGame {
+	
+	// Update this as squares obtain values
+	private int squaresWithValues = 0;
 	
 	private Date gameStartTime;
 	public Date getGameStartTime() {
@@ -64,6 +68,35 @@ public class KenKenGame {
 		this.cageSquareOccupied[p.x][p.y] = true; 
 	}
 	
+	private void postInitialize() {
+		// For shared "constructor" code
+		
+		// We are going to attach to the value set event on our user squares to
+		//  make sure they have a value when being selected.  This way we can count
+		//  the number of squares the user has filled in and allow for a faster
+		//  calculation of the winning condition.
+		
+		final KenKenGame self = this;
+		
+		int order = this.latinSquare.getOrder();
+		
+		UserSquare.ValueSetListener valueSetListener = new UserSquare.ValueSetListener() {
+			public void onValueSet(ValueSetEvent event) {
+				if(event.getValue() > 0) {
+					self.squaresWithValues += 1;
+				} else {
+					self.squaresWithValues -= 1;
+				}
+			}
+		};
+		
+		for(int i = 0; i < order; i += 1) {
+			for(int j = 0; j < order; j += 1) {
+				this.userSquares[i][j].AddValueSetListener(valueSetListener);
+			}
+		}
+	}
+	
 	public KenKenGame(int order) {
 		this.latinSquare = new LatinSquare(order);
 		
@@ -84,10 +117,13 @@ public class KenKenGame {
 		CageGenerator.Generate(this);
 		
 		this.gameStartTime = new Date();
+		
+		this.postInitialize();
 	}
 	
 	// #region JSON Serialization
 	
+	private static final String squaresWithValuesProperty = "SquaresWithValues";
 	private static final String gameTimeElapsedProperty = "GameTimeElapsed";
 	private static final String latinSquareProperty = "LatinSquare";
 	private static final String cagesProperty = "Cages";
@@ -119,6 +155,7 @@ public class KenKenGame {
 				userSquaresJson.put(i, innerArray);
 			}
 			
+			json.put(squaresWithValuesProperty, this.squaresWithValues);
 			json.put(gameTimeElapsedProperty, timeElapsed);
 			json.put(latinSquareProperty, this.latinSquare.ToJson());
 			json.put(cagesProperty, cagesJson);
@@ -133,6 +170,8 @@ public class KenKenGame {
 	
 	public KenKenGame(JSONObject json) {
 		try {
+			
+			this.squaresWithValues = json.getInt(squaresWithValuesProperty);
 			
 			long timeElapsed = json.getLong(gameTimeElapsedProperty);
 			this.gameStartTime = new Date();
@@ -164,6 +203,8 @@ public class KenKenGame {
 						);
 				}
 			}
+
+			this.postInitialize();
 			
 		} catch(JSONException e) {
 			e.printStackTrace();

@@ -28,7 +28,7 @@ public final class CageGenerator {
             }
         );
 	
-	private static int max(int[] numbers) {
+	public static int max(int[] numbers) {
 		int max = numbers[0];
 		for(int i = 1; i < numbers.length; i += 1) {
 			if(numbers[i] > max) {
@@ -38,7 +38,7 @@ public final class CageGenerator {
 		return max;
 	}
 
-	private static int min(int[] numbers) {
+	public static int min(int[] numbers) {
 		int min = numbers[0];
 		for(int i = 1; i < numbers.length; i += 1) {
 			if(numbers[i] < min) {
@@ -48,7 +48,7 @@ public final class CageGenerator {
 		return min;
 	}
 	
-	private static int sum(int[] numbers) {
+	public static int sum(int[] numbers) {
 		int sum = 0;
 		for(int i = 0; i < numbers.length; i += 1) {
 			sum += numbers[i];
@@ -56,7 +56,7 @@ public final class CageGenerator {
 		return sum;
 	}
 	
-	private static int product(int[] numbers) {
+	public static int product(int[] numbers) {
 		int product = 1;
 		for(int i = 0; i < numbers.length; i += 1) {
 			product *= numbers[i];

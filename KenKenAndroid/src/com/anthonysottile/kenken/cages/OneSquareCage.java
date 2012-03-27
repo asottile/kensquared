@@ -19,6 +19,8 @@ public class OneSquareCage extends BaseCage {
         this.renderLines.add(new RenderLine(Points.add(location, Points.Down), 1, true));
         this.renderLines.add(new RenderLine(Points.add(location, Points.Right), 1, false));
         
+        this.squares.add(location);
+        
         game.setOccupied(location);
 
         this.signNumber =

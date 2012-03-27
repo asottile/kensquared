@@ -136,6 +136,10 @@ public class ThreeSquareBentCage extends BaseCage {
         game.setOccupied(location);
         game.setOccupied(secondSquare);
         game.setOccupied(thirdSquare);
+        
+        this.squares.add(location);
+        this.squares.add(secondSquare);
+        this.squares.add(thirdSquare);
 
         this.signNumber =
             CageGenerator.DetermineSign

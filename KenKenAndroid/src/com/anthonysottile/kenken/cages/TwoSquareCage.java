@@ -42,6 +42,9 @@ public class TwoSquareCage extends BaseCage {
         // set all the squares as occupied
         game.setOccupied(location);
         game.setOccupied(secondSquare);
+        
+        this.squares.add(location);
+        this.squares.add(secondSquare);
 
         this.signNumber =
             CageGenerator.DetermineSign

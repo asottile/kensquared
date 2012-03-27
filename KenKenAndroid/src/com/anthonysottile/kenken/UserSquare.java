@@ -167,9 +167,9 @@ public class UserSquare {
 	// #endregion
 	
 	public UserSquare(int x, int y, int order) {
-			this.x = x;
-			this.y = y;
-			this.candidates = new boolean[order];
+		this.x = x;
+		this.y = y;
+		this.candidates = new boolean[order];
 	}
 	
 	// #region JSON Serialization
