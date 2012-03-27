@@ -8,7 +8,6 @@ import java.util.List;
 
 import com.anthonysottile.kenken.KenKenGame;
 import com.anthonysottile.kenken.RenderLine;
-import com.anthonysottile.kenken.SquareDrawingDimensions;
 import com.anthonysottile.kenken.UserSquare;
 import com.anthonysottile.kenken.UserSquare.ValueSetEvent;
 import com.anthonysottile.kenken.cages.ICage;

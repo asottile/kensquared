@@ -1,4 +1,4 @@
-package com.anthonysottile.kenken;
+package com.anthonysottile.kenken.ui;
 
 import android.graphics.Paint;
 import android.graphics.Point;

@@ -5,6 +5,10 @@ import java.util.EventListener;
 import java.util.EventObject;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class UserSquare {
 	
 	private int x;
@@ -167,4 +171,52 @@ public class UserSquare {
 			this.y = y;
 			this.candidates = new boolean[order];
 	}
+	
+	// #region JSON Serialization
+	
+	private static final String xProperty = "X";
+	private static final String yProperty = "Y";
+	private static final String valueProperty = "Value";
+	private static final String candidatesProperty = "Candidates";
+	
+	public JSONObject ToJson() {
+		JSONObject json = new JSONObject();
+
+		try {
+			JSONArray candidatesJson = new JSONArray();
+			for(int i = 0; i < this.candidates.length; i += 1) {
+				candidatesJson.put(i, this.candidates[i]);
+			}
+			
+			json.put(xProperty, this.x);
+			json.put(yProperty, this.y);
+			json.put(valueProperty, this.value);
+			json.put(candidatesProperty, candidatesJson);
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		return json;
+	}
+	
+	public UserSquare(JSONObject json) {
+	
+		try {
+			this.x = json.getInt(xProperty);
+			this.y = json.getInt(yProperty);
+			this.value = json.getInt(valueProperty);
+			
+			JSONArray candidatesJson = json.getJSONArray(candidatesProperty);
+			this.candidates = new boolean[candidatesJson.length()];
+			for(int i = 0; i < candidates.length; i += 1) {
+				this.candidates[i] = candidatesJson.getBoolean(i);
+			}
+		
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// #endregion
 }

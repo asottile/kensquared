@@ -5,7 +5,6 @@ import java.util.EventListener;
 import java.util.EventObject;
 import java.util.List;
 
-import com.anthonysottile.kenken.SquareDrawingDimensions;
 import com.anthonysottile.kenken.UserSquare;
 
 import android.graphics.Canvas;
