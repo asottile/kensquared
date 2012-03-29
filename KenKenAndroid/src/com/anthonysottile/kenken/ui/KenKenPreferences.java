@@ -42,7 +42,7 @@ public class KenKenPreferences extends PreferenceActivity {
         this.gameSize.setEntries(KenKenPreferences.ValuesStrings);
         this.gameSize.setEntryValues(KenKenPreferences.ValuesStrings);
         this.gameSize.setTitle(R.string.gameSize);
-        int index = SettingsProvider.GetGameSize() - UIConstants.MinimumGameSize;
+        int index = SettingsProvider.GetGameSize() - UIConstants.MinGameSize;
         this.gameSize.setDefaultValue(KenKenPreferences.ValuesStrings[index]);
         this.gameSize.setOnPreferenceChangeListener(
 			new Preference.OnPreferenceChangeListener() {

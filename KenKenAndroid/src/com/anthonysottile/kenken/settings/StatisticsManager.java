@@ -88,7 +88,7 @@ public final class StatisticsManager {
 			StatisticsManager.Load();
 		}
 		
-		return StatisticsManager.statistics[gameSize - UIConstants.MinimumGameSize];
+		return StatisticsManager.statistics[gameSize - UIConstants.MinGameSize];
 	}
 	
 	public static void GameStarted(int gameSize) {
@@ -96,7 +96,7 @@ public final class StatisticsManager {
 			StatisticsManager.Load();
 		}
 		
-		int index = gameSize - UIConstants.MinimumGameSize;
+		int index = gameSize - UIConstants.MinGameSize;
 		StatisticsManager.statistics[index].GameStarted();
 		
 		StatisticsManager.saveGameStatistics();
@@ -111,7 +111,7 @@ public final class StatisticsManager {
 			StatisticsManager.Load();
 		}
 		
-		int index = gameSize - UIConstants.MinimumGameSize;
+		int index = gameSize - UIConstants.MinGameSize;
 		GameStatistics game = StatisticsManager.statistics[index];
 		
 		int gameSeconds = (int)(ticks / 1000);

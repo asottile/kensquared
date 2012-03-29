@@ -91,7 +91,7 @@ public class KenKenStatistics extends Activity {
 	
 	private void clearStatistics() {
 		StatisticsManager.ClearGameStatistics();
-		this.setValues(this.dropdown.getSelectedItemPosition() + UIConstants.MinimumGameSize);
+		this.setValues(this.dropdown.getSelectedItemPosition() + UIConstants.MinGameSize);
 	}
 	
 	@Override
@@ -147,12 +147,12 @@ public class KenKenStatistics extends Activity {
 			);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         this.dropdown.setAdapter(spinnerAdapter);
-        this.dropdown.setSelection(SettingsProvider.GetGameSize() - UIConstants.MinimumGameSize);
+        this.dropdown.setSelection(SettingsProvider.GetGameSize() - UIConstants.MinGameSize);
         this.dropdown.setOnItemSelectedListener(
     		new OnItemSelectedListener() {
 				public void onItemSelected(AdapterView<?> adapter, View dropdown,
 					int selectedIndex, long id) {
-					self.setValues(selectedIndex + UIConstants.MinimumGameSize);
+					self.setValues(selectedIndex + UIConstants.MinGameSize);
 				}
 
 				public void onNothingSelected(AdapterView<?> arg0) {

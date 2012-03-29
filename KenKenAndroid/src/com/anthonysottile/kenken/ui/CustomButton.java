@@ -23,6 +23,9 @@ import android.view.View;
 public class CustomButton extends View {
 
 	private final static int DefaultSize = 28;
+	private final static int TopMargin = 8;
+	
+	// #region Check Changed Event
 	
 	public class CheckChangedEvent extends EventObject {
 		
@@ -62,6 +65,10 @@ public class CustomButton extends View {
         }
 	}
 	
+	// #endregion
+	
+	// #region Click Event
+	
 	public interface ClickListener extends EventListener {
 		
 		public void onClick(EventObject event);
@@ -83,6 +90,8 @@ public class CustomButton extends View {
 			this.clickListeners.get(i).onClick(event);
 		}
 	}
+	
+	// #endregion
 	
 	private int value = 0;
 	public int getValue() {
@@ -333,8 +342,10 @@ public class CustomButton extends View {
 		
 		// Paint the text
 		
+		int textSize = this.getMeasuredHeight() - CustomButton.TopMargin * 2;
+		
 		Paint textPaint = new Paint();
-		textPaint.setTextSize(20);
+		textPaint.setTextSize(textSize);
 		if(!this.enabled) {
 			textPaint.setColor(Color.rgb(0x99, 0x99, 0x99));
 		} else if(checked) {
@@ -345,7 +356,7 @@ public class CustomButton extends View {
 		
 		float textWidth = textPaint.measureText(this.text);
 		int left = (this.getMeasuredWidth() - (int)textWidth) / 2;
-		int top = this.getMeasuredHeight() / 2 + 10;
+		int top = CustomButton.TopMargin + textSize;
 		
 		canvas.drawText(this.text, left, top, textPaint);
 	}

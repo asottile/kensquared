@@ -15,7 +15,7 @@ public final class SettingsProvider {
 	
 	private static SharedPreferences preferences = null;
 	
-	private static int gameSize = 4;
+	private static int gameSize = UIConstants.MinGameSize;
 	
 	// TODO: implement dirty cache methodology
 
@@ -63,7 +63,7 @@ public final class SettingsProvider {
 		SettingsProvider.gameSize =
 			SettingsProvider.preferences.getInt(
 				SettingsProvider.GameSize,
-				UIConstants.MinimumGameSize
+				UIConstants.MinGameSize
 			);
 	}
 	

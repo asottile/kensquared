@@ -9,8 +9,6 @@ import com.anthonysottile.kenken.UserSquare;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Point;
-import android.graphics.Rect;
 
 public class KenKenSquare {
 
@@ -49,7 +47,9 @@ public class KenKenSquare {
 	}
 	
 	public void drawSquare(Canvas canvas) {
-	
+		int x = this.square.getX();
+		int y = this.square.getY();
+		
 		// Fill background
 		Paint backgroundColor;
 		switch(this.touchState) {
@@ -69,67 +69,45 @@ public class KenKenSquare {
 			backgroundColor = UIConstants.GetMarkedIncorrectColor();
 		}
 		
-		Rect squareRect = this.dimensions.getSquareRectangle();
-		int squareTextTop = squareRect.top + this.dimensions.getSquareTextOffset();
-		
-		canvas.drawRect(squareRect, backgroundColor);
+		this.dimensions.PaintBackgroundColor(
+			canvas,
+			backgroundColor,
+			x,
+			y
+		);
 		
 		// Draw cage text
-		if(!this.cageText.equalsIgnoreCase("")) {
-			Point pos = this.dimensions.getCageTextPosition();
-			canvas.drawText(this.cageText, pos.x, pos.y, this.dimensions.getCageTextPaint());
+		if(this.cageText.length() > 0) {
+			this.dimensions.PaintCageText(
+				canvas,
+				this.cageText,
+				x,
+				y
+			);
 		}
 		
 		// Draw value text or candidates text
 		int squareValue = this.square.getValue();
 		if(squareValue > 0) {
 			// Display value
-			String valueText = this.square.GetValueString();
-			Paint textPaint = this.dimensions.getValueTextPaint();
-			
-			int textWidth = (int)textPaint.measureText(valueText);
-			
-			int valueTextLeft =	squareRect.left + (squareRect.width() - textWidth) / 2;
-			
-			canvas.drawText(this.square.GetValueString(), valueTextLeft, squareTextTop, textPaint);
+			this.dimensions.PaintValueText(
+				canvas,
+				this.square.GetValueString(),
+				x,
+				y
+			);
 		} else {
 			// Display candidates
 			String candidatesText = this.square.GetCandidatesString();
 			
 			// Only paint if there is a string there
-			if(!candidatesText.equalsIgnoreCase("")) {
-				Paint textPaint = this.dimensions.getCandidateTextPaint();
-			
-				// Figure out the strings to print
-				int squareWidth = squareRect.width();
-				int textLength = candidatesText.length();
-				
-				// Note: this is wrapping character by character, not by word
-				// first represents the first character index in the string segment
-				// line is the line that the text is being written to
-				int first = 0;
-				int line = 0;
-				while(first < textLength) {
-					int last = candidatesText.length();
-					while(textPaint.measureText(candidatesText, first, last) > squareWidth) {
-						last -= 1;
-					}
-					
-					// Draw the string from first to last
-					canvas.drawText(
-						candidatesText,
-						first,
-						last,
-						squareRect.left,
-						squareTextTop + line * textPaint.getTextSize(),
-						textPaint
-					);
-					
-					// assign last into first to check for the next substring
-					first = last;
-					
-					line += 1;
-				}
+			if(candidatesText.length() > 0) {
+				this.dimensions.PaintCandidatesText(
+					canvas,
+					candidatesText,
+					x,
+					y
+				);
 			}
 		}
 	}

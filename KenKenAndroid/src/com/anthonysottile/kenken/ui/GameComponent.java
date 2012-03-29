@@ -18,10 +18,7 @@ import com.anthonysottile.kenken.ui.ValuesLayout.ValueEvent;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -51,20 +48,23 @@ public class GameComponent extends View {
 		return this.game;
 	}
 	
-	private final int CageFontSizeBase = 24;
-	private int getCageTextFontSize(int order) {
-		return this.CageFontSizeBase - order;
-	}
-	
-	private final int ValueFontSizeBase = 30;
-	private int getValueTextFontSize(int order) {
-		return this.ValueFontSizeBase - order;
-	}
-	
 	private boolean isGameWon() {
 		if(this.game == null) {
 			return false;
 		}
+		
+		// Note: this is the new version of this check
+		// The old check used to make sure every square was filled in
+		//  with the values that are stored in the LatinSquare.
+		// However, this presented a problem because there were often
+		//  multiple solutions to the cages provided that did not necessarily
+		//  match that Latin Square.  This new method now checks first to see
+		//  if every square has been filled in.  Then it iterates through all
+		//  of the cages to see if they are satisfied.
+		// This is both faster and makes the game a little easier.
+		// However: this produces an inconsistency that will not be resolved
+		//  in the fact that the "Check" button will now only reference
+		//  the backing square and not one of the several possible solutions.
 		
 		int order = this.game.getLatinSquare().getOrder();
 		if(this.game.getSquaresWithValues() < order * order) {
@@ -81,21 +81,6 @@ public class GameComponent extends View {
 		}
 		
 		return true;
-		
-		/*
-		int order = this.game.getLatinSquare().getOrder();
-		UserSquare[][] userSquares = this.game.getUserSquares();
-		int[][] latinSquare = this.game.getLatinSquare().getValues();
-		for(int i = 0; i < order; i += 1) {
-			for(int j = 0; j < order; j += 1) {
-				if(userSquares[i][j].getValue() != latinSquare[i][j]) {
-					return false;
-				}
-			}
-		}
-		
-		return true;
-		*/
 	}
 	
 	private void valueSetEvent(ValueSetEvent event) {
@@ -241,46 +226,21 @@ public class GameComponent extends View {
 		this.squareWidthPlusBorder = squareWidth + UIConstants.BorderWidth;
 		this.squareHeightPlusBorder = squareHeight + UIConstants.BorderWidth;
 		
+		SquareDrawingDimensions dimensions =
+			new SquareDrawingDimensions(order, squareWidth, squareHeight);
+		
+		UserSquare[][] userSquares = this.game.getUserSquares();
+		
 		this.uiSquares = new KenKenSquare[order][];
 		for(int i = 0; i < order; i += 1) {
 			this.uiSquares[i] = new KenKenSquare[order];
 			for(int j = 0; j < order; j += 1) {
-				
-				int left = UIConstants.BorderWidth * (i + 1) + i * this.squareWidth;
-				int top = UIConstants.BorderWidth * (j + 1) + j * this.squareHeight;
-				int right = left + this.squareWidth;
-				int bottom = top + this.squareHeight;
-				
-				int cageTextFontSize = this.getCageTextFontSize(order);
-				int valueTextFontSize = this.getValueTextFontSize(order);
-				
-				Rect squareRect = new Rect(left, top, right, bottom);
-				Point cageTextPosition = new Point(left + 5, top + cageTextFontSize);
-				int squareTextOffset = 5 + cageTextFontSize + valueTextFontSize;
-				
-				Paint cageTextPaint = new Paint();
-				cageTextPaint.setTextSize(cageTextFontSize);
-				cageTextPaint.setColor(Color.rgb(0, 0, 0));
-				
-				Paint valueTextPaint = new Paint();
-				valueTextPaint.setTextSize(valueTextFontSize);
-				valueTextPaint.setColor(Color.rgb(0, 0, 0));
-				
-				Paint candidateTextPaint = new Paint();
-				candidateTextPaint.setTextSize(8);
-				candidateTextPaint.setColor(Color.rgb(0, 0, 0));
-				
-				SquareDrawingDimensions dimensions =
-					new SquareDrawingDimensions(
-						squareRect,
-						cageTextPosition,
-						cageTextPaint,
-						squareTextOffset,
-						valueTextPaint,
-						candidateTextPaint
+								
+				this.uiSquares[i][j] =
+					new KenKenSquare(
+						userSquares[i][j],
+						dimensions
 					);
-				
-				this.uiSquares[i][j] = new KenKenSquare(this.game.getUserSquares()[i][j], dimensions);
 				this.uiSquares[i][j].AddRequestRedrawListener(
 					new KenKenSquare.RequestRedrawListener() {
 						public void onRequestRedraw(RequestRedrawEvent event) {
