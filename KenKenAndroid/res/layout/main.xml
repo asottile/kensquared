@@ -22,6 +22,16 @@
             android:layout_height="fill_parent" />
 
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/timerText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
     <com.anthonysottile.kenken.ui.ValuesLayout
         android:id="@+id/valuesLayout"
         android:layout_width="fill_parent"

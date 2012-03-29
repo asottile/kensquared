@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class KenKenAndroidActivity extends Activity {
 
@@ -23,6 +24,7 @@ public class KenKenAndroidActivity extends Activity {
 	private GameComponent gameComponent = null;
 	private CandidatesLayout candidatesLayout = null;
 	private ValuesLayout valuesLayout = null;
+	private TextView timerText = null;
 	
 	private void showMessageBox(String message) {
 		AlertDialog ad = new AlertDialog.Builder(this).create();
@@ -84,6 +86,8 @@ public class KenKenAndroidActivity extends Activity {
     		(ValuesLayout)this.findViewById(R.id.valuesLayout);
         this.gameComponent =
     		(GameComponent)this.findViewById(R.id.gameComponent);
+        this.timerText =
+    		(TextView)this.findViewById(R.id.timerText);
         
         // Give the gameComponent references to layouts.
         this.gameComponent.Initialize(this.candidatesLayout, this.valuesLayout);
@@ -95,6 +99,8 @@ public class KenKenAndroidActivity extends Activity {
 				}
 			}
 		);
+        
+        this.timerText.setText("00:00:00");
     }
     
     @Override
