@@ -15,6 +15,9 @@ public final class StatisticsManager {
 	private static SharedPreferences preferences = null;
 	private static GameStatistics[] statistics = null;
 	
+	/**
+	 * Clears the statistics.
+	 */
 	public static void ClearGameStatistics() {
 
 		// Create dummy JSON array
@@ -55,6 +58,9 @@ public final class StatisticsManager {
 		editor.commit();
 	}
 	
+	/**
+	 * Loads the statistics.  Populates them if this is the first run.
+	 */
 	public static void Load() {
 		// First check if we have the Statistics already there
 		if (!StatisticsManager.preferences.contains(StatisticsManager.Statistics)) {
@@ -82,6 +88,12 @@ public final class StatisticsManager {
 		}
 	}
 
+	/**
+	 * Returns the Game Statistics for the specified game size.
+	 * 
+	 * @param gameSize The game size to retrieve statistics for.
+	 * @return The Game Statistics for the specified game size.
+	 */
 	public static GameStatistics GetGameStatistics(int gameSize) {
 		
 		if(StatisticsManager.statistics == null) {
@@ -91,6 +103,11 @@ public final class StatisticsManager {
 		return StatisticsManager.statistics[gameSize - UIConstants.MinGameSize];
 	}
 	
+	/**
+	 * Call when a game has been started to update that statistic.
+	 * 
+	 * @param gameSize The size of the game started.
+	 */
 	public static void GameStarted(int gameSize) {
 		if(StatisticsManager.statistics == null) {
 			StatisticsManager.Load();
@@ -102,6 +119,14 @@ public final class StatisticsManager {
 		StatisticsManager.saveGameStatistics();
 	}
 	
+	/**
+	 * Call when a game has ended to update statistics.
+	 * Returns true if this is a new high score.
+	 * 
+	 * @param gameSize The size of the game completed.
+	 * @param ticks The number of ms that the game took.
+	 * @return True if the game is a new high score.
+	 */
 	public static boolean GameEnded(int gameSize, long ticks) {
 
 		// Returns true if the game is a high score
@@ -128,6 +153,11 @@ public final class StatisticsManager {
 		return returnValue;
 	}
 	
+	/**
+	 * Initialization method to give the manager a reference to preferences.
+	 * 
+	 * @param preferences A reference to the application preferences.
+	 */
 	public static void Initialize(SharedPreferences preferences) {
 		StatisticsManager.preferences = preferences;
 	}

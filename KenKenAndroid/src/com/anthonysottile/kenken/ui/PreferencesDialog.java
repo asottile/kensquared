@@ -23,6 +23,15 @@ public class PreferencesDialog extends Dialog {
 	
 	private Spinner dropdown = null;
 
+	private static final LinearLayout.LayoutParams spacerViewLayoutParams =
+		new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, 1);
+	private View getSpacerView() {
+		View spacerView = new View(this.getContext());
+        spacerView.setBackgroundColor(Color.LTGRAY);
+        spacerView.setLayoutParams(spacerViewLayoutParams);
+        return spacerView;
+	}
+
 	/**
 	 * Sets the Dialog's spinner to the value specified.
 	 * 
@@ -33,18 +42,9 @@ public class PreferencesDialog extends Dialog {
 	public void SetSpinner(int gameSize) {
 		this.dropdown.setSelection(gameSize - UIConstants.MinGameSize);
 	}
-	
+
 	public PreferencesDialog(Context context) {
 		super(context);
-	}
-
-	private static final LinearLayout.LayoutParams spacerViewLayoutParams =
-		new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, 1);
-	private View getSpacerView() {
-		View spacerView = new View(this.getContext());
-        spacerView.setBackgroundColor(Color.LTGRAY);
-        spacerView.setLayoutParams(spacerViewLayoutParams);
-        return spacerView;
 	}
 
 	@Override

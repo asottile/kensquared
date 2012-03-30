@@ -66,5 +66,5 @@ public final class UIConstants {
 		return UIConstants.markedIncorrectColor;
 	}
 	
-	private UIConstants() {}
+	private UIConstants() { }
 }

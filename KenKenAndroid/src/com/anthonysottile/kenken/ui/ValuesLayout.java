@@ -21,7 +21,7 @@ public class ValuesLayout extends LinearLayout {
 			0.5f
 		);
 	
-	//#region Events
+	//#region Value Changed Event
 	
 	public class ValueEvent extends EventObject {
 		
@@ -53,9 +53,9 @@ public class ValuesLayout extends LinearLayout {
 	}
 	private void triggerValueChanged(int value) {
 		ValueEvent event = new ValueEvent(this, value);
-		int size = this.valueChangedListeners.size();
-		for(int i = 0; i < size; i += 1) {
-			this.valueChangedListeners.get(i).onValueChanged(event);
+		
+		for(ValueChangedListener listener : this.valueChangedListeners) {
+			listener.onValueChanged(event);
 		}
 	}
 	
@@ -70,7 +70,6 @@ public class ValuesLayout extends LinearLayout {
 				CustomButton valueButton = (CustomButton)event.getSource();
 				
 				if(valueButton.getChecked()) {
-					
 					// Button became checked
 					if(ValuesLayout.this.selectedButton != null) {
 						ValuesLayout.this.selectedButton.setCheckedNoTrigger(false);
@@ -89,6 +88,11 @@ public class ValuesLayout extends LinearLayout {
 			}
 		};
 		
+	/**
+	 * Sets the values to disabled for all in the list of numbers.
+	 * 
+	 * @param disabled The list of Values to disable.
+	 */
 	public void SetDisabled(List<Integer> disabled) {
 		// First enable all the buttons
 		for(int i = 0; i < valueButtons.length; i += 1) {
@@ -102,6 +106,9 @@ public class ValuesLayout extends LinearLayout {
 		}
 	}
 	
+	/**
+	 * Disables all of the value buttons for this control.
+	 */
 	public void SetDisabled() {
 		// Disable all of the buttons.
 		for(int i = 0; i < this.valueButtons.length; i += 1) {
@@ -109,6 +116,12 @@ public class ValuesLayout extends LinearLayout {
 		}
 	}
 	
+	/**
+	 * Sets the value of this control.  Note, this does not bubble an event
+	 *  as it should only be called when selecting a square.
+	 *  
+	 * @param value The value to set.
+	 */
 	public void SetValue(int value) {
 
 		// Do not trigger events as this should only be called from
@@ -127,6 +140,14 @@ public class ValuesLayout extends LinearLayout {
 		}
 	}
 	
+	/**
+	 * Attempts to set the value on the control.  Note, this does bubble an event
+	 *  as it should only be called from a ui element setting it (such as a key
+	 *   press).  A value will not be set if the target button is disabled.
+	 *   A value that is already set will be unset.   
+	 * 
+	 * @param value The value to attempt to set.
+	 */
 	public void TrySetValue(int value) {
 		// Only set the value if it is enabled
 		// Also when checking or unchecking the target button,
@@ -151,23 +172,31 @@ public class ValuesLayout extends LinearLayout {
 		}
 	}
 	
+	/**
+	 * Clears the Value control removing all ui elements.
+	 */
 	public void Clear() {
 		if(this.valueButtons != null) {
 			this.removeAllViews();
-			
-			for(int i = 0; i < this.valueButtons.length; i += 1) {
-				this.valueButtons[i].ClearCheckChangedListeners();
+		
+			for(CustomButton valueButton : this.valueButtons) {
+				valueButton.ClearCheckChangedListeners();
 			}
 			
 			this.valueButtons = null;
 		}
 	}
 	
-	public void NewGame(int order) {
+	/**
+	 * Setup method for when a new game is started.
+	 * 
+	 * @param gameSize The size of the game.
+	 */
+	public void NewGame(int gameSize) {
 		this.Clear();
 
-		this.valueButtons = new CustomButton[order];
-		for(int i = 0; i < order; i += 1) {
+		this.valueButtons = new CustomButton[gameSize];
+		for(int i = 0; i < gameSize; i += 1) {
 			this.valueButtons[i] = new CustomButton(this.getContext());
 			this.valueButtons[i].setEnabled(true);
 			this.valueButtons[i].setHasLeftCurve(false);
@@ -181,6 +210,7 @@ public class ValuesLayout extends LinearLayout {
 			this.addView(this.valueButtons[i], ValuesLayout.buttonsLayoutParams);
 		}
 		
+		// Set the first and last buttons to be curved (left and right).
 		this.valueButtons[0].setHasLeftCurve(true);
 		this.valueButtons[this.valueButtons.length - 1].setHasRightCurve(true);
 	}

@@ -41,14 +41,6 @@ public class SquareDrawingDimensions {
 		return sb.toString();
 	}
 	
-	private int getLeft(int x) {
-		return UIConstants.BorderWidth * (x + 1) + x * this.squareWidth;
-	}
-	
-	private int getTop(int y) {
-		return UIConstants.BorderWidth * (y + 1) + y * this.squareHeight;
-	}
-	
 	private int squareWidth;
 	private int squareHeight;
 	private int order;
@@ -61,6 +53,23 @@ public class SquareDrawingDimensions {
 	private Paint valueTextPaint = null;
 	private Paint candidatesTextPaint = null;
 
+	
+	private int getLeft(int x) {
+		return UIConstants.BorderWidth * (x + 1) + x * this.squareWidth;
+	}
+	
+	private int getTop(int y) {
+		return UIConstants.BorderWidth * (y + 1) + y * this.squareHeight;
+	}
+	
+	/**
+	 * Paints the cage text for the given square.
+	 * 
+	 * @param canvas The canvas to paint on to.
+	 * @param cageText The cage text to paint on the canvas.
+	 * @param x The x index of the square that is painting.
+	 * @param y The y index of the square that is painting.
+	 */
 	public void PaintCageText(Canvas canvas, String cageText, int x, int y) {
 		int left = this.getLeft(x) + SquareDrawingDimensions.cageTextLeftMargin;
 		int top = this.getTop(y) + this.cageTextFontSize;
@@ -68,6 +77,14 @@ public class SquareDrawingDimensions {
 		canvas.drawText(cageText, left, top, this.cageTextPaint);
 	}
 	
+	/**
+	 * Paints the value text for the given square.
+	 * 
+	 * @param canvas The canvas to paint on to.
+	 * @param valueText The value text to paint on the canvas.
+	 * @param x The x index of the square that is painting.
+	 * @param y The y index of the square that is painting.
+	 */
 	public void PaintValueText(Canvas canvas, String valueText, int x, int y) {
 		
 		int textWidth = (int)this.valueTextPaint.measureText(valueText);
@@ -78,6 +95,14 @@ public class SquareDrawingDimensions {
 		canvas.drawText(valueText, left, top, this.valueTextPaint);
 	}
 	
+	/**
+	 * Paints the candidate text for the given square.
+	 * 
+	 * @param canvas The canvas to paint on to.
+	 * @param candidatesText The candidates text to paint on the canvas.
+	 * @param x The x index of the square that is painting.
+	 * @param y The y index of the square that is painting.
+	 */
 	public void PaintCandidatesText(Canvas canvas, String candidatesText, int x, int y) {
 		// Figure out the length of string to print
 		int textLength = candidatesText.length();
@@ -115,6 +140,14 @@ public class SquareDrawingDimensions {
 		}
 	}
 	
+	/**
+	 * Paints the background for the given square.
+	 * 
+	 * @param canvas The canvas to paint on to.
+	 * @param paint The paint to use to draw the background.
+	 * @param x The x index of the square that is painting.
+	 * @param y The y index of the square that is painting.
+	 */
 	public void PaintBackgroundColor(Canvas canvas, Paint paint, int x, int y) {
 		int left = this.getLeft(x);
 		int right = left + this.squareWidth;

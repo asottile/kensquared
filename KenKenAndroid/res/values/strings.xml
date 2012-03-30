@@ -2,25 +2,51 @@
 <resources>
 
     <string name="app_name">KenKenAndroid</string>
+    
+    <!-- Game Component -->
+    
     <string name="plus">+</string>
     <string name="minus">-</string>
-    <string name="clear">Clear</string>
+    <string name="paused">Paused</string>
+    
+    <!-- end Game Component -->
+    
+    <!-- Menus -->
+    
     <string name="newGame">New Game</string>
-    <string name="preferences">Preferences</string>
-    <string name="preferencesWarning">Note: Changing game size will end the current game.</string>
-    <string name="statistics">Statistics</string>
-    <string name="about">About</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
-    <string name="gameSize">Game Size</string>
-    <string name="gamesPlayed">Games Played:</string>
-    <string name="gamesWon">Games Won:</string>
-    <string name="averageTime">Average Time:</string>
-    <string name="bestTime">Best Time:</string>
-    <string name="bestTimeDate">Best Time Date:</string>
-    <string name="clearStatistics">Clear Statistics</string>
     <string name="check">Check</string>
     <string name="pause">Pause</string>
     <string name="resume">Resume</string>
-    <string name="paused">Paused</string>
+    <string name="about">About</string>
+    
+    <!-- end Menus -->
+    
+    <!-- Dialog -->
+    
+    <string name="gameSize">Game Size</string>
+    
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    
+        <!-- Preferences -->
+        
+        <string name="preferences">Preferences</string>
+        <string name="preferencesWarning">Note: Changing game size will end the current game.</string>
+    
+        <!-- end Preferences -->
+    
+        <!-- Statistics -->
+    
+        <string name="statistics">Statistics</string>
+        <string name="gamesPlayed">Games Played:</string>
+        <string name="gamesWon">Games Won:</string>
+        <string name="averageTime">Average Time:</string>
+        <string name="bestTime">Best Time:</string>
+        <string name="bestTimeDate">Best Time Date:</string>
+        <string name="clear">Clear</string>
+    
+        <!-- end Statistics -->
+    
+    <!-- end Dialog -->
+    
 </resources>

@@ -15,7 +15,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
@@ -91,6 +90,9 @@ public class KenKenAndroidActivity extends Activity {
     			}
     		}
 		);
+        
+        // Give a reference to resources for Bitmap cache
+        BitmapCache.Initialize(this.getResources());
         
         // Set up private references for convenience later
         this.candidatesLayout =
@@ -174,9 +176,12 @@ public class KenKenAndroidActivity extends Activity {
     
     private void showStatistics() {
     	this.gameComponent.PauseIfNotPaused();
+    	this.showDialog(KenKenAndroidActivity.StatisticsDialogId);
+    	/*
     	Intent statisticsActivity =
 			new Intent(getBaseContext(), KenKenStatistics.class);
         startActivity(statisticsActivity);
+        */
     }
     
     private void showAbout() {
@@ -211,6 +216,8 @@ public class KenKenAndroidActivity extends Activity {
     			
     			break;
     		case KenKenAndroidActivity.StatisticsDialogId:
+    			
+    			((StatisticsDialog)dialog).Refresh();
     			
     			break;
 			default:

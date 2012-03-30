@@ -28,17 +28,32 @@ public enum Sign {
     	Sign.None
     };
     
+    /**
+     * Converts the number passed in to the enumeration type.
+     * 
+     * @param n The number to convert to the Sign enum.  Must be inclusively between
+     *           [Sign.Add.getIntValue(), Sign.None.getIntValue()]
+     * @return Returns the Sign enum from the integer.
+     */
     public static Sign toSign(int n) {
     	return Sign.signsByInt[n];
     }
     
     private int n;
+    /**
+     * Returns the integer representation of the enum.
+     * 
+     * @return The integer representation of the enum.
+     */
     public int getIntValue() {
     	return this.n;
     }
     
     private String s;
-    
+
+    /**
+     * Returns the string representation of the enum.
+     */
     @Override
     public String toString() {
     	return this.s;

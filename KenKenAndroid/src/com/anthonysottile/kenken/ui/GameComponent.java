@@ -16,7 +16,6 @@ import com.anthonysottile.kenken.UserSquare;
 import com.anthonysottile.kenken.UserSquare.ValueSetEvent;
 import com.anthonysottile.kenken.cages.ICage;
 import com.anthonysottile.kenken.settings.SettingsProvider;
-import com.anthonysottile.kenken.ui.KenKenSquare.RequestRedrawEvent;
 import com.anthonysottile.kenken.ui.KenKenSquare.SquareTouchState;
 import com.anthonysottile.kenken.ui.ValuesLayout.ValueEvent;
 
@@ -47,7 +46,7 @@ public class GameComponent extends View {
 	
 	private final KenKenSquare.RequestRedrawListener redrawListener = 
 		new KenKenSquare.RequestRedrawListener() {
-			public void onRequestRedraw(RequestRedrawEvent event) {
+			public void onRequestRedraw(EventObject event) {
 				GameComponent.this.postInvalidate();
 			}
 		};

@@ -115,18 +115,36 @@ public class CandidatesLayout extends LinearLayout {
 			}
 		};
 	
+	/**
+	 * Sets the values of the candidates control.  The values are passed in
+	 *  as booleans representing the checked state of each candidate.
+	 *  Note: this does not trigger any events as this should only be
+	 *   called from ui setting of a square.
+	 *  
+	 * @param values The checked state of each candidate.
+	 */
 	public void SetValues(boolean[] values) {
 		for(int i = 0; i < values.length; i += 1) {
 			this.candidates[i].setCheckedNoTrigger(values[i]);
 		}
 	}
 	
+	/**
+	 * Attempts to set the candidate of the given value.  If it is disabled it
+	 *  does nothing.  If it is checked it becomes unchecked.  Note: this triggers
+	 *  events as this should only be called from key press.
+	 *  
+	 * @param value The value to attempt to set.
+	 */
 	public void TrySetValue(int value) {
 		if(this.candidates != null && this.candidates[value - 1].getEnabled()) {
 			this.candidates[value - 1].toggleChecked();
 		}
 	}
 	
+	/**
+	 * Sets all of the candidate buttons to disabled.
+	 */
 	public void SetDisabled() {
 		if(this.candidates != null) {
 			for(int i = 0; i < this.candidates.length; i += 1) {
@@ -135,6 +153,11 @@ public class CandidatesLayout extends LinearLayout {
 		}
 	}
 	
+	/** 
+	 * Sets the specific candidate buttons to disabled.
+	 * 
+	 * @param disabled The candidate buttons to disabled.
+	 */
 	public void SetDisabled(List<Integer> disabled) {
 
 		for(int i = 0; i < this.candidates.length; i += 1) {
@@ -148,7 +171,13 @@ public class CandidatesLayout extends LinearLayout {
 		}
 	}
 	
-	public void NewGame(int order) {
+
+	/**
+	 * Setup method for when a new game is started.
+	 * 
+	 * @param gameSize The size of the game.
+	 */
+	public void NewGame(int gameSize) {
 		this.Clear();
 		
 		// Candidates layout... Add the + and - buttons
@@ -183,8 +212,8 @@ public class CandidatesLayout extends LinearLayout {
 		this.addView(minusButton, 40, ViewGroup.LayoutParams.FILL_PARENT);
 		this.addView(new TextView(this.getContext()), 5, ViewGroup.LayoutParams.FILL_PARENT);
 		
-		this.candidates = new CustomButton[order];
-		for(int i = 0; i < order; i += 1) {
+		this.candidates = new CustomButton[gameSize];
+		for(int i = 0; i < gameSize; i += 1) {
 			this.candidates[i] = new CustomButton(this.getContext());
 			this.candidates[i].setEnabled(true);
 			this.candidates[i].setHasLeftCurve(false);
@@ -201,7 +230,10 @@ public class CandidatesLayout extends LinearLayout {
 		this.candidates[0].setHasLeftCurve(true);
 		this.candidates[this.candidates.length - 1].setHasRightCurve(true);
 	}
-	
+
+	/**
+	 * Clears the candidates control removing all ui elements.
+	 */
 	public void Clear() {
 		// Remove candidate views if they are there
 		if(this.candidates != null) {

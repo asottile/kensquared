@@ -43,9 +43,20 @@ public final class SettingsProvider {
 	
 	// #endregion
 	
+	/**
+	 * Returns the setting for the game size.
+	 * 
+	 * @return The setting for the game size.
+	 */
 	public static int GetGameSize() {
 		return SettingsProvider.gameSize;
 	}
+	
+	/**
+	 * Sets the game size setting.  Triggers game size changed if it changes.
+	 * 
+	 * @param gameSize The size of the game to set.
+	 */
 	public static void SetGameSize(int gameSize) {
 		if(gameSize != SettingsProvider.gameSize) {
 			SettingsProvider.gameSize = gameSize;
@@ -56,7 +67,12 @@ public final class SettingsProvider {
 			SettingsProvider.triggerGameSizeChanged();
 		}
 	}
-	
+
+	/**
+	 * Initialization method to give the manager a reference to preferences.
+	 * 
+	 * @param preferences A reference to the application preferences.
+	 */
 	public static void Initialize(SharedPreferences preferences) {
 		SettingsProvider.preferences = preferences;
 		SettingsProvider.gameSize =

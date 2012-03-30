@@ -5,18 +5,12 @@ import java.util.EventListener;
 import java.util.EventObject;
 import java.util.List;
 
-import com.anthonysottile.kenken.R;
-
 import android.content.Context;
-import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -59,9 +53,8 @@ public class CustomButton extends View {
 	private void triggerCheckChanged() {
         CheckChangedEvent event = new CheckChangedEvent(this, this.checked);
         
-        int size = this.checkChangedListeners.size();
-        for(int i = 0; i < size; i += 1) {
-        	this.checkChangedListeners.get(i).onCheckChanged(event);
+        for (CheckChangedListener listener : this.checkChangedListeners) {
+        	listener.onCheckChanged(event);
         }
 	}
 	
@@ -70,9 +63,9 @@ public class CustomButton extends View {
 	// #region Click Event
 	
 	public interface ClickListener extends EventListener {
-		
 		public void onClick(EventObject event);
 	}
+	
 	private List<ClickListener> clickListeners = new ArrayList<ClickListener>();
 	public void AddClickListener(ClickListener listener) {
 		this.clickListeners.add(listener);
@@ -85,26 +78,50 @@ public class CustomButton extends View {
 	}
 	private void triggerClick() {
 		EventObject event = new EventObject(this);
-		int size = this.clickListeners.size();
-		for(int i = 0; i < size; i += 1) {
-			this.clickListeners.get(i).onClick(event);
+		
+		for (ClickListener listener : this.clickListeners) {
+			listener.onClick(event);
 		}
 	}
 	
 	// #endregion
 	
 	private int value = 0;
+	
+	/**
+	 * Returns the integer value of this button.
+	 * 
+	 * @return The value of the button.
+	 */
 	public int getValue() {
 		return this.value;
 	}
+	
+	/**
+	 * Sets the integer value of this button.
+	 * 
+	 * @param value The value to set on the button.
+	 */
 	public void setValue(int value) {
 		this.value = value;
 	}
 	
 	private boolean enabled = false;
+	
+	/**
+	 * Returns whether the button is enabled.
+	 * 
+	 * @return Whether the button is enabled.
+	 */
 	public boolean getEnabled() {
 		return this.enabled;
 	}
+	
+	/**
+	 * Sets whether the button is enabled.
+	 * 
+	 * @param enabled Whether the button should be enabled.
+	 */
 	public void setEnabled(boolean enabled) {
 		if(this.enabled != enabled) {
 			this.enabled = enabled;
@@ -115,9 +132,21 @@ public class CustomButton extends View {
 	}
 	
 	private boolean hasLeftCurve = false;
+	
+	/**
+	 * Returns whether the button has a left curve.
+	 * 
+	 * @return Whether the button has a left curve.
+	 */
 	public boolean getHasLeftCurve() {
 		return this.hasLeftCurve;
 	}
+	
+	/**
+	 * Sets whether the button has a left curve.
+	 * 
+	 * @param hasLeftCurve Whether the button has a left curve.
+	 */
 	public void setHasLeftCurve(boolean hasLeftCurve) {
 		if(this.hasLeftCurve != hasLeftCurve) {
 			this.hasLeftCurve = hasLeftCurve;
@@ -128,9 +157,21 @@ public class CustomButton extends View {
 	}
 
 	private boolean hasRightCurve = false;
+	
+	/**
+	 * Returns whether the button has a right curve.
+	 * 
+	 * @return Whether the button has a right curve.
+	 */
 	public boolean getHasRightCurve() {
 		return this.hasRightCurve;
 	}
+	
+	/**
+	 * Sets whether the button has a right curve.
+	 * 
+	 * @param hasRightCurve Whether the button has a right curve.
+	 */
 	public void setHasRightCurve(boolean hasRightCurve) {
 		if(this.hasRightCurve != hasRightCurve) {
 			this.hasRightCurve = hasRightCurve;
@@ -141,17 +182,41 @@ public class CustomButton extends View {
 	}
 	
 	private boolean isCheckable = false;
+	
+	/**
+	 * Returns whether the button reacts to clicking by checking and unchecking.
+	 * 
+	 * @return Whether the button reacts to clicking by checking and unchecking. 
+	 */
 	public boolean getIsCheckable() {
 		return this.isCheckable;
 	}
+	
+	/**
+	 * Sets whether the button reacts to clicking by checking and unchecking.
+	 * 
+	 * @param isCheckable Whether the button reacts to clicking by checking and unchecking.
+	 */
 	public void setIsCheckable(boolean isCheckable) {
 		this.isCheckable = isCheckable;
 	}
 
 	private boolean checked = false;
+	
+	/**
+	 * Returns whether the button is checked.
+	 * 
+	 * @return Whether the button is checked.
+	 */
 	public boolean getChecked() {
 		return this.checked;
 	}
+	
+	/**
+	 * Sets whether the button is checked.  Note this triggers check changed.
+	 * 
+	 * @param checked Whether the button is checked.
+	 */
 	public void setChecked(boolean checked) {
 		if(this.checked != checked) {
 			this.checked = checked;
@@ -162,6 +227,12 @@ public class CustomButton extends View {
 			this.postInvalidate();
 		}
 	}
+	
+	/**
+	 * Sets whether the button is checked.  Note this does not trigger check changed.
+	 * 
+	 * @param checked Whether the button is checked.
+	 */
 	public void setCheckedNoTrigger(boolean checked) {
 		if(this.checked != checked) {
 			this.checked = checked;
@@ -170,14 +241,30 @@ public class CustomButton extends View {
 			this.postInvalidate();
 		}
 	}
+	
+	/**
+	 * Toggles the checked state of the button. Note this triggers check changed.
+	 */
 	public void toggleChecked() {
 		this.setChecked(!this.checked);
 	}
 	
 	private String text = "";
+	
+	/**
+	 * Returns the text of the button.
+	 * 
+	 * @return The text of the button.
+	 */
 	public String getText() {
 		return this.text;
 	}
+	
+	/**
+	 * Sets the text of the button.
+	 * 
+	 * @param text The display text of the button.
+	 */
 	public void setText(String text) {
 		if(!this.text.equals(text)) {
 			this.text = text;
@@ -260,10 +347,7 @@ public class CustomButton extends View {
 		int start = 1;
 		int end = this.getMeasuredWidth() - 1;
 
-		Resources res = this.getContext().getResources();
-		
-		Paint p = new Paint();
-		p.setColor(Color.rgb(0, 0, 0));
+		Paint p = UIConstants.GetCageColor();
 		
 		// Draw left curve
 		if(this.hasLeftCurve) {
@@ -272,11 +356,11 @@ public class CustomButton extends View {
 			
 			Bitmap bitmap;
 			if(!this.enabled) {
-				bitmap = BitmapFactory.decodeResource(res, R.drawable.left_disabled);
+				bitmap = BitmapCache.getDisabledLeft();
 			} else if(this.checked) {
-				bitmap = BitmapFactory.decodeResource(res, R.drawable.left_selected);
+				bitmap = BitmapCache.getSelectedLeft();
 			} else {
-				bitmap = BitmapFactory.decodeResource(res, R.drawable.left);
+				bitmap = BitmapCache.getEnabledLeft();
 			}
 			
 			// Draw left curve
@@ -299,11 +383,11 @@ public class CustomButton extends View {
 			
 			Bitmap bitmap;
 			if(!this.enabled) {
-				bitmap = BitmapFactory.decodeResource(res, R.drawable.right_disabled);
+				bitmap = BitmapCache.getDisabledRight();
 			} else if(this.checked) {
-				bitmap = BitmapFactory.decodeResource(res, R.drawable.right_selected);
+				bitmap = BitmapCache.getSelectedRight();
 			} else {
-				bitmap = BitmapFactory.decodeResource(res, R.drawable.right);
+				bitmap = BitmapCache.getEnabledRight();
 			}
 			
 			// Draw right curve
@@ -324,11 +408,11 @@ public class CustomButton extends View {
 		
 		Bitmap bitmap;
 		if(!this.enabled) {
-			bitmap = BitmapFactory.decodeResource(res, R.drawable.middle_disabled);
+			bitmap = BitmapCache.getDisabledCenter();
 		} else if(this.checked) {
-			bitmap = BitmapFactory.decodeResource(res, R.drawable.middle_selected);
+			bitmap = BitmapCache.getSelectedCenter();
 		} else {
-			bitmap = BitmapFactory.decodeResource(res, R.drawable.middle);
+			bitmap = BitmapCache.getEnabledCenter();
 		}
 		
 		Rect destReg = new Rect(
@@ -359,21 +443,6 @@ public class CustomButton extends View {
 		int top = CustomButton.TopMargin + textSize;
 		
 		canvas.drawText(this.text, left, top, textPaint);
-	}
-	
-	public CustomButton(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	
-		TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CustomButton);
-				
-		this.enabled = a.getBoolean(R.styleable.CustomButton_enabled, false);
-		this.hasLeftCurve = a.getBoolean(R.styleable.CustomButton_has_left_curve, false);
-		this.hasRightCurve = a.getBoolean(R.styleable.CustomButton_has_right_curve, false);
-		this.isCheckable = a.getBoolean(R.styleable.CustomButton_is_checkable, false);
-		this.checked = a.getBoolean(R.styleable.CustomButton_checked, false);
-		this.text = a.getString(R.styleable.CustomButton_text);
-
-		this.postInvalidate();
 	}
 	
 	public CustomButton(Context context) {

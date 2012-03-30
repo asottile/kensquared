@@ -125,26 +125,8 @@ public class KenKenSquare {
 
 	// #region Request Redraw Event
 	
-	public class RequestRedrawEvent extends EventObject {
-		private static final long serialVersionUID = -8285430466228083088L;
-		
-		private int x;
-		public int getX() {
-			return this.x;
-		}
-		private int y;
-		public int getY() {
-			return this.y;
-		}
-		
-		public RequestRedrawEvent(Object sender, int x, int y) {
-			super(sender);
-			this.x = x;
-			this.y = y;
-		}
-	}
 	public interface RequestRedrawListener extends EventListener {
-		public void onRequestRedraw(RequestRedrawEvent event);
+		public void onRequestRedraw(EventObject event);
 	}
 	
 	private List<RequestRedrawListener> requestRedrawListeners =
@@ -159,12 +141,7 @@ public class KenKenSquare {
 		this.requestRedrawListeners.clear();
 	}
 	private void triggerRequestRedrawEvent() {
-		RequestRedrawEvent event =
-			new RequestRedrawEvent(
-				this,
-				this.square.getX(),
-				this.square.getY()
-			);
+		EventObject event = new EventObject(this);
 		
 		for (RequestRedrawListener listener : this.requestRedrawListeners) {
 			listener.onRequestRedraw(event);
