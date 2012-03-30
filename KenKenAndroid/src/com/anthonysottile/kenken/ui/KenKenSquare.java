@@ -116,11 +116,9 @@ public class KenKenSquare {
 		this.square = square;
 		this.dimensions = dimensions;
 		
-		final KenKenSquare self = this;
-		
 		this.square.AddChangedEventHandler(new UserSquare.UserSquareChangedListener() {
 			public void onUserSquareChanged(EventObject event) {
-				self.triggerRequestRedrawEvent();
+				KenKenSquare.this.triggerRequestRedrawEvent();
 			}
 		});
 	}

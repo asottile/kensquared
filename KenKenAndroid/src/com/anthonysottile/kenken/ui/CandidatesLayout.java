@@ -6,6 +6,7 @@ import java.util.EventObject;
 import java.util.List;
 
 import com.anthonysottile.kenken.R;
+import com.anthonysottile.kenken.ui.CustomButton.CheckChangedEvent;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -15,6 +16,13 @@ import android.widget.TextView;
 
 public class CandidatesLayout extends LinearLayout {
 
+	private static final LayoutParams buttonsLayoutParams =
+		new LinearLayout.LayoutParams(
+			30,
+			ViewGroup.LayoutParams.FILL_PARENT,
+			0.5f
+		);
+	
 	//#region Events
 	
 	public class CandidateEvent extends EventObject {
@@ -94,13 +102,18 @@ public class CandidatesLayout extends LinearLayout {
 		}
 	}
 	
-	private void handleCheckChanged(CustomButton button) {
-		if(button.getChecked()) {
-			this.triggerCandidateAdded(button.getValue());
-		} else {
-			this.triggerCandidateRemoved(button.getValue());
-		}
-	}
+	private final CustomButton.CheckChangedListener checkChangedListener =
+		new CustomButton.CheckChangedListener() {
+			public void onCheckChanged(CheckChangedEvent event) {
+				CustomButton button = (CustomButton)event.getSource();
+				if(button.getChecked()) {
+					CandidatesLayout.this.triggerCandidateAdded(button.getValue());
+				} else {
+					CandidatesLayout.this.triggerCandidateRemoved(button.getValue());
+				}
+				
+			}
+		};
 	
 	public void SetValues(boolean[] values) {
 		for(int i = 0; i < values.length; i += 1) {
@@ -138,8 +151,6 @@ public class CandidatesLayout extends LinearLayout {
 	public void NewGame(int order) {
 		this.Clear();
 		
-		final CandidatesLayout self = this;
-		
 		// Candidates layout... Add the + and - buttons
 		this.plusButton = new CustomButton(this.getContext());
 		this.plusButton.setEnabled(true);
@@ -150,7 +161,7 @@ public class CandidatesLayout extends LinearLayout {
 		this.plusButton.setText(this.getContext().getString(R.string.plus));
 		this.plusButton.AddClickListener(new CustomButton.ClickListener() {
 			public void onClick(EventObject event) {
-				self.populateAllClicked();
+				CandidatesLayout.this.populateAllClicked();
 			}
 		});
 
@@ -163,7 +174,7 @@ public class CandidatesLayout extends LinearLayout {
 		this.minusButton.setText(this.getContext().getString(R.string.minus));
 		this.minusButton.AddClickListener(new CustomButton.ClickListener() {
 			public void onClick(EventObject event) {
-				self.clearAllClicked();
+				CandidatesLayout.this.clearAllClicked();
 			}
 		});
 		
@@ -182,22 +193,9 @@ public class CandidatesLayout extends LinearLayout {
 			this.candidates[i].setCheckedNoTrigger(false);
 			this.candidates[i].setValue(i + 1);
 			this.candidates[i].setText(Integer.toString(i + 1, 10));
-			this.candidates[i].AddCheckChangedListener(
-				new CustomButton.CheckChangedListener() {
-					public void onCheckChanged(CustomButton.CheckChangedEvent event) {
-						self.handleCheckChanged((CustomButton)event.getSource());
-					}
-				}
-			);
+			this.candidates[i].AddCheckChangedListener(this.checkChangedListener);
 			
-			// weight the buttons so they stretch to the entire layout
-			LayoutParams weightingLayoutParams =
-				new LinearLayout.LayoutParams(
-					30,
-					ViewGroup.LayoutParams.FILL_PARENT
-				);
-			weightingLayoutParams.weight = 0.5f;
-			this.addView(this.candidates[i], weightingLayoutParams);
+			this.addView(this.candidates[i], CandidatesLayout.buttonsLayoutParams);
 		}
 		
 		this.candidates[0].setHasLeftCurve(true);

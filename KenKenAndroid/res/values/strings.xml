@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World, KenKenAndroidActivity!</string>
     <string name="app_name">KenKenAndroid</string>
     <string name="plus">+</string>
     <string name="minus">-</string>
     <string name="clear">Clear</string>
     <string name="newGame">New Game</string>
     <string name="preferences">Preferences</string>
+    <string name="preferencesWarning">Note: Changing game size will end the current game.</string>
     <string name="statistics">Statistics</string>
     <string name="about">About</string>
     <string name="ok">OK</string>
-    <string name="preference_category">Game Preferences</string>
+    <string name="cancel">Cancel</string>
     <string name="gameSize">Game Size</string>
     <string name="gamesPlayed">Games Played:</string>
     <string name="gamesWon">Games Won:</string>

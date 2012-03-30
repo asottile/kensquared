@@ -82,6 +82,17 @@ public class KenKenGame {
 		this.cageSquareOccupied[p.x][p.y] = true; 
 	}
 	
+	private final UserSquare.ValueSetListener valueSetListener =
+		new UserSquare.ValueSetListener() {
+			public void onValueSet(ValueSetEvent event) {
+				if(event.getValue() > 0) {
+					KenKenGame.this.squaresWithValues += 1;
+				} else {
+					KenKenGame.this.squaresWithValues -= 1;
+				}
+			}
+		};
+	
 	private void postInitialize() {
 		// For shared "constructor" code
 		
@@ -90,23 +101,11 @@ public class KenKenGame {
 		//  the number of squares the user has filled in and allow for a faster
 		//  calculation of the winning condition.
 		
-		final KenKenGame self = this;
-		
 		int order = this.latinSquare.getOrder();
-		
-		UserSquare.ValueSetListener valueSetListener = new UserSquare.ValueSetListener() {
-			public void onValueSet(ValueSetEvent event) {
-				if(event.getValue() > 0) {
-					self.squaresWithValues += 1;
-				} else {
-					self.squaresWithValues -= 1;
-				}
-			}
-		};
 		
 		for(int i = 0; i < order; i += 1) {
 			for(int j = 0; j < order; j += 1) {
-				this.userSquares[i][j].AddValueSetListener(valueSetListener);
+				this.userSquares[i][j].AddValueSetListener(this.valueSetListener);
 			}
 		}
 	}
@@ -191,10 +190,7 @@ public class KenKenGame {
 			this.gameStartTime = new Date();
 			this.gameStartTime.setTime(this.gameStartTime.getTime() - timeElapsed);
 			
-			this.latinSquare =
-				new LatinSquare(
-					json.getJSONObject(latinSquareProperty)
-				);
+			this.latinSquare =	new LatinSquare(json.getJSONObject(latinSquareProperty));
 			
 			JSONArray cagesJson = json.getJSONArray(cagesProperty);
 			this.cages = new ArrayList<ICage>();

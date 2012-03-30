@@ -98,8 +98,6 @@ public class KenKenStatistics extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final KenKenStatistics self = this;
-        
         LinearLayout.LayoutParams halfWidth =
     		new LinearLayout.LayoutParams(
     			30,
@@ -152,12 +150,12 @@ public class KenKenStatistics extends Activity {
     		new OnItemSelectedListener() {
 				public void onItemSelected(AdapterView<?> adapter, View dropdown,
 					int selectedIndex, long id) {
-					self.setValues(selectedIndex + UIConstants.MinGameSize);
+					KenKenStatistics.this.setValues(
+						selectedIndex + UIConstants.MinGameSize
+					);
 				}
 
-				public void onNothingSelected(AdapterView<?> arg0) {
-					// Woo!!!! Do Nothing!!!
-				}
+				public void onNothingSelected(AdapterView<?> arg0) { }
     		}
 		);
 

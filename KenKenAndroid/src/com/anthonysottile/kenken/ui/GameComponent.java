@@ -40,12 +40,24 @@ public class GameComponent extends View {
 	private Handler gameTimer = new Handler();
 	private Runnable updater = new Runnable() {
 		public void run() {
-			updateTime();
-			gameTimer.postDelayed(this, 1000);
+			GameComponent.this.updateTime();
+			GameComponent.this.gameTimer.postDelayed(this, 1000);
 		}
 	};
 	
-	private UserSquare.ValueSetListener valueSetEventListener = null;
+	private final KenKenSquare.RequestRedrawListener redrawListener = 
+		new KenKenSquare.RequestRedrawListener() {
+			public void onRequestRedraw(RequestRedrawEvent event) {
+				GameComponent.this.postInvalidate();
+			}
+		};
+	
+	private final UserSquare.ValueSetListener valueSetEventListener =
+		new UserSquare.ValueSetListener() {
+			public void onValueSet(ValueSetEvent event) {
+				GameComponent.this.valueSetEvent(event);
+			}
+		};
 	
 	private int squareWidth = -1;
 	private int squareWidthPlusBorder = -1;
@@ -53,8 +65,8 @@ public class GameComponent extends View {
 	private int squareHeightPlusBorder = -1;
 	
 	private KenKenSquare[][] uiSquares = null;
-	private KenKenSquare currentSelectedSquare = null;
-	private KenKenSquare currentHoverSquare = null;
+	private KenKenSquare selectedSquare = null;
+	private KenKenSquare hoverSquare = null;
 	
 	private boolean paused = false;
 	private long pausedTime;
@@ -193,7 +205,7 @@ public class GameComponent extends View {
 	
 	private void setFromSquare() {
 		
-		UserSquare currentUserSquare = this.currentSelectedSquare.getUserSquare();
+		UserSquare currentUserSquare = this.selectedSquare.getUserSquare();
 		
 		List<Integer> disabled = this.getDisabled(currentUserSquare);
 
@@ -208,12 +220,19 @@ public class GameComponent extends View {
 		this.candidatesLayout.SetValues(currentUserSquare.getCandidates());
 	}
 		
+	/**
+	 * Sets the game (if it exists) to a paused state.
+	 */
 	public void SetPausedIfNotPaused() {
 		if(this.game != null && !this.paused) {
 			this.TogglePause();
 		}
 	}
 	
+	/**
+	 * Toggles the paused state of the game.
+	 * Do not call if there could be no game at the time.
+	 */
 	public void TogglePause() {
 		if(this.paused) {
 			
@@ -244,26 +263,24 @@ public class GameComponent extends View {
 		this.postInvalidate();
 	}
 	
+	/**
+	 * Gives the Game Component references to the Candidates, Values, and timer text.
+	 */
 	public void Initialize(
 		CandidatesLayout candidatesLayout,
 		ValuesLayout valuesLayout,
 		TextView timerText) {
+		
 		this.candidatesLayout = candidatesLayout;
 		this.valuesLayout = valuesLayout;
 		this.timerText = timerText;
 		
-		final GameComponent self = this;
-		
-		this.valueSetEventListener = new UserSquare.ValueSetListener() {
-			public void onValueSet(ValueSetEvent event) {
-				self.valueSetEvent(event);
-			}
-		};
-		
 		this.candidatesLayout.AddCandidateAddedListener(
 			new CandidatesLayout.CandidateAddedListener() {
 				public void onCandidateAdded(CandidatesLayout.CandidateEvent event) {
-					self.currentSelectedSquare.getUserSquare().AddCandidate(event.getCandidate());
+					GameComponent.this.selectedSquare
+						.getUserSquare()
+						.AddCandidate(event.getCandidate());
 				}
 			}
 		);
@@ -271,7 +288,9 @@ public class GameComponent extends View {
 		this.candidatesLayout.AddCandidateRemovedListener(
 			new CandidatesLayout.CandidateRemovedListener() {
 				public void onCandidateRemoved(CandidatesLayout.CandidateEvent event) {
-					self.currentSelectedSquare.getUserSquare().RemoveCandidate(event.getCandidate());
+					GameComponent.this.selectedSquare
+						.getUserSquare()
+						.RemoveCandidate(event.getCandidate());
 				}
 			}
 		);
@@ -279,7 +298,9 @@ public class GameComponent extends View {
 		this.valuesLayout.AddValueChangedListener(
 			new ValuesLayout.ValueChangedListener() {
 				public void onValueChanged(ValueEvent event) {
-					self.currentSelectedSquare.getUserSquare().setValue(event.getValue());
+					GameComponent.this.selectedSquare
+						.getUserSquare()
+						.setValue(event.getValue());
 				}
 			}
 		);
@@ -287,10 +308,9 @@ public class GameComponent extends View {
 	
 	private void initializeGame(int order) {
 		
-		final GameComponent self = this;
-		
 		int boardWidth = this.getMeasuredWidth();
 		int boardHeight = this.getMeasuredHeight();
+		
 		// Adjust height / width for borders
 		int borders = UIConstants.BorderWidth * (order + 1);
 		boardWidth -= borders;
@@ -316,13 +336,7 @@ public class GameComponent extends View {
 						userSquares[i][j],
 						dimensions
 					);
-				this.uiSquares[i][j].AddRequestRedrawListener(
-					new KenKenSquare.RequestRedrawListener() {
-						public void onRequestRedraw(RequestRedrawEvent event) {
-							self.postInvalidate();
-						}
-					}
-				);
+				this.uiSquares[i][j].AddRequestRedrawListener(this.redrawListener);
 			}
 		}
 		
@@ -332,12 +346,13 @@ public class GameComponent extends View {
 		for(int i = 0; i < cagesSize; i += 1) {
 			ICage cage = cages.get(i);
 			Point location = cage.getSignLocation();
-			this.uiSquares[location.x][location.y].setCageText(cage.getSignNumber().toString());
+			this.uiSquares[location.x][location.y]
+				.setCageText(cage.getSignNumber().toString());
 		}
 		
 		// Set the first square to be selected
-		this.currentSelectedSquare = this.uiSquares[0][0];
-		this.currentSelectedSquare.setTouchState(SquareTouchState.Selected);
+		this.selectedSquare = this.uiSquares[0][0];
+		this.selectedSquare.setTouchState(SquareTouchState.Selected);
 		
 		this.updateTime();
 		this.gameTimer.postDelayed(this.updater, 1000);
@@ -350,7 +365,8 @@ public class GameComponent extends View {
 
 	/**
 	 * Saves out current state of the game.  Returns null if none to save.
-	 * @return null if there is no game.
+	 * 
+	 * @return Game JSON or null if there is no game.
 	 */
 	public JSONObject SaveState() {
 		if(this.game == null) {
@@ -395,8 +411,8 @@ public class GameComponent extends View {
 				}
 			}
 			
-			if(this.currentSelectedSquare != null) {
-				this.currentSelectedSquare.getUserSquare().ClearValueSetListeners();
+			if(this.selectedSquare != null) {
+				this.selectedSquare.getUserSquare().ClearValueSetListeners();
 			}
 			
 			this.gameTimer.removeCallbacks(this.updater);
@@ -404,8 +420,8 @@ public class GameComponent extends View {
 			
 			this.game = null;
 			this.uiSquares = null;
-			this.currentHoverSquare = null;
-			this.currentSelectedSquare = null;
+			this.hoverSquare = null;
+			this.selectedSquare = null;
 		}
 		
 		// Invalidate the drawn canvas
@@ -451,31 +467,31 @@ public class GameComponent extends View {
 				case MotionEvent.ACTION_DOWN:
 				case MotionEvent.ACTION_MOVE:
 					
-					if(this.currentHoverSquare != null
-						&& this.currentHoverSquare != targetSquare) {
-						this.currentHoverSquare.setTouchState(SquareTouchState.None);
+					if(this.hoverSquare != null
+						&& this.hoverSquare != targetSquare) {
+						this.hoverSquare.setTouchState(SquareTouchState.None);
 					}
 
 					if(targetSquare.getTouchState() != SquareTouchState.Selected) {
-						this.currentHoverSquare = targetSquare;
-						this.currentHoverSquare.setTouchState(SquareTouchState.Touching);
+						this.hoverSquare = targetSquare;
+						this.hoverSquare.setTouchState(SquareTouchState.Touching);
 					}
 					
 					break;
 				case MotionEvent.ACTION_UP:
 					
-					if(this.currentHoverSquare != null) {
-						this.currentHoverSquare.setTouchState(SquareTouchState.None);
-						this.currentHoverSquare = null;
+					if(this.hoverSquare != null) {
+						this.hoverSquare.setTouchState(SquareTouchState.None);
+						this.hoverSquare = null;
 					}
 					
-					this.currentSelectedSquare.setTouchState(SquareTouchState.None);
-					this.currentSelectedSquare.getUserSquare().RemoveValueSetListener(
+					this.selectedSquare.setTouchState(SquareTouchState.None);
+					this.selectedSquare.getUserSquare().RemoveValueSetListener(
 						this.valueSetEventListener
 					);
-					this.currentSelectedSquare = targetSquare;
-					this.currentSelectedSquare.setTouchState(SquareTouchState.Selected);
-					this.currentSelectedSquare.getUserSquare().AddValueSetListener(
+					this.selectedSquare = targetSquare;
+					this.selectedSquare.setTouchState(SquareTouchState.Selected);
+					this.selectedSquare.getUserSquare().AddValueSetListener(
 						this.valueSetEventListener
 					);
 					
