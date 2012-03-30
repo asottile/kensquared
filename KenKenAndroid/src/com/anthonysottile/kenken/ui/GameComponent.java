@@ -31,11 +31,51 @@ import android.widget.TextView;
 
 public class GameComponent extends View {
 
-	private final static int DefaultSize = 100;
+	public enum GameState {
+		Clear,
+		InGame,
+		Paused,
+		Won		
+	};
+	
+	private final static int defaultSize = 100;
 	
 	private CandidatesLayout candidatesLayout = null;
 	private ValuesLayout valuesLayout = null;
 	private TextView timerText = null;
+	
+	private final KenKenSquare.RequestRedrawListener redrawListener = 
+		new KenKenSquare.RequestRedrawListener() {
+			public void onRequestRedraw(RequestRedrawEvent event) {
+				GameComponent.this.postInvalidate();
+			}
+		};
+	
+	private final UserSquare.ValueSetListener valueSetListener =
+		new UserSquare.ValueSetListener() {
+			public void onValueSet(ValueSetEvent event) {
+				GameComponent.this.valueSetEvent(event);
+			}
+		};
+	
+	private int squareWidthPlusBorder;
+	private int squareHeightPlusBorder;
+	
+	private KenKenSquare[][] uiSquares = null;
+	private KenKenSquare selectedSquare = null;
+	private KenKenSquare hoverSquare = null;
+	
+	private GameState gameState = GameState.Clear;
+	public GameState getGameState() {
+		return this.gameState;
+	}
+	
+	private long pausedTime;
+		
+	private KenKenGame game = null;
+	public KenKenGame getGame() {
+		return this.game;
+	}
 	
 	private Handler gameTimer = new Handler();
 	private Runnable updater = new Runnable() {
@@ -45,39 +85,24 @@ public class GameComponent extends View {
 		}
 	};
 	
-	private final KenKenSquare.RequestRedrawListener redrawListener = 
-		new KenKenSquare.RequestRedrawListener() {
-			public void onRequestRedraw(RequestRedrawEvent event) {
-				GameComponent.this.postInvalidate();
-			}
-		};
-	
-	private final UserSquare.ValueSetListener valueSetEventListener =
-		new UserSquare.ValueSetListener() {
-			public void onValueSet(ValueSetEvent event) {
-				GameComponent.this.valueSetEvent(event);
-			}
-		};
-	
-	private int squareWidth = -1;
-	private int squareWidthPlusBorder = -1;
-	private int squareHeight = -1;
-	private int squareHeightPlusBorder = -1;
-	
-	private KenKenSquare[][] uiSquares = null;
-	private KenKenSquare selectedSquare = null;
-	private KenKenSquare hoverSquare = null;
-	
-	private boolean paused = false;
-	private long pausedTime;
-	
-	private boolean clickable = false;
-	
-	private KenKenGame game = null;
-	public KenKenGame getGame() {
-		return this.game;
+	private void updateTime() {
+		Date now = new Date();
+		long ticks = now.getTime() - this.game.getGameStartTime().getTime();
+		int tickSeconds = (int)ticks / 1000;
+		int seconds = tickSeconds % 60;
+		int minutes = tickSeconds / 60 % 60;
+		int hours = tickSeconds / 3600;
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("%02d", hours));
+		sb.append(':');
+		sb.append(String.format("%02d", minutes));
+		sb.append(':');
+		sb.append(String.format("%02d", seconds));
+		
+		this.timerText.setText(sb.toString());
 	}
-	
+
 	private boolean isGameWon() {
 		if(this.game == null) {
 			return false;
@@ -101,34 +126,14 @@ public class GameComponent extends View {
 			return false;
 		}
 		
-		List<ICage> cages = this.game.getCages();
 		UserSquare[][] userSquares = this.game.getUserSquares();
-		int cagesSize = cages.size();
-		for(int i = 0; i < cagesSize; i += 1) {
-			if(!cages.get(i).cageIsValid(userSquares)) {
+		
+		for (ICage cage : this.game.getCages()) {
+			if(!cage.cageIsValid(userSquares))
 				return false;
-			}
 		}
 		
 		return true;
-	}
-	
-	private void updateTime() {
-		Date now = new Date();
-		long ticks = now.getTime() - this.game.getGameStartTime().getTime();
-		int tickSeconds = (int)ticks / 1000;
-		int seconds = tickSeconds % 60;
-		int minutes = tickSeconds / 60 % 60;
-		int hours = tickSeconds / 3600;
-		
-		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("%02d", hours));
-		sb.append(':');
-		sb.append(String.format("%02d", minutes));
-		sb.append(':');
-		sb.append(String.format("%02d", seconds));
-		
-		this.timerText.setText(sb.toString());
 	}
 	
 	private void valueSetEvent(ValueSetEvent event) {
@@ -164,7 +169,7 @@ public class GameComponent extends View {
 				// Disable stuff
 				this.valuesLayout.SetDisabled();
 				this.candidatesLayout.SetDisabled();
-				this.clickable = false;
+				this.gameState = GameState.Won;
 				
 				this.gameTimer.removeCallbacks(this.updater);
 				this.updateTime();
@@ -221,10 +226,10 @@ public class GameComponent extends View {
 	}
 		
 	/**
-	 * Sets the game (if it exists) to a paused state.
+	 * Sets the game to paused if it is in game.
 	 */
-	public void SetPausedIfNotPaused() {
-		if(this.game != null && !this.paused) {
+	public void PauseIfNotPaused() {
+		if(this.gameState == GameState.InGame) {
 			this.TogglePause();
 		}
 	}
@@ -234,13 +239,12 @@ public class GameComponent extends View {
 	 * Do not call if there could be no game at the time.
 	 */
 	public void TogglePause() {
-		if(this.paused) {
+		if(this.gameState == GameState.Paused) {
 			
 			// UnPause game
 			this.game.ResetGameStartTime(this.pausedTime);
 			
-			this.paused = false;
-			this.clickable = true;
+			this.gameState = GameState.InGame;
 			this.setFromSquare();
 			this.updateTime();
 			this.gameTimer.postDelayed(this.updater, 1000);
@@ -251,8 +255,7 @@ public class GameComponent extends View {
 			Date date = new Date();
 			this.pausedTime = date.getTime() - this.game.getGameStartTime().getTime();			
 			
-			this.paused = true;
-			this.clickable = false;
+			this.gameState = GameState.Paused;
 			this.candidatesLayout.SetDisabled();
 			this.valuesLayout.SetDisabled();
 			this.gameTimer.removeCallbacks(this.updater);
@@ -316,8 +319,8 @@ public class GameComponent extends View {
 		boardWidth -= borders;
 		boardHeight -= borders;
 		
-		this.squareWidth = boardWidth / order;
-		this.squareHeight = boardHeight / order;
+		int squareWidth = boardWidth / order;
+		int squareHeight = boardHeight / order;
 		this.squareWidthPlusBorder = squareWidth + UIConstants.BorderWidth;
 		this.squareHeightPlusBorder = squareHeight + UIConstants.BorderWidth;
 		
@@ -326,25 +329,18 @@ public class GameComponent extends View {
 		
 		UserSquare[][] userSquares = this.game.getUserSquares();
 		
-		this.uiSquares = new KenKenSquare[order][];
+		this.uiSquares = new KenKenSquare[order][];		
 		for(int i = 0; i < order; i += 1) {
 			this.uiSquares[i] = new KenKenSquare[order];
 			for(int j = 0; j < order; j += 1) {
-								
-				this.uiSquares[i][j] =
-					new KenKenSquare(
-						userSquares[i][j],
-						dimensions
-					);
+				this.uiSquares[i][j] = new KenKenSquare(userSquares[i][j], dimensions);
 				this.uiSquares[i][j].AddRequestRedrawListener(this.redrawListener);
 			}
 		}
 		
 		// Pass cage texts into the squares
 		List<ICage> cages = this.game.getCages();
-		int cagesSize = cages.size();
-		for(int i = 0; i < cagesSize; i += 1) {
-			ICage cage = cages.get(i);
+		for(ICage cage : cages) {
 			Point location = cage.getSignLocation();
 			this.uiSquares[location.x][location.y]
 				.setCageText(cage.getSignNumber().toString());
@@ -357,7 +353,7 @@ public class GameComponent extends View {
 		this.updateTime();
 		this.gameTimer.postDelayed(this.updater, 1000);
 		
-		this.clickable = true;
+		this.gameState = GameState.InGame;
 		
 		// Invalidate the drawn canvas
 		this.postInvalidate();
@@ -369,17 +365,18 @@ public class GameComponent extends View {
 	 * @return Game JSON or null if there is no game.
 	 */
 	public JSONObject SaveState() {
-		if(this.game == null) {
+		if(this.gameState == GameState.Clear || this.gameState == GameState.Won) {
 			return null;
+		}
+		
+		// If we are paused, we want to set the correct time before saving it out.
+		if(this.gameState == GameState.Paused) {
+			this.game.ResetGameStartTime(this.pausedTime);
 		}
 		
 		JSONObject gameAsJson = this.game.ToJson();
 		
-		// Set paused (which should clean up some things).
-		this.SetPausedIfNotPaused();
-		
-		// Clear the game out
-		this.Clear();
+		this.PauseIfNotPaused();
 		
 		return gameAsJson;
 	}
@@ -389,8 +386,9 @@ public class GameComponent extends View {
 		if(gameAsJson != null) {
 			this.game = new KenKenGame(gameAsJson);
 			this.initializeGame(this.game.getLatinSquare().getOrder());
-			this.paused = false;
-			this.SetPausedIfNotPaused();
+			
+			// Pause the game
+			this.TogglePause();
 		}
 	}
 	
@@ -402,12 +400,15 @@ public class GameComponent extends View {
 
 	public void Clear() {
 		
+		this.candidatesLayout.Clear();
+		this.valuesLayout.Clear();
+		
 		if(this.game != null) {
+			
 			// remove event stuff
-			int order = this.game.getLatinSquare().getOrder();
-			for(int i = 0; i < order; i += 1) {
-				for(int j = 0; j < order; j += 1) {
-					this.uiSquares[i][j].ClearRequestRedrawListeners();
+			for(KenKenSquare[] squares : this.uiSquares) {
+				for(KenKenSquare square : squares) {
+					square.ClearRequestRedrawListeners();
 				}
 			}
 			
@@ -423,6 +424,8 @@ public class GameComponent extends View {
 			this.hoverSquare = null;
 			this.selectedSquare = null;
 		}
+		
+		this.gameState = GameState.Clear;
 		
 		// Invalidate the drawn canvas
 		this.postInvalidate();
@@ -453,25 +456,30 @@ public class GameComponent extends View {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		
-		// Click event
-		
-		if(this.game != null && this.clickable) {
+		// Only want to accept clicks if we are in game.
+		if(this.gameState == GameState.InGame) {
 			
 			float x = event.getX();
 			float y = event.getY();
 			
 			KenKenSquare targetSquare =
 				getSquareFromPosition((int)x, (int)y);
-			
+
+			// Move, Down are handled as "hovering"
+			// Up is handled as the click
 			switch(event.getAction()) {
 				case MotionEvent.ACTION_DOWN:
 				case MotionEvent.ACTION_MOVE:
-					
+
+					// If there is a hover square and it is not this one
+					// Then make it not hovered any more.
 					if(this.hoverSquare != null
 						&& this.hoverSquare != targetSquare) {
 						this.hoverSquare.setTouchState(SquareTouchState.None);
 					}
 
+					// If this hovering square is not selected then set
+					//  the hover state on it.
 					if(targetSquare.getTouchState() != SquareTouchState.Selected) {
 						this.hoverSquare = targetSquare;
 						this.hoverSquare.setTouchState(SquareTouchState.Touching);
@@ -480,26 +488,34 @@ public class GameComponent extends View {
 					break;
 				case MotionEvent.ACTION_UP:
 					
+					// On mouse up, if there was a hover square then 
+					//  clear the hovered state.
 					if(this.hoverSquare != null) {
 						this.hoverSquare.setTouchState(SquareTouchState.None);
 						this.hoverSquare = null;
 					}
 					
+					// Un set the touched state of the previously touched square
+					// This includes removing its event listeners
+					// Then set the selected square and set the touched state
+					//  and rebind the event handler.
 					this.selectedSquare.setTouchState(SquareTouchState.None);
 					this.selectedSquare.getUserSquare().RemoveValueSetListener(
-						this.valueSetEventListener
+						this.valueSetListener
 					);
 					this.selectedSquare = targetSquare;
 					this.selectedSquare.setTouchState(SquareTouchState.Selected);
 					this.selectedSquare.getUserSquare().AddValueSetListener(
-						this.valueSetEventListener
+						this.valueSetListener
 					);
 					
+					// After this, set up the Candidates and Values layouts.
 					this.setFromSquare();
 					
 					break;
 			}
 			
+			// Return true since we handled the click
 			return true;
 		}
 
@@ -519,7 +535,7 @@ public class GameComponent extends View {
         if (widthMode == MeasureSpec.EXACTLY) {
         	width = widthSize;
         } else {
-        	width = GameComponent.DefaultSize;
+        	width = GameComponent.defaultSize;
         	if (widthMode == MeasureSpec.AT_MOST && width > widthSize ) {
         		width = widthSize;
         	}
@@ -527,7 +543,7 @@ public class GameComponent extends View {
         if (heightMode == MeasureSpec.EXACTLY) {
         	height = heightSize;
         } else {
-        	height = GameComponent.DefaultSize;
+        	height = GameComponent.defaultSize;
         	if (heightMode == MeasureSpec.AT_MOST && height > heightSize ) {
         		height = heightSize;
         	}
@@ -540,7 +556,8 @@ public class GameComponent extends View {
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		
-		if(this.paused) {			
+		// If the game is paused, just draw black background and return
+		if(this.gameState == GameState.Paused) {			
 			canvas.drawColor(Color.BLACK);
 			return;
 		}
@@ -577,20 +594,16 @@ public class GameComponent extends View {
 			);
 		}
 		
-		if(game != null) {
+		if(this.gameState == GameState.InGame || this.gameState == GameState.Won) {
 		
 			// Draw Cages
-			List<ICage> cages = this.game.getCages();
-			int cagesSize = cages.size();
-			for(int i = 0; i < cagesSize; i += 1) {
-				ICage cage = cages.get(i);
-				List<RenderLine> renderLines = cage.getRenderLines();
-				int renderLinesSize = renderLines.size();
-				for(int j = 0; j < renderLinesSize; j += 1) {
-					RenderLine line = renderLines.get(j);
-
-                    int startX = line.getPosition().x * (squareWidth + UIConstants.BorderWidth);
-                    int startY = line.getPosition().y * (squareHeight + UIConstants.BorderWidth);
+			for (ICage cage : this.game.getCages()) {			
+				for (RenderLine line : cage.getRenderLines()) {
+					
+					Point linePosition = line.getPosition();
+					
+                    int startX = linePosition.x * (squareWidth + UIConstants.BorderWidth);
+                    int startY = linePosition.y * (squareHeight + UIConstants.BorderWidth);
 
                     int endX = startX;
                     int endY = startY;
@@ -606,13 +619,13 @@ public class GameComponent extends View {
                 		endX + UIConstants.BorderWidth, endY + UIConstants.BorderWidth,
                 		UIConstants.GetCageColor()
             		);			
-                }
+				}
 			}
 			
 			// draw the squares themselves
-			for(int i = 0; i < order; i += 1) {
-				for(int j = 0; j < order; j += 1) {
-					this.uiSquares[i][j].drawSquare(canvas);
+			for(KenKenSquare[] squares : this.uiSquares) {
+				for(KenKenSquare square : squares) {
+					square.drawSquare(canvas);
 				}
 			}
 		}
@@ -627,11 +640,21 @@ public class GameComponent extends View {
 		private static final long serialVersionUID = -6896411724437170770L;
 		
 		private long ticks;
+		/**
+		 * Returns the number of ticks that the game took.  This is in ms.
+		 * 
+		 * @return The number of ticks the game took to win.
+		 */
 		public long getTicks() {
 			return this.ticks;
 		}
 		
 		private int size;
+		/**
+		 * Returns the size of the game that was won.
+		 * 
+		 * @return The size of the game that was won.
+		 */
 		public int getSize() {
 			return this.size;
 		}
@@ -645,24 +668,40 @@ public class GameComponent extends View {
 	}
 	
 	public interface GameWonListener extends EventListener {
+		/**
+		 * Event handler that is called when a game is won.
+		 * 
+		 * @param event The event object of the Game Won event.
+		 */
 		public void onGameWon(GameWonEvent event);
 	}
 	
 	private List<GameWonListener> gameWonListeners =
 			new ArrayList<GameWonListener>();
-	public void AddGameWonListener(GameWonListener listener) {
-		this.gameWonListeners.add(listener);
-	}
-	public void RemoveGameWonListener(GameWonListener listener) {
-		this.gameWonListeners.remove(listener);
-	}
 	private void triggerGameWon(long ticks, int size) {
 		GameWonEvent event = new GameWonEvent(this, ticks, size);
 		
-		int listenersSize = this.gameWonListeners.size();
-		for(int i = 0; i < listenersSize; i += 1) {
-			this.gameWonListeners.get(i).onGameWon(event);
+		for(GameWonListener listener : this.gameWonListeners) {
+			listener.onGameWon(event);
 		}
+	}
+	
+	/**
+	 * Adds the listener to the Game Won listeners.
+	 * 
+	 * @param listener The Game Won listener to add to the listeners.
+	 */
+	public void AddGameWonListener(GameWonListener listener) {
+		this.gameWonListeners.add(listener);
+	}
+	
+	/**
+	 *  Removes the listener from the Game Won listeners.
+	 *  
+	 * @param listener The Game Won listener to remove from the listeners.
+	 */
+	public void RemoveGameWonListener(GameWonListener listener) {
+		this.gameWonListeners.remove(listener);
 	}
 	
 	// #endregion

@@ -2,9 +2,13 @@ package com.anthonysottile.kenken.ui;
 
 import java.util.EventObject;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.anthonysottile.kenken.R;
 import com.anthonysottile.kenken.settings.SettingsProvider;
 import com.anthonysottile.kenken.settings.StatisticsManager;
+import com.anthonysottile.kenken.ui.GameComponent.GameState;
 import com.anthonysottile.kenken.ui.GameComponent.GameWonEvent;
 
 import android.app.Activity;
@@ -23,15 +27,14 @@ public class KenKenAndroidActivity extends Activity {
 
 	private static final int PreferencesDialogId = 0;
 	private static final int StatisticsDialogId = 1;
-	
+
 	private static final String preferences = "com.anthonysottile.kenken";
+	private static final String saveGameBundleProperty = "SavedGame";
 
 	private GameComponent gameComponent = null;
 	private CandidatesLayout candidatesLayout = null;
 	private ValuesLayout valuesLayout = null;
 	private TextView timerText = null;
-	
-	private boolean inGame = false;
 	
 	private void showMessageBox(String message) {
 		AlertDialog ad = new AlertDialog.Builder(this).create();
@@ -47,7 +50,6 @@ public class KenKenAndroidActivity extends Activity {
 	}
 	
 	private void gameSizeChanged() {
-		this.inGame = false;
 		this.gameComponent.Clear();
 		this.candidatesLayout.Clear();
 		this.valuesLayout.Clear();
@@ -57,8 +59,6 @@ public class KenKenAndroidActivity extends Activity {
 		new GameComponent.GameWonListener() {
 			public void onGameWon(GameWonEvent event) {
 
-				KenKenAndroidActivity.this.inGame = false;
-				
 				boolean highScore =
 					StatisticsManager.GameEnded(
 						event.getSize(), 
@@ -77,7 +77,7 @@ public class KenKenAndroidActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-                
+        
         // Give a reference to settings to our static settings manager
         // Also attach to the settings's event handler
         SharedPreferences preferences =
@@ -110,27 +110,44 @@ public class KenKenAndroidActivity extends Activity {
 		);
         
         this.gameComponent.AddGameWonListener(this.gameWonListener);
-    }
-    
-    @Override
-    protected void onResume() {
-    	super.onResume();
-    	
-    	// See if we have a saved game to restore
-    	this.gameComponent.LoadState(SettingsProvider.GetSavedGame());
+        
+        // Restore the saved state if applicable
+        if(savedInstanceState != null) {
+        	if(savedInstanceState.containsKey(KenKenAndroidActivity.saveGameBundleProperty)) {
+        		
+        		String gameJsonString =
+    				savedInstanceState.getString(KenKenAndroidActivity.saveGameBundleProperty);
+        		
+        		if(gameJsonString.length() > 0) {
+        			try {
+        				JSONObject gameAsJson = new JSONObject(gameJsonString);
+        				this.gameComponent.LoadState(gameAsJson);
+        			} catch (JSONException e) {
+        				e.printStackTrace();
+        			}
+        		}
+        	}
+        }
     }
     
     @Override
     protected void onPause() {
     	super.onPause();
-    	
-    	SettingsProvider.SaveGame(this.gameComponent.SaveState());
+
+    	this.gameComponent.PauseIfNotPaused();
     }
     
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+    	JSONObject game = this.gameComponent.SaveState();
+    	if(game != null) {
+        	savedInstanceState.putString(KenKenAndroidActivity.saveGameBundleProperty, game.toString());
+    	}
+    	
+    	super.onSaveInstanceState(savedInstanceState);
+    }
     
     private void newGame() {
-    	this.inGame = true;
-    	
     	int gameSize = SettingsProvider.GetGameSize();
     	StatisticsManager.GameStarted(gameSize);
     	this.gameComponent.NewGame(gameSize);
@@ -147,12 +164,12 @@ public class KenKenAndroidActivity extends Activity {
     }
     
     private void showPreferences() {
-    	this.gameComponent.SetPausedIfNotPaused();
+    	this.gameComponent.PauseIfNotPaused();
     	this.showDialog(KenKenAndroidActivity.PreferencesDialogId);
     }
     
     private void showStatistics() {
-    	this.gameComponent.SetPausedIfNotPaused();
+    	this.gameComponent.PauseIfNotPaused();
     	Intent statisticsActivity =
 			new Intent(getBaseContext(), KenKenStatistics.class);
         startActivity(statisticsActivity);
@@ -168,14 +185,10 @@ public class KenKenAndroidActivity extends Activity {
     	Dialog dialog;
     	switch(id) {
     		case KenKenAndroidActivity.PreferencesDialogId:
-    			
     			dialog = new PreferencesDialog(this);
-    			
     			break;
     		case KenKenAndroidActivity.StatisticsDialogId:
-    			
     			dialog = new StatisticsDialog(this);
-    			
     			break;
 			default:
 				dialog = null;
@@ -190,8 +203,7 @@ public class KenKenAndroidActivity extends Activity {
     	switch(id) {
     		case KenKenAndroidActivity.PreferencesDialogId:
     			
-    			PreferencesDialog d = (PreferencesDialog)dialog;
-    			d.SetSpinner(SettingsProvider.GetGameSize());
+    			((PreferencesDialog)dialog).SetSpinner(SettingsProvider.GetGameSize());
     			
     			break;
     		case KenKenAndroidActivity.StatisticsDialogId:
@@ -213,8 +225,11 @@ public class KenKenAndroidActivity extends Activity {
     
     @Override
     public boolean onPrepareOptionsMenu (Menu menu) {
-    	menu.findItem(R.id.check).setEnabled(this.inGame);
-    	menu.findItem(R.id.pause).setEnabled(this.inGame);
+    	GameComponent.GameState gameState = this.gameComponent.getGameState();
+    	menu.findItem(R.id.check).setEnabled(gameState == GameState.InGame);
+    	menu.findItem(R.id.pause).setEnabled(
+			gameState == GameState.InGame || gameState == GameState.Paused
+		);
         return true;
     }
     

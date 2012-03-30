@@ -166,9 +166,8 @@ public class KenKenSquare {
 				this.square.getY()
 			);
 		
-		int length = this.requestRedrawListeners.size();
-		for(int i = 0; i < length; i += 1) {
-			this.requestRedrawListeners.get(i).onRequestRedraw(event);
+		for (RequestRedrawListener listener : this.requestRedrawListeners) {
+			listener.onRequestRedraw(event);
 		}
 	}
 	
