@@ -19,4 +19,7 @@
     <string name="bestTime">Best Time:</string>
     <string name="bestTimeDate">Best Time Date:</string>
     <string name="clearStatistics">Clear Statistics</string>
+    <string name="check">Check</string>
+    <string name="pause">Pause</string>
+    <string name="paused">Paused</string>
 </resources>

@@ -27,6 +27,17 @@ public class KenKenGame {
 	public Date getGameStartTime() {
 		return this.gameStartTime;
 	}
+	
+	/**
+	 * Resets the game time to the specified milliseconds.
+	 * @param milliseconds The amount of elapsed time to set the game time
+	 *                      to.
+	 */
+	public void ResetGameStartTime(long milliseconds) {
+		Date date = new Date();
+		date.setTime(date.getTime() - milliseconds);
+		this.gameStartTime = date;
+	}
 
 	public void PenalizeGameStartTime(long milliseconds) {
 		this.gameStartTime.setTime(this.gameStartTime.getTime() - milliseconds);

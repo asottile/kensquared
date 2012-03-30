@@ -26,6 +26,8 @@ public class KenKenAndroidActivity extends Activity {
 	private ValuesLayout valuesLayout = null;
 	private TextView timerText = null;
 	
+	private boolean inGame = false;
+	
 	private void showMessageBox(String message) {
 		AlertDialog ad = new AlertDialog.Builder(this).create();
 		ad.setCancelable(false);
@@ -40,12 +42,16 @@ public class KenKenAndroidActivity extends Activity {
 	}
 	
 	private void gameSizeChanged() {
+		this.inGame = false;
 		this.gameComponent.Clear();
 		this.candidatesLayout.Clear();
 		this.valuesLayout.Clear();
 	}
 	
 	private void gameWon(GameComponent.GameWonEvent event) {
+
+		this.inGame = false;
+    	
 		boolean highScore =
 			StatisticsManager.GameEnded(event.getSize(), event.getTicks());
 		
@@ -90,7 +96,11 @@ public class KenKenAndroidActivity extends Activity {
     		(TextView)this.findViewById(R.id.timerText);
         
         // Give the gameComponent references to layouts.
-        this.gameComponent.Initialize(this.candidatesLayout, this.valuesLayout);
+        this.gameComponent.Initialize(
+    		this.candidatesLayout,
+    		this.valuesLayout,
+    		this.timerText
+		);
         
         this.gameComponent.AddGameWonListener(
     		new GameComponent.GameWonListener() {
@@ -99,8 +109,21 @@ public class KenKenAndroidActivity extends Activity {
 				}
 			}
 		);
-        
-        this.timerText.setText("00:00:00");
+    }
+    
+    @Override
+    protected void onResume() {
+    	super.onResume();
+    	
+    	// See if we have a saved game to restore
+    	this.gameComponent.LoadState(SettingsProvider.GetSavedGame());
+    }
+    
+    @Override
+    protected void onPause() {
+    	super.onPause();
+    	
+    	SettingsProvider.SaveGame(this.gameComponent.SaveState());
     }
     
     @Override
@@ -111,6 +134,8 @@ public class KenKenAndroidActivity extends Activity {
     }
     
     private void newGame() {
+    	this.inGame = true;
+    	
     	int gameSize = SettingsProvider.GetGameSize();
     	StatisticsManager.GameStarted(gameSize);
     	this.gameComponent.NewGame(gameSize);
@@ -118,18 +143,35 @@ public class KenKenAndroidActivity extends Activity {
     	this.valuesLayout.NewGame(gameSize);
     }
     
+    private void pauseGame() {
+    	this.gameComponent.TogglePause();
+    }
+    
+    private void checkGame() {
+    	
+    }
+    
     private void showPreferences() {
-    	Intent settingsActivity = new Intent(getBaseContext(), KenKenPreferences.class);
+    	Intent settingsActivity =
+			new Intent(getBaseContext(), KenKenPreferences.class);
         startActivity(settingsActivity);
     }
     
     private void showStatistics() {
-    	Intent statisticsActivity = new Intent(getBaseContext(), KenKenStatistics.class);
+    	Intent statisticsActivity =
+			new Intent(getBaseContext(), KenKenStatistics.class);
         startActivity(statisticsActivity);
     }
     
     private void showAbout() {
     	this.showMessageBox("Show About Clicked");
+    }
+    
+    @Override
+    public boolean onPrepareOptionsMenu (Menu menu) {
+    	menu.findItem(R.id.check).setEnabled(this.inGame);
+    	menu.findItem(R.id.pause).setEnabled(this.inGame);
+        return true;
     }
     
     @Override
@@ -139,6 +181,12 @@ public class KenKenAndroidActivity extends Activity {
             case R.id.newGame:
         		this.newGame();
                 return true;
+            case R.id.pause:
+            	this.pauseGame();
+            	return true;
+            case R.id.check:
+            	this.checkGame();
+            	return true;
             case R.id.preferences:
         		this.showPreferences();
                 return true;

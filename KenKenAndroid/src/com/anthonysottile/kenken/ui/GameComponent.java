@@ -6,7 +6,10 @@ import java.util.EventListener;
 import java.util.EventObject;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import com.anthonysottile.kenken.KenKenGame;
+import com.anthonysottile.kenken.R;
 import com.anthonysottile.kenken.RenderLine;
 import com.anthonysottile.kenken.UserSquare;
 import com.anthonysottile.kenken.UserSquare.ValueSetEvent;
@@ -18,10 +21,13 @@ import com.anthonysottile.kenken.ui.ValuesLayout.ValueEvent;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 
 public class GameComponent extends View {
 
@@ -29,6 +35,15 @@ public class GameComponent extends View {
 	
 	private CandidatesLayout candidatesLayout = null;
 	private ValuesLayout valuesLayout = null;
+	private TextView timerText = null;
+	
+	private Handler gameTimer = new Handler();
+	private Runnable updater = new Runnable() {
+		public void run() {
+			updateTime();
+			gameTimer.postDelayed(this, 1000);
+		}
+	};
 	
 	private UserSquare.ValueSetListener valueSetEventListener = null;
 	
@@ -40,6 +55,9 @@ public class GameComponent extends View {
 	private KenKenSquare[][] uiSquares = null;
 	private KenKenSquare currentSelectedSquare = null;
 	private KenKenSquare currentHoverSquare = null;
+	
+	private boolean paused = false;
+	private long pausedTime;
 	
 	private boolean clickable = false;
 	
@@ -83,6 +101,24 @@ public class GameComponent extends View {
 		return true;
 	}
 	
+	private void updateTime() {
+		Date now = new Date();
+		long ticks = now.getTime() - this.game.getGameStartTime().getTime();
+		int tickSeconds = (int)ticks / 1000;
+		int seconds = tickSeconds % 60;
+		int minutes = tickSeconds / 60 % 60;
+		int hours = tickSeconds / 3600;
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("%02d", hours));
+		sb.append(':');
+		sb.append(String.format("%02d", minutes));
+		sb.append(':');
+		sb.append(String.format("%02d", seconds));
+		
+		this.timerText.setText(sb.toString());
+	}
+	
 	private void valueSetEvent(ValueSetEvent event) {
 		
 		int value = event.getValue();
@@ -117,6 +153,9 @@ public class GameComponent extends View {
 				this.valuesLayout.SetDisabled();
 				this.candidatesLayout.SetDisabled();
 				this.clickable = false;
+				
+				this.gameTimer.removeCallbacks(this.updater);
+				this.updateTime();
 				
 				Date now = new Date();
 				long ticks = now.getTime() - this.game.getGameStartTime().getTime();
@@ -168,10 +207,50 @@ public class GameComponent extends View {
 		}
 		this.candidatesLayout.SetValues(currentUserSquare.getCandidates());
 	}
+		
+	public void SetPausedIfNotPaused() {
+		if(this.game != null && !this.paused) {
+			this.TogglePause();
+		}
+	}
 	
-	public void Initialize(CandidatesLayout candidatesLayout, ValuesLayout valuesLayout) {
+	public void TogglePause() {
+		if(this.paused) {
+			
+			// UnPause game
+			this.game.ResetGameStartTime(this.pausedTime);
+			
+			this.paused = false;
+			this.clickable = true;
+			this.setFromSquare();
+			this.updateTime();
+			this.gameTimer.postDelayed(this.updater, 1000);
+			
+		} else {
+			
+			// Pause game
+			Date date = new Date();
+			this.pausedTime = date.getTime() - this.game.getGameStartTime().getTime();			
+			
+			this.paused = true;
+			this.clickable = false;
+			this.candidatesLayout.SetDisabled();
+			this.valuesLayout.SetDisabled();
+			this.gameTimer.removeCallbacks(this.updater);
+			this.timerText.setText(this.getContext().getString(R.string.paused));
+		}
+		
+		// Redraw since paused state changed
+		this.postInvalidate();
+	}
+	
+	public void Initialize(
+		CandidatesLayout candidatesLayout,
+		ValuesLayout valuesLayout,
+		TextView timerText) {
 		this.candidatesLayout = candidatesLayout;
 		this.valuesLayout = valuesLayout;
+		this.timerText = timerText;
 		
 		final GameComponent self = this;
 		
@@ -206,13 +285,9 @@ public class GameComponent extends View {
 		);
 	}
 	
-	public void NewGame(int order) {
+	private void initializeGame(int order) {
 		
 		final GameComponent self = this;
-		
-		this.Clear();
-		
-		this.game = new KenKenGame(order);
 		
 		int boardWidth = this.getMeasuredWidth();
 		int boardHeight = this.getMeasuredHeight();
@@ -263,11 +338,50 @@ public class GameComponent extends View {
 		// Set the first square to be selected
 		this.currentSelectedSquare = this.uiSquares[0][0];
 		this.currentSelectedSquare.setTouchState(SquareTouchState.Selected);
-				
+		
+		this.updateTime();
+		this.gameTimer.postDelayed(this.updater, 1000);
+		
 		this.clickable = true;
 		
 		// Invalidate the drawn canvas
 		this.postInvalidate();
+	}
+
+	/**
+	 * Saves out current state of the game.  Returns null if none to save.
+	 * @return null if there is no game.
+	 */
+	public JSONObject SaveState() {
+		if(this.game == null) {
+			return null;
+		}
+		
+		JSONObject gameAsJson = this.game.ToJson();
+		
+		// Set paused (which should clean up some things).
+		this.SetPausedIfNotPaused();
+		
+		// Clear the game out
+		this.Clear();
+		
+		return gameAsJson;
+	}
+	
+	public void LoadState(JSONObject gameAsJson) {
+		this.Clear();
+		if(gameAsJson != null) {
+			this.game = new KenKenGame(gameAsJson);
+			this.initializeGame(this.game.getLatinSquare().getOrder());
+			this.paused = false;
+			this.SetPausedIfNotPaused();
+		}
+	}
+	
+	public void NewGame(int order) {
+		this.Clear();
+		this.game = new KenKenGame(order);
+		this.initializeGame(order);
 	}
 
 	public void Clear() {
@@ -284,6 +398,9 @@ public class GameComponent extends View {
 			if(this.currentSelectedSquare != null) {
 				this.currentSelectedSquare.getUserSquare().ClearValueSetListeners();
 			}
+			
+			this.gameTimer.removeCallbacks(this.updater);
+			this.timerText.setText("");
 			
 			this.game = null;
 			this.uiSquares = null;
@@ -406,7 +523,12 @@ public class GameComponent extends View {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-				
+		
+		if(this.paused) {			
+			canvas.drawColor(Color.BLACK);
+			return;
+		}
+		
 		int order = SettingsProvider.GetGameSize();
 				
 		int boardWidth = this.getMeasuredWidth();

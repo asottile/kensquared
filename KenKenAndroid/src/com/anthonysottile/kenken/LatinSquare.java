@@ -133,7 +133,7 @@ public class LatinSquare {
 				JSONArray innerArray = outerArray.getJSONArray(i);
 				this.values[i] = new int[this.values.length];
 				
-				for(int j = 0; j < this.values[i].length; i += 1) {
+				for(int j = 0; j < this.values[i].length; j += 1) {
 					this.values[i][j] = innerArray.getInt(j);
 				}
 			}
