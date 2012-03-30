@@ -9,6 +9,7 @@ import java.util.List;
 import org.json.JSONObject;
 
 import com.anthonysottile.kenken.KenKenGame;
+import com.anthonysottile.kenken.LatinSquare;
 import com.anthonysottile.kenken.R;
 import com.anthonysottile.kenken.RenderLine;
 import com.anthonysottile.kenken.UserSquare;
@@ -82,6 +83,17 @@ public class GameComponent extends View {
 		public void run() {
 			GameComponent.this.updateTime();
 			GameComponent.this.gameTimer.postDelayed(this, 1000);
+		}
+	};
+	private Runnable checkClearer = new Runnable() {
+		public void run() {
+			if(GameComponent.this.gameState != GameState.Clear) {
+				for (KenKenSquare[] squares : GameComponent.this.uiSquares) {
+					for(KenKenSquare square : squares) {
+						square.setMarkedIncorrect(false);
+					}
+				}
+			}
 		}
 	};
 	
@@ -266,47 +278,29 @@ public class GameComponent extends View {
 		this.postInvalidate();
 	}
 	
-	/**
-	 * Gives the Game Component references to the Candidates, Values, and timer text.
-	 */
-	public void Initialize(
-		CandidatesLayout candidatesLayout,
-		ValuesLayout valuesLayout,
-		TextView timerText) {
+	public void Check() {
 		
-		this.candidatesLayout = candidatesLayout;
-		this.valuesLayout = valuesLayout;
-		this.timerText = timerText;
+		// Penalize the game playing time by 15 seconds
+		this.game.PenalizeGameStartTime(15000);
+		this.updateTime();
 		
-		this.candidatesLayout.AddCandidateAddedListener(
-			new CandidatesLayout.CandidateAddedListener() {
-				public void onCandidateAdded(CandidatesLayout.CandidateEvent event) {
-					GameComponent.this.selectedSquare
-						.getUserSquare()
-						.AddCandidate(event.getCandidate());
+		LatinSquare latinSquare = this.game.getLatinSquare();
+		int[][] values = latinSquare.getValues();
+		int order = latinSquare.getOrder();
+		
+		for(int i = 0; i < order; i += 1) {
+			for(int j = 0; j < order; j += 1) {
+				
+				KenKenSquare square = this.uiSquares[i][j];
+				int squareValue = square.getUserSquare().getValue();
+				if(squareValue > 0 && squareValue != values[i][j]) {
+					square.setMarkedIncorrect(true);
 				}
 			}
-		);
+		}
 		
-		this.candidatesLayout.AddCandidateRemovedListener(
-			new CandidatesLayout.CandidateRemovedListener() {
-				public void onCandidateRemoved(CandidatesLayout.CandidateEvent event) {
-					GameComponent.this.selectedSquare
-						.getUserSquare()
-						.RemoveCandidate(event.getCandidate());
-				}
-			}
-		);
-		
-		this.valuesLayout.AddValueChangedListener(
-			new ValuesLayout.ValueChangedListener() {
-				public void onValueChanged(ValueEvent event) {
-					GameComponent.this.selectedSquare
-						.getUserSquare()
-						.setValue(event.getValue());
-				}
-			}
-		);
+		// Set a timer to clear the UI state change
+		this.gameTimer.postDelayed(this.checkClearer, 5000);
 	}
 	
 	private void initializeGame(int order) {
@@ -431,6 +425,51 @@ public class GameComponent extends View {
 		this.postInvalidate();
 	}
 	
+	/**
+	 * Gives the Game Component references to the Candidates, Values, and timer text.
+	 */
+	public void Initialize(
+		CandidatesLayout candidatesLayout,
+		ValuesLayout valuesLayout,
+		TextView timerText) {
+		
+		this.candidatesLayout = candidatesLayout;
+		this.valuesLayout = valuesLayout;
+		this.timerText = timerText;
+		
+		this.candidatesLayout.AddCandidateAddedListener(
+			new CandidatesLayout.CandidateAddedListener() {
+				public void onCandidateAdded(CandidatesLayout.CandidateEvent event) {
+					GameComponent.this.selectedSquare
+						.getUserSquare()
+						.AddCandidate(event.getCandidate());
+				}
+			}
+		);
+		
+		this.candidatesLayout.AddCandidateRemovedListener(
+			new CandidatesLayout.CandidateRemovedListener() {
+				public void onCandidateRemoved(CandidatesLayout.CandidateEvent event) {
+					GameComponent.this.selectedSquare
+						.getUserSquare()
+						.RemoveCandidate(event.getCandidate());
+				}
+			}
+		);
+		
+		this.valuesLayout.AddValueChangedListener(
+			new ValuesLayout.ValueChangedListener() {
+				public void onValueChanged(ValueEvent event) {
+					GameComponent.this.selectedSquare
+						.getUserSquare()
+						.setValue(event.getValue());
+				}
+			}
+		);
+	}
+	
+	// #region Touch Event
+	
 	private KenKenSquare getSquareFromPosition(int x, int y) {
 		
 		int xIndex = (x - UIConstants.BorderWidth) / this.squareWidthPlusBorder;
@@ -521,6 +560,8 @@ public class GameComponent extends View {
 
 		return false;
 	}
+	
+	// #endregion
 	
 	// #region Measure and Draw
 	

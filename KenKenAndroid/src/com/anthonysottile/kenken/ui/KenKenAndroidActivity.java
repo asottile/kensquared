@@ -134,6 +134,7 @@ public class KenKenAndroidActivity extends Activity {
     protected void onPause() {
     	super.onPause();
 
+    	// Pause the game since they are navigating away
     	this.gameComponent.PauseIfNotPaused();
     }
     
@@ -141,7 +142,10 @@ public class KenKenAndroidActivity extends Activity {
     public void onSaveInstanceState(Bundle savedInstanceState) {
     	JSONObject game = this.gameComponent.SaveState();
     	if(game != null) {
-        	savedInstanceState.putString(KenKenAndroidActivity.saveGameBundleProperty, game.toString());
+        	savedInstanceState.putString(
+    			KenKenAndroidActivity.saveGameBundleProperty,
+    			game.toString()
+			);
     	}
     	
     	super.onSaveInstanceState(savedInstanceState);
@@ -160,7 +164,7 @@ public class KenKenAndroidActivity extends Activity {
     }
     
     private void checkGame() {
-    	
+    	this.gameComponent.Check();
     }
     
     private void showPreferences() {
@@ -230,6 +234,11 @@ public class KenKenAndroidActivity extends Activity {
     	menu.findItem(R.id.pause).setEnabled(
 			gameState == GameState.InGame || gameState == GameState.Paused
 		);
+    	if(gameState != GameState.Paused) {
+    		menu.findItem(R.id.pause).setTitle(R.string.pause);
+    	} else {
+    		menu.findItem(R.id.pause).setTitle(R.string.resume);
+    	}
         return true;
     }
     

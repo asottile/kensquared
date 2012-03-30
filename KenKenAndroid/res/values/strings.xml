@@ -21,5 +21,6 @@
     <string name="clearStatistics">Clear Statistics</string>
     <string name="check">Check</string>
     <string name="pause">Pause</string>
+    <string name="resume">Resume</string>
     <string name="paused">Paused</string>
 </resources>
