@@ -25,7 +25,7 @@ public class NumberPickerTests extends TestCase {
 		assertEquals(NumberPickerSize, numberPicker.GetRemaining());
 		
 		// Test the entire size
-		for(int i = 1; i <= NumberPickerSize; i += 1) {
+		for (int i = 1; i <= NumberPickerSize; i += 1) {
 			numberPicker.GetNext();
 			assertEquals(NumberPickerSize - i, numberPicker.GetRemaining());
 		}
@@ -40,7 +40,7 @@ public class NumberPickerTests extends TestCase {
 		// Instantiate a set to track the integers we receive
 		Set<Integer> receivedIntegers = new HashSet<Integer>();
 		
-		for(int i = 0; i < NumberPickerSize; i += 1) {
+		for (int i = 0; i < NumberPickerSize; i += 1) {
 			int receivedInteger = this.numberPicker.GetNext();
 			
 			// Assert that the integer we got out is in the correct range
@@ -75,7 +75,7 @@ public class NumberPickerTests extends TestCase {
 	@Test
 	public void testNumberPicker() {
 		// Tests for the constructor
-		for(int i = 1; i < 5; i += 1) {
+		for (int i = 1; i < 5; i += 1) {
 			NumberPicker picker = new NumberPicker(i);
 			assertEquals(i, picker.GetRemaining());
 		}
