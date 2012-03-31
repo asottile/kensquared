@@ -107,14 +107,16 @@ public class SquareDrawingDimensions {
 		// Figure out the length of string to print
 		int textLength = candidatesText.length();
 		
+		// Align the candidates text at the bottom of the square
 		int left = this.getLeft(x) + 3;
-		int top = this.getTop(y) + this.cageTextFontSize + 5;
+		int top = this.getTop(y) + this.squareHeight - 5
+				- (this.order / 6) * this.candidatesTextFontSize;
 		
 		// Note: this is wrapping character by character, not by word
 		// first represents the first character index in the string segment
 		// line is the line that the text is being written to
 		int first = 0;
-		int line = 1;
+		int line = 0;
 		while(first < textLength) {
 			int last = candidatesText.length();
 			while(
