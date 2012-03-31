@@ -71,7 +71,7 @@ public class KenKenGame {
 	}
 	
 	public boolean squareIsValid(Point p) {
-		if(this.squareIsOffBoard(p)) {
+		if (this.squareIsOffBoard(p)) {
 			return false;
 		}
 		
@@ -85,7 +85,7 @@ public class KenKenGame {
 	private final UserSquare.ValueSetListener valueSetListener =
 		new UserSquare.ValueSetListener() {
 			public void onValueSet(ValueSetEvent event) {
-				if(event.getValue() > 0) {
+				if (event.getValue() > 0) {
 					KenKenGame.this.squaresWithValues += 1;
 				} else {
 					KenKenGame.this.squaresWithValues -= 1;
@@ -103,8 +103,8 @@ public class KenKenGame {
 		
 		int order = this.latinSquare.getOrder();
 		
-		for(int i = 0; i < order; i += 1) {
-			for(int j = 0; j < order; j += 1) {
+		for (int i = 0; i < order; i += 1) {
+			for (int j = 0; j < order; j += 1) {
 				this.userSquares[i][j].AddValueSetListener(this.valueSetListener);
 			}
 		}
@@ -115,11 +115,11 @@ public class KenKenGame {
 		
 		this.cageSquareOccupied = new boolean[order][];
 		this.userSquares = new UserSquare[order][];
-		for(int i = 0; i < order; i += 1) {
+		for (int i = 0; i < order; i += 1) {
 			this.cageSquareOccupied[i] = new boolean[order];
 			this.userSquares[i] = new UserSquare[order];
 			
-			for(int j = 0; j < order; j += 1) {
+			for (int j = 0; j < order; j += 1) {
 				this.cageSquareOccupied[i][j] = false;
 				this.userSquares[i][j] = new UserSquare(i, j, order);
 			}
@@ -152,16 +152,16 @@ public class KenKenGame {
 			
 			JSONArray cagesJson = new JSONArray();
 			int cagesLength = this.cages.size();
-			for(int i = 0; i < cagesLength; i += 1) {
+			for (int i = 0; i < cagesLength; i += 1) {
 				cagesJson.put(i, this.cages.get(i).ToJson());
 			}
 			
 			JSONArray userSquaresJson = new JSONArray();
-			for(int i = 0; i < this.userSquares.length; i += 1) {
+			for (int i = 0; i < this.userSquares.length; i += 1) {
 				
 				JSONArray innerArray = new JSONArray();
 				
-				for(int j = 0; j < this.userSquares[i].length; j += 1) {
+				for (int j = 0; j < this.userSquares[i].length; j += 1) {
 					innerArray.put(j, this.userSquares[i][j].ToJson());
 				}
 				
@@ -195,18 +195,18 @@ public class KenKenGame {
 			JSONArray cagesJson = json.getJSONArray(cagesProperty);
 			this.cages = new ArrayList<ICage>();
 			int cagesSize = cagesJson.length();
-			for(int i = 0; i < cagesSize; i += 1) {
+			for (int i = 0; i < cagesSize; i += 1) {
 				this.cages.add(BaseCage.ToCage(cagesJson.getJSONObject(i)));
 			}
 			
 			JSONArray userSquareJson = json.getJSONArray(userSquaresProperty);
 			this.userSquares = new UserSquare[userSquareJson.length()][];
-			for(int i = 0; i < this.userSquares.length; i += 1) {
+			for (int i = 0; i < this.userSquares.length; i += 1) {
 				
 				this.userSquares[i] = new UserSquare[this.userSquares.length];
 				JSONArray innerArray = userSquareJson.getJSONArray(i);
 		
-				for(int j = 0; j < this.userSquares[i].length; j += 1) {
+				for (int j = 0; j < this.userSquares[i].length; j += 1) {
 					this.userSquares[i][j] =
 						new UserSquare(
 							innerArray.getJSONObject(j)

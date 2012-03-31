@@ -54,7 +54,7 @@ public class ValuesLayout extends LinearLayout {
 	private void triggerValueChanged(int value) {
 		ValueEvent event = new ValueEvent(this, value);
 		
-		for(ValueChangedListener listener : this.valueChangedListeners) {
+		for (ValueChangedListener listener : this.valueChangedListeners) {
 			listener.onValueChanged(event);
 		}
 	}
@@ -69,9 +69,9 @@ public class ValuesLayout extends LinearLayout {
 			public void onCheckChanged(CheckChangedEvent event) {
 				CustomButton valueButton = (CustomButton)event.getSource();
 				
-				if(valueButton.getChecked()) {
+				if (valueButton.getChecked()) {
 					// Button became checked
-					if(ValuesLayout.this.selectedButton != null) {
+					if (ValuesLayout.this.selectedButton != null) {
 						ValuesLayout.this.selectedButton.setCheckedNoTrigger(false);
 						ValuesLayout.this.selectedButton = null;
 					}
@@ -95,13 +95,13 @@ public class ValuesLayout extends LinearLayout {
 	 */
 	public void SetDisabled(List<Integer> disabled) {
 		// First enable all the buttons
-		for(int i = 0; i < valueButtons.length; i += 1) {
+		for (int i = 0; i < valueButtons.length; i += 1) {
 			this.valueButtons[i].setEnabled(true);
 		}
 		
 		// Then disable the guys that we are supposed to
 		int disabledSize = disabled.size();
-		for(int i = 0; i < disabledSize; i += 1) {
+		for (int i = 0; i < disabledSize; i += 1) {
 			this.valueButtons[disabled.get(i) - 1].setEnabled(false);
 		}
 	}
@@ -111,7 +111,7 @@ public class ValuesLayout extends LinearLayout {
 	 */
 	public void SetDisabled() {
 		// Disable all of the buttons.
-		for(int i = 0; i < this.valueButtons.length; i += 1) {
+		for (int i = 0; i < this.valueButtons.length; i += 1) {
 			this.valueButtons[i].setEnabled(false);
 		}
 	}
@@ -128,13 +128,13 @@ public class ValuesLayout extends LinearLayout {
 		//  the setup/tear-down of a square being clicked.
 		
 		// Uncheck the current selected button if it is checked
-		if(this.selectedButton != null) {
+		if (this.selectedButton != null) {
 			this.selectedButton.setCheckedNoTrigger(false);
 			this.selectedButton = null;
 		}
 		
 		// If the value is not the "uncheck" value then set the check
-		if(value != 0) {
+		if (value != 0) {
 			this.selectedButton = this.valueButtons[value - 1];
 			this.selectedButton.setCheckedNoTrigger(true);
 		}
@@ -152,8 +152,8 @@ public class ValuesLayout extends LinearLayout {
 		// Only set the value if it is enabled
 		// Also when checking or unchecking the target button,
 		//  trigger the check events.
-		if(this.valueButtons[value - 1].getEnabled()) {
-			if(this.valueButtons[value - 1].getChecked()) {
+		if (this.valueButtons[value - 1].getEnabled()) {
+			if (this.valueButtons[value - 1].getChecked()) {
 				// This button is currently selected
 				// Uncheck it and set the currentSelectedButton to null
 				this.selectedButton.setChecked(false);
@@ -161,7 +161,7 @@ public class ValuesLayout extends LinearLayout {
 			} else {
 				
 				// Uncheck the current selected button if it is checked
-				if(this.selectedButton != null) {
+				if (this.selectedButton != null) {
 					this.selectedButton.setCheckedNoTrigger(false);
 					this.selectedButton = null;
 				}
@@ -176,10 +176,10 @@ public class ValuesLayout extends LinearLayout {
 	 * Clears the Value control removing all ui elements.
 	 */
 	public void Clear() {
-		if(this.valueButtons != null) {
+		if (this.valueButtons != null) {
 			this.removeAllViews();
 		
-			for(CustomButton valueButton : this.valueButtons) {
+			for (CustomButton valueButton : this.valueButtons) {
 				valueButton.ClearCheckChangedListeners();
 			}
 			
@@ -196,7 +196,7 @@ public class ValuesLayout extends LinearLayout {
 		this.Clear();
 
 		this.valueButtons = new CustomButton[gameSize];
-		for(int i = 0; i < gameSize; i += 1) {
+		for (int i = 0; i < gameSize; i += 1) {
 			this.valueButtons[i] = new CustomButton(this.getContext());
 			this.valueButtons[i].setEnabled(true);
 			this.valueButtons[i].setHasLeftCurve(false);

@@ -41,11 +41,11 @@ public abstract class BaseCage implements ICage {
 		
 		int squaresSize = this.squares.size();
 		int[] values = new int[squaresSize];
-		for(int i = 0; i < squaresSize; i += 1) {
+		for (int i = 0; i < squaresSize; i += 1) {
 			Point point = this.squares.get(i);
 			UserSquare square = userSquares[point.x][point.y];
 			int value = square.getValue();
-			if(value == 0) {
+			if (value == 0) {
 				return false;
 			}
 			values[i] = value;
@@ -83,13 +83,13 @@ public abstract class BaseCage implements ICage {
 		try {			
 			JSONArray renderLinesJson = new JSONArray();
 			int size = this.renderLines.size();
-			for(int i = 0; i < size; i += 1) {
+			for (int i = 0; i < size; i += 1) {
 				renderLinesJson.put(i, this.renderLines.get(i).ToJson());
 			}
 			
 			JSONArray squaresJson = new JSONArray();
 			int squaresSize = this.squares.size();
-			for(int i = 0; i < squaresSize; i += 1) {
+			for (int i = 0; i < squaresSize; i += 1) {
 				squaresJson.put(i, Points.ToJson(this.squares.get(i)));
 			}
 			
@@ -113,7 +113,7 @@ public abstract class BaseCage implements ICage {
 				JSONArray renderLinesJson = json.getJSONArray(renderLinesProperty);
 				
 				int length = renderLinesJson.length();
-				for(int i = 0; i < length; i += 1) {
+				for (int i = 0; i < length; i += 1) {
 					RenderLine line =
 						new RenderLine(
 							renderLinesJson.getJSONObject(i)
@@ -125,7 +125,7 @@ public abstract class BaseCage implements ICage {
 				JSONArray squaresJson = json.getJSONArray(squaresProperty);
 				
 				int squaresLength = squaresJson.length();
-				for(int i = 0; i < squaresLength; i += 1) {
+				for (int i = 0; i < squaresLength; i += 1) {
 					Point point =
 						Points.ToPoint(squaresJson.getJSONObject(i));
 					this.squares.add(point);

@@ -17,8 +17,9 @@ public class NumberPicker {
 
     public int GetNext()
     {
-        if (this.attempted == this.length)
+        if (this.attempted == this.length) {
             return -1;
+        }
 
         int lastCardIndex = this.length - this.attempted - 1;
 

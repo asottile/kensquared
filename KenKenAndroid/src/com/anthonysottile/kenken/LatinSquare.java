@@ -101,10 +101,10 @@ public class LatinSquare {
 			
 			JSONArray outerArray = new JSONArray();
 			
-			for(int i = 0; i < this.values.length; i += 1) {
+			for (int i = 0; i < this.values.length; i += 1) {
 				JSONArray innerArray = new JSONArray();
 				
-				for(int j = 0; j < this.values[i].length; j += 1) {
+				for (int j = 0; j < this.values[i].length; j += 1) {
 					innerArray.put(j, this.values[i][j]);
 				}
 				
@@ -128,12 +128,12 @@ public class LatinSquare {
 			JSONArray outerArray = json.getJSONArray(valuesProperty);
 			
 			this.values = new int[outerArray.length()][];
-			for(int i = 0; i < this.values.length; i += 1) {
+			for (int i = 0; i < this.values.length; i += 1) {
 				
 				JSONArray innerArray = outerArray.getJSONArray(i);
 				this.values[i] = new int[this.values.length];
 				
-				for(int j = 0; j < this.values[i].length; j += 1) {
+				for (int j = 0; j < this.values[i].length; j += 1) {
 					this.values[i][j] = innerArray.getInt(j);
 				}
 			}

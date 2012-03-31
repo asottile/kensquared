@@ -16,12 +16,12 @@ public class SquareDrawingDimensions {
 		// If the order is >= 6 then we are returning only half
 		// Otherwise we are returning a full candidates string
 		StringBuilder sb = new StringBuilder();
-		if(order >= 6) {
+		if (order >= 6) {
 			boolean first = true;
 			// Round up
 			int halfOrder = (int)(1.0 * order / 2 + .9);
-			for(int i = 0; i < halfOrder; i += 1) {
-				if(!first) {
+			for (int i = 0; i < halfOrder; i += 1) {
+				if (!first) {
 					sb.append(' ');
 				}
 				first = false;
@@ -29,8 +29,8 @@ public class SquareDrawingDimensions {
 			}
 		} else {
 			boolean first = true;
-			for(int i = 0; i < order; i += 1) {
-				if(!first) {
+			for (int i = 0; i < order; i += 1) {
+				if (!first) {
 					sb.append(' ');
 				}
 				first = false;
@@ -117,9 +117,9 @@ public class SquareDrawingDimensions {
 		// line is the line that the text is being written to
 		int first = 0;
 		int line = 0;
-		while(first < textLength) {
+		while (first < textLength) {
 			int last = candidatesText.length();
-			while(
+			while (
 				this.candidatesTextPaint.measureText(candidatesText, first, last)
 				> this.squareWidth - 5) {
 				last -= 1;
@@ -194,7 +194,7 @@ public class SquareDrawingDimensions {
 		
 		int maxWidth = this.squareWidth - 5 - (UIConstants.MaxGameSize - order) * 2;
 		
-		while(candidatesTextPaint.measureText(testMeasureString) > maxWidth) {
+		while (candidatesTextPaint.measureText(testMeasureString) > maxWidth) {
 			this.candidatesTextFontSize -= 1;
 			this.candidatesTextPaint.setTextSize(this.candidatesTextFontSize);
 		}

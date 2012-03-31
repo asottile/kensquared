@@ -23,7 +23,7 @@ public final class StatisticsManager {
 		// Create dummy JSON array
 		JSONArray array = new JSONArray();
 		try {
-			for(int i = 0; i < 6; i += 1) {
+			for (int i = 0; i < 6; i += 1) {
 				array.put(i, new GameStatistics(i + 4).ToJson());
 			}
 		} catch (JSONException e) {
@@ -44,7 +44,7 @@ public final class StatisticsManager {
 		// Create JSON array
 		JSONArray array = new JSONArray();
 		try {
-			for(int i = 0; i < 6; i += 1) {
+			for (int i = 0; i < 6; i += 1) {
 				array.put(i, StatisticsManager.statistics[i].ToJson());
 			}
 		} catch (JSONException e) {
@@ -78,7 +78,7 @@ public final class StatisticsManager {
 					)
 				);
 			
-			for(int i = 0; i < 6; i += 1) {
+			for (int i = 0; i < 6; i += 1) {
 				StatisticsManager.statistics[i] =
 					new GameStatistics(array.getJSONObject(i));
 			}
@@ -96,7 +96,7 @@ public final class StatisticsManager {
 	 */
 	public static GameStatistics GetGameStatistics(int gameSize) {
 		
-		if(StatisticsManager.statistics == null) {
+		if (StatisticsManager.statistics == null) {
 			StatisticsManager.Load();
 		}
 		
@@ -109,7 +109,7 @@ public final class StatisticsManager {
 	 * @param gameSize The size of the game started.
 	 */
 	public static void GameStarted(int gameSize) {
-		if(StatisticsManager.statistics == null) {
+		if (StatisticsManager.statistics == null) {
 			StatisticsManager.Load();
 		}
 		
@@ -132,7 +132,7 @@ public final class StatisticsManager {
 		// Returns true if the game is a high score
 		boolean returnValue = false;
 		
-		if(StatisticsManager.statistics == null) {
+		if (StatisticsManager.statistics == null) {
 			StatisticsManager.Load();
 		}
 		
@@ -143,7 +143,7 @@ public final class StatisticsManager {
 		
 		game.GameWon(gameSeconds);
 		
-		if(gameSeconds < game.getBestTime()) {
+		if (gameSeconds < game.getBestTime()) {
 			game.SetBestTime(gameSeconds);
 			returnValue = true;
 		}

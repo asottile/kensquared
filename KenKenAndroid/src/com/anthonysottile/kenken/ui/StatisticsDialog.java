@@ -81,7 +81,7 @@ public class StatisticsDialog extends Dialog {
 		this.gamesPlayed.setText(Integer.toString(statistics.getGamesPlayed(), 10));
 		this.gamesWon.setText(Integer.toString(statistics.getGamesWon(), 10));
 		
-		if(statistics.getGamesWon() > 0) {
+		if (statistics.getGamesWon() > 0) {
 			this.averageTime.setText(
 				StatisticsDialog.toTimeString(
 					statistics.getTotalSeconds() / statistics.getGamesWon()

@@ -123,7 +123,7 @@ public class CustomButton extends View {
 	 * @param enabled Whether the button should be enabled.
 	 */
 	public void setEnabled(boolean enabled) {
-		if(this.enabled != enabled) {
+		if (this.enabled != enabled) {
 			this.enabled = enabled;
 			
 			// Need to redraw
@@ -148,7 +148,7 @@ public class CustomButton extends View {
 	 * @param hasLeftCurve Whether the button has a left curve.
 	 */
 	public void setHasLeftCurve(boolean hasLeftCurve) {
-		if(this.hasLeftCurve != hasLeftCurve) {
+		if (this.hasLeftCurve != hasLeftCurve) {
 			this.hasLeftCurve = hasLeftCurve;
 			
 			// Need to redraw
@@ -173,7 +173,7 @@ public class CustomButton extends View {
 	 * @param hasRightCurve Whether the button has a right curve.
 	 */
 	public void setHasRightCurve(boolean hasRightCurve) {
-		if(this.hasRightCurve != hasRightCurve) {
+		if (this.hasRightCurve != hasRightCurve) {
 			this.hasRightCurve = hasRightCurve;
 			
 			// Need to redraw
@@ -218,7 +218,7 @@ public class CustomButton extends View {
 	 * @param checked Whether the button is checked.
 	 */
 	public void setChecked(boolean checked) {
-		if(this.checked != checked) {
+		if (this.checked != checked) {
 			this.checked = checked;
 			
 			this.triggerCheckChanged();
@@ -234,7 +234,7 @@ public class CustomButton extends View {
 	 * @param checked Whether the button is checked.
 	 */
 	public void setCheckedNoTrigger(boolean checked) {
-		if(this.checked != checked) {
+		if (this.checked != checked) {
 			this.checked = checked;
 			
 			// Need to redraw
@@ -266,7 +266,7 @@ public class CustomButton extends View {
 	 * @param text The display text of the button.
 	 */
 	public void setText(String text) {
-		if(!this.text.equals(text)) {
+		if (!this.text.equals(text)) {
 			this.text = text;
 			
 			// Redraw
@@ -278,7 +278,7 @@ public class CustomButton extends View {
 	public boolean onTouchEvent(MotionEvent event) {
 		
 		// Click event
-		if(this.enabled) {
+		if (this.enabled) {
 		
 			float x = event.getX();
 			float y = event.getY();
@@ -295,9 +295,9 @@ public class CustomButton extends View {
 					break;
 				case MotionEvent.ACTION_UP:
 					
-					if(isInsideControl) {
+					if (isInsideControl) {
 						
-						if(this.isCheckable) {
+						if (this.isCheckable) {
 							// If we are checkable then change the checked state
 							this.setChecked(!this.checked);
 						}
@@ -350,14 +350,14 @@ public class CustomButton extends View {
 		Paint p = UIConstants.GetCageColor();
 		
 		// Draw left curve
-		if(this.hasLeftCurve) {
+		if (this.hasLeftCurve) {
 			start += 7;
 			Rect destRect = new Rect(0, 0, 8, this.getMeasuredHeight());
 			
 			Bitmap bitmap;
-			if(!this.enabled) {
+			if (!this.enabled) {
 				bitmap = BitmapCache.getDisabledLeft();
-			} else if(this.checked) {
+			} else if (this.checked) {
 				bitmap = BitmapCache.getSelectedLeft();
 			} else {
 				bitmap = BitmapCache.getEnabledLeft();
@@ -372,7 +372,7 @@ public class CustomButton extends View {
 		}
 		
 		// Draw right curve
-		if(this.hasRightCurve) {
+		if (this.hasRightCurve) {
 			end -= 7;
 			Rect destReg = new Rect(
 				this.getMeasuredWidth() - 8,
@@ -382,9 +382,9 @@ public class CustomButton extends View {
 			);
 			
 			Bitmap bitmap;
-			if(!this.enabled) {
+			if (!this.enabled) {
 				bitmap = BitmapCache.getDisabledRight();
-			} else if(this.checked) {
+			} else if (this.checked) {
 				bitmap = BitmapCache.getSelectedRight();
 			} else {
 				bitmap = BitmapCache.getEnabledRight();
@@ -407,9 +407,9 @@ public class CustomButton extends View {
 		// Draw the background
 		
 		Bitmap bitmap;
-		if(!this.enabled) {
+		if (!this.enabled) {
 			bitmap = BitmapCache.getDisabledCenter();
-		} else if(this.checked) {
+		} else if (this.checked) {
 			bitmap = BitmapCache.getSelectedCenter();
 		} else {
 			bitmap = BitmapCache.getEnabledCenter();
@@ -430,9 +430,9 @@ public class CustomButton extends View {
 		
 		Paint textPaint = new Paint();
 		textPaint.setTextSize(textSize);
-		if(!this.enabled) {
+		if (!this.enabled) {
 			textPaint.setColor(Color.rgb(0x99, 0x99, 0x99));
-		} else if(checked) {
+		} else if (checked) {
 			textPaint.setColor(Color.rgb(0, 0, 0));
 		} else {
 			textPaint.setColor(Color.rgb(0xff, 0xff, 0xff));

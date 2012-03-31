@@ -58,7 +58,7 @@ public final class SettingsProvider {
 	 * @param gameSize The size of the game to set.
 	 */
 	public static void SetGameSize(int gameSize) {
-		if(gameSize != SettingsProvider.gameSize) {
+		if (gameSize != SettingsProvider.gameSize) {
 			SettingsProvider.gameSize = gameSize;
 			SharedPreferences.Editor editor = SettingsProvider.preferences.edit();
 			editor.putInt(SettingsProvider.GameSize, SettingsProvider.gameSize);

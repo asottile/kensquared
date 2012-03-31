@@ -101,7 +101,7 @@ public class GameWonDialog extends Dialog {
 		this.winTime.setText(GameWonDialog.toTimeString((int)ticks / 1000));
 		this.winDate.setText(dateFormat.format(new Date()));
 		
-		if(newHighScore) {
+		if (newHighScore) {
 			this.newHighScore.setText(this.getContext().getString(R.string.newHighScore));
 		} else {
 			this.newHighScore.setText("");

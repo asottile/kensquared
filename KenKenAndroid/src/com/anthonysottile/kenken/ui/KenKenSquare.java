@@ -65,7 +65,7 @@ public class KenKenSquare {
 				break;
 		}
 		
-		if(this.markedIncorrect) {
+		if (this.markedIncorrect) {
 			backgroundColor = UIConstants.GetMarkedIncorrectColor();
 		}
 		
@@ -77,7 +77,7 @@ public class KenKenSquare {
 		);
 		
 		// Draw cage text
-		if(this.cageText.length() > 0) {
+		if (this.cageText.length() > 0) {
 			this.dimensions.PaintCageText(
 				canvas,
 				this.cageText,
@@ -88,7 +88,7 @@ public class KenKenSquare {
 		
 		// Draw value text or candidates text
 		int squareValue = this.square.getValue();
-		if(squareValue > 0) {
+		if (squareValue > 0) {
 			// Display value
 			this.dimensions.PaintValueText(
 				canvas,
@@ -101,7 +101,7 @@ public class KenKenSquare {
 			String candidatesText = this.square.GetCandidatesString();
 			
 			// Only paint if there is a string there
-			if(candidatesText.length() > 0) {
+			if (candidatesText.length() > 0) {
 				this.dimensions.PaintCandidatesText(
 					canvas,
 					candidatesText,

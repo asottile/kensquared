@@ -58,7 +58,7 @@ public class CandidatesLayout extends LinearLayout {
 		CandidateEvent event = new CandidateEvent(this, candidate);
 		
 		int size = this.candidateAddedListeners.size();
-		for(int i = 0; i < size; i += 1) {
+		for (int i = 0; i < size; i += 1) {
 			this.candidateAddedListeners.get(i).onCandidateAdded(event);
 		}
 	}
@@ -75,7 +75,7 @@ public class CandidatesLayout extends LinearLayout {
 		CandidateEvent event = new CandidateEvent(this, candidate);
 		
 		int size = this.candidateRemovedListeners.size();
-		for(int i = 0; i < size; i += 1) {
+		for (int i = 0; i < size; i += 1) {
 			this.candidateRemovedListeners.get(i).onCandidateRemoved(event);
 		}
 	}
@@ -87,16 +87,16 @@ public class CandidatesLayout extends LinearLayout {
 	private CustomButton[] candidates = null;
 	
 	private void populateAllClicked() {
-		for(int i = 0; i < this.candidates.length; i += 1) {
-			if(this.candidates[i].getEnabled() && !this.candidates[i].getChecked()) {
+		for (int i = 0; i < this.candidates.length; i += 1) {
+			if (this.candidates[i].getEnabled() && !this.candidates[i].getChecked()) {
 				this.candidates[i].setChecked(true);
 			}
 		}
 	}
 	
 	private void clearAllClicked() {
-		for(int i = 0; i < this.candidates.length; i += 1) {
-			if(this.candidates[i].getEnabled() && this.candidates[i].getChecked()) {
+		for (int i = 0; i < this.candidates.length; i += 1) {
+			if (this.candidates[i].getEnabled() && this.candidates[i].getChecked()) {
 				this.candidates[i].setChecked(false);
 			}
 		}
@@ -106,7 +106,7 @@ public class CandidatesLayout extends LinearLayout {
 		new CustomButton.CheckChangedListener() {
 			public void onCheckChanged(CheckChangedEvent event) {
 				CustomButton button = (CustomButton)event.getSource();
-				if(button.getChecked()) {
+				if (button.getChecked()) {
 					CandidatesLayout.this.triggerCandidateAdded(button.getValue());
 				} else {
 					CandidatesLayout.this.triggerCandidateRemoved(button.getValue());
@@ -124,7 +124,7 @@ public class CandidatesLayout extends LinearLayout {
 	 * @param values The checked state of each candidate.
 	 */
 	public void SetValues(boolean[] values) {
-		for(int i = 0; i < values.length; i += 1) {
+		for (int i = 0; i < values.length; i += 1) {
 			this.candidates[i].setCheckedNoTrigger(values[i]);
 		}
 	}
@@ -137,7 +137,7 @@ public class CandidatesLayout extends LinearLayout {
 	 * @param value The value to attempt to set.
 	 */
 	public void TrySetValue(int value) {
-		if(this.candidates != null && this.candidates[value - 1].getEnabled()) {
+		if (this.candidates != null && this.candidates[value - 1].getEnabled()) {
 			this.candidates[value - 1].toggleChecked();
 		}
 	}
@@ -146,8 +146,8 @@ public class CandidatesLayout extends LinearLayout {
 	 * Sets all of the candidate buttons to disabled.
 	 */
 	public void SetDisabled() {
-		if(this.candidates != null) {
-			for(int i = 0; i < this.candidates.length; i += 1) {
+		if (this.candidates != null) {
+			for (int i = 0; i < this.candidates.length; i += 1) {
 				this.candidates[i].setEnabled(false);
 			}
 		}
@@ -160,12 +160,12 @@ public class CandidatesLayout extends LinearLayout {
 	 */
 	public void SetDisabled(List<Integer> disabled) {
 
-		for(int i = 0; i < this.candidates.length; i += 1) {
+		for (int i = 0; i < this.candidates.length; i += 1) {
 			this.candidates[i].setEnabled(true);
 		}
 		
 		int disabledSize = disabled.size();
-		for(int i = 0; i < disabledSize; i += 1) {
+		for (int i = 0; i < disabledSize; i += 1) {
 			int indexToDisable = disabled.get(i) - 1;
 			this.candidates[indexToDisable].setEnabled(false);
 		}
@@ -213,7 +213,7 @@ public class CandidatesLayout extends LinearLayout {
 		this.addView(new TextView(this.getContext()), 5, ViewGroup.LayoutParams.FILL_PARENT);
 		
 		this.candidates = new CustomButton[gameSize];
-		for(int i = 0; i < gameSize; i += 1) {
+		for (int i = 0; i < gameSize; i += 1) {
 			this.candidates[i] = new CustomButton(this.getContext());
 			this.candidates[i].setEnabled(true);
 			this.candidates[i].setHasLeftCurve(false);
@@ -236,10 +236,10 @@ public class CandidatesLayout extends LinearLayout {
 	 */
 	public void Clear() {
 		// Remove candidate views if they are there
-		if(this.candidates != null) {
+		if (this.candidates != null) {
 			this.removeAllViews();
 			
-			for(int i = 0; i < candidates.length; i += 1) {
+			for (int i = 0; i < candidates.length; i += 1) {
 				this.candidates[i].ClearCheckChangedListeners();
 			}
 			

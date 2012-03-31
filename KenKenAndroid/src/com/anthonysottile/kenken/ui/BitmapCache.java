@@ -23,7 +23,7 @@ public final class BitmapCache {
 	private static Bitmap selectedRight = null;
 	
 	public static Bitmap getEnabledLeft() {
-		if(BitmapCache.enabledLeft == null) {
+		if (BitmapCache.enabledLeft == null) {
 			BitmapCache.enabledLeft =
 				BitmapFactory.decodeResource(BitmapCache.resources, R.drawable.left);
 		}
@@ -31,7 +31,7 @@ public final class BitmapCache {
 	}
 	
 	public static Bitmap getEnabledCenter() {
-		if(BitmapCache.enabledCenter == null) {
+		if (BitmapCache.enabledCenter == null) {
 			BitmapCache.enabledCenter =
 				BitmapFactory.decodeResource(BitmapCache.resources, R.drawable.middle);
 		}
@@ -39,7 +39,7 @@ public final class BitmapCache {
 	}
 	
 	public static Bitmap getEnabledRight() {
-		if(BitmapCache.enabledRight == null) {
+		if (BitmapCache.enabledRight == null) {
 			BitmapCache.enabledRight =
 				BitmapFactory.decodeResource(BitmapCache.resources, R.drawable.right);
 		}
@@ -47,7 +47,7 @@ public final class BitmapCache {
 	}
 	
 	public static Bitmap getDisabledLeft() {
-		if(BitmapCache.disabledLeft == null) {
+		if (BitmapCache.disabledLeft == null) {
 			BitmapCache.disabledLeft =
 				BitmapFactory.decodeResource(BitmapCache.resources, R.drawable.left_disabled);
 		}
@@ -55,7 +55,7 @@ public final class BitmapCache {
 	}
 
 	public static Bitmap getDisabledCenter() {
-		if(BitmapCache.disabledCenter == null) {
+		if (BitmapCache.disabledCenter == null) {
 			BitmapCache.disabledCenter =
 				BitmapFactory.decodeResource(BitmapCache.resources, R.drawable.middle_disabled);
 		}
@@ -63,7 +63,7 @@ public final class BitmapCache {
 	}
 	
 	public static Bitmap getDisabledRight() {
-		if(BitmapCache.disabledRight == null) {
+		if (BitmapCache.disabledRight == null) {
 			BitmapCache.disabledRight =
 				BitmapFactory.decodeResource(BitmapCache.resources, R.drawable.right_disabled);
 		}
@@ -71,7 +71,7 @@ public final class BitmapCache {
 	}
 	
 	public static Bitmap getSelectedLeft() {
-		if(BitmapCache.selectedLeft == null) {
+		if (BitmapCache.selectedLeft == null) {
 			BitmapCache.selectedLeft =
 				BitmapFactory.decodeResource(BitmapCache.resources, R.drawable.left_selected);
 		}
@@ -79,7 +79,7 @@ public final class BitmapCache {
 	}
 
 	public static Bitmap getSelectedCenter() {		
-		if(BitmapCache.selectedCenter == null) {
+		if (BitmapCache.selectedCenter == null) {
 			BitmapCache.selectedCenter =
 				BitmapFactory.decodeResource(BitmapCache.resources, R.drawable.middle_selected);
 		}
@@ -87,7 +87,7 @@ public final class BitmapCache {
 	}
 
 	public static Bitmap getSelectedRight() {		
-		if(BitmapCache.selectedRight == null) {
+		if (BitmapCache.selectedRight == null) {
 			BitmapCache.selectedRight =
 				BitmapFactory.decodeResource(BitmapCache.resources, R.drawable.right_selected);
 		}

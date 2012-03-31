@@ -89,7 +89,7 @@ public class GameStatistics
 			json.put(GameStatistics.GamesWon, this.gamesWon);
 			json.put(GameStatistics.TotalSeconds, this.totalSeconds);
 			
-			if(this.bestTimeDate != null) {
+			if (this.bestTimeDate != null) {
 				json.put(GameStatistics.BestTime, this.bestTime);
 				json.put(
 					GameStatistics.BestTimeDate,
@@ -115,7 +115,7 @@ public class GameStatistics
 			this.gamesWon = json.getInt(GameStatistics.GamesWon);
 			this.totalSeconds = json.getInt(GameStatistics.TotalSeconds);
 			
-			if(json.has(GameStatistics.BestTimeDate)) {
+			if (json.has(GameStatistics.BestTimeDate)) {
 				this.bestTime = json.getInt(GameStatistics.BestTime);
 				this.bestTimeDate =
 					GameStatistics.dateFormatter.parse(

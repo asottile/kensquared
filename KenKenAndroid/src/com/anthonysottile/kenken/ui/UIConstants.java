@@ -14,7 +14,7 @@ public final class UIConstants {
 	
 	private static Paint gridColor = null;
 	public static Paint GetGridColor() {
-		if(UIConstants.gridColor == null) {
+		if (UIConstants.gridColor == null) {
 			UIConstants.gridColor = new Paint();
 			UIConstants.gridColor.setColor(Color.rgb(0xCC, 0xCC, 0xCC));
 		}
@@ -23,7 +23,7 @@ public final class UIConstants {
 	
 	private static Paint cageColor = null;
 	public static Paint GetCageColor() {
-		if(UIConstants.cageColor == null) {
+		if (UIConstants.cageColor == null) {
 			UIConstants.cageColor = new Paint();
 			UIConstants.cageColor.setColor(Color.rgb(0x00, 0x00, 0x00));
 		}
@@ -32,7 +32,7 @@ public final class UIConstants {
 	
 	private static Paint hoveringColor = null;
 	public static Paint GetHoveringColor() {
-		if(UIConstants.hoveringColor == null) {
+		if (UIConstants.hoveringColor == null) {
 			UIConstants.hoveringColor = new Paint();
 			UIConstants.hoveringColor.setColor(Color.rgb(0x1e, 0x77, 0xd3));
 		}
@@ -41,7 +41,7 @@ public final class UIConstants {
 	
 	private static Paint selectedColor = null;
 	public static Paint GetSelectedColor() {
-		if(UIConstants.selectedColor == null) {
+		if (UIConstants.selectedColor == null) {
 			UIConstants.selectedColor = new Paint();
 			UIConstants.selectedColor.setColor(Color.rgb(0x00, 0xC0, 0xC0));
 		}
@@ -50,7 +50,7 @@ public final class UIConstants {
 
 	private static Paint backgroundColor = null;
 	public static Paint GetBackgroundColor() {
-		if(UIConstants.backgroundColor == null) {
+		if (UIConstants.backgroundColor == null) {
 			UIConstants.backgroundColor = new Paint();
 			UIConstants.backgroundColor.setColor(Color.rgb(0xff, 0xff, 0xff));
 		}
@@ -59,7 +59,7 @@ public final class UIConstants {
 	
 	private static Paint markedIncorrectColor = null;
 	public static Paint GetMarkedIncorrectColor() {
-		if(UIConstants.markedIncorrectColor == null) {
+		if (UIConstants.markedIncorrectColor == null) {
 			UIConstants.markedIncorrectColor = new Paint();
 			UIConstants.markedIncorrectColor.setColor(Color.rgb(0xff, 0x66, 0x66));
 		}

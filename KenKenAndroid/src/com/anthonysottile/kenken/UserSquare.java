@@ -31,7 +31,7 @@ public class UserSquare {
 		return this.value;
 	}
 	public void setValue(int value) {
-		if(this.value != value) {
+		if (this.value != value) {
 			this.value = value;
 			
 			this.triggerValueSetEvent();
@@ -42,8 +42,8 @@ public class UserSquare {
 
 	public List<Integer> GetIntCandidates() {
 		List<Integer> intList = new ArrayList<Integer>();
-		for(int i = 0; i < this.candidates.length; i += 1) {
-			if(this.candidates[i]) { 
+		for (int i = 0; i < this.candidates.length; i += 1) {
+			if (this.candidates[i]) { 
 				intList.add(i);
 			}
 		}
@@ -55,9 +55,9 @@ public class UserSquare {
 		
 		StringBuilder sb = new StringBuilder();
 		boolean first = true;
-		for(int i = 0; i < this.candidates.length; i += 1) {
-			if(this.candidates[i]) {
-				if(!first) {
+		for (int i = 0; i < this.candidates.length; i += 1) {
+			if (this.candidates[i]) {
+				if (!first) {
 					sb.append(' ');
 				}
 				sb.append(i + 1);
@@ -73,7 +73,7 @@ public class UserSquare {
 	}
 	
 	public void AddCandidate(int value) {
-		if(!this.candidates[value - 1]) {
+		if (!this.candidates[value - 1]) {
 			this.candidates[value - 1] = true;
 
 			this.triggerChangedEvent();
@@ -81,7 +81,7 @@ public class UserSquare {
 	}
 	
 	public void RemoveCandidate(int value) {
-		if(this.candidates[value - 1]) {
+		if (this.candidates[value - 1]) {
 			this.candidates[value - 1] = false;
 
 			this.triggerChangedEvent();
@@ -104,9 +104,8 @@ public class UserSquare {
 	private void triggerChangedEvent() {
 		EventObject event = new EventObject(this);
 		
-		int length = this.changedHandlers.size();
-		for(int i = 0; i < length; i += 1) {
-			this.changedHandlers.get(i).onUserSquareChanged(event);
+		for (UserSquareChangedListener listener : this.changedHandlers) {
+			listener.onUserSquareChanged(event);
 		}
 	}
 
@@ -158,9 +157,8 @@ public class UserSquare {
 	private void triggerValueSetEvent() {
 		ValueSetEvent event = new ValueSetEvent(this, this.x, this.y, this.value);
 		
-		int length = this.valueSetListeners.size();
-		for(int i = 0; i < length; i += 1) {
-			this.valueSetListeners.get(i).onValueSet(event);
+		for (ValueSetListener listener : this.valueSetListeners) {
+			listener.onValueSet(event);
 		}
 	}
 	
@@ -184,7 +182,7 @@ public class UserSquare {
 
 		try {
 			JSONArray candidatesJson = new JSONArray();
-			for(int i = 0; i < this.candidates.length; i += 1) {
+			for (int i = 0; i < this.candidates.length; i += 1) {
 				candidatesJson.put(i, this.candidates[i]);
 			}
 			
@@ -209,7 +207,7 @@ public class UserSquare {
 			
 			JSONArray candidatesJson = json.getJSONArray(candidatesProperty);
 			this.candidates = new boolean[candidatesJson.length()];
-			for(int i = 0; i < candidates.length; i += 1) {
+			for (int i = 0; i < candidates.length; i += 1) {
 				this.candidates[i] = candidatesJson.getBoolean(i);
 			}
 		

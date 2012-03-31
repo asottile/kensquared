@@ -103,13 +103,13 @@ public class KenKenAndroidActivity extends Activity {
         this.gameComponent.AddGameWonListener(this.gameWonListener);
         
         // Restore the saved state if applicable
-        if(savedInstanceState != null) {
-        	if(savedInstanceState.containsKey(KenKenAndroidActivity.saveGameBundleProperty)) {
+        if (savedInstanceState != null) {
+        	if (savedInstanceState.containsKey(KenKenAndroidActivity.saveGameBundleProperty)) {
         		
         		String gameJsonString =
     				savedInstanceState.getString(KenKenAndroidActivity.saveGameBundleProperty);
         		
-        		if(gameJsonString.length() > 0) {
+        		if (gameJsonString.length() > 0) {
         			try {
         				JSONObject gameAsJson = new JSONObject(gameJsonString);
         				this.gameComponent.LoadState(gameAsJson);
@@ -132,7 +132,7 @@ public class KenKenAndroidActivity extends Activity {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
     	JSONObject game = this.gameComponent.SaveState();
-    	if(game != null) {
+    	if (game != null) {
         	savedInstanceState.putString(
     			KenKenAndroidActivity.saveGameBundleProperty,
     			game.toString()
@@ -177,7 +177,7 @@ public class KenKenAndroidActivity extends Activity {
     protected Dialog onCreateDialog(int id) {
     	
     	Dialog dialog;
-    	switch(id) {
+    	switch (id) {
     		case KenKenAndroidActivity.PreferencesDialogId:
     			dialog = new PreferencesDialog(this);
     			break;
@@ -197,7 +197,7 @@ public class KenKenAndroidActivity extends Activity {
     @Override
     protected void onPrepareDialog(int id, Dialog dialog) {
     	
-    	switch(id) {
+    	switch (id) {
     		case KenKenAndroidActivity.PreferencesDialogId:
     			
     			((PreferencesDialog)dialog).SetSpinner(SettingsProvider.GetGameSize());
@@ -241,7 +241,7 @@ public class KenKenAndroidActivity extends Activity {
     	menu.findItem(R.id.pause).setEnabled(
 			gameState == GameState.InGame || gameState == GameState.Paused
 		);
-    	if(gameState != GameState.Paused) {
+    	if (gameState != GameState.Paused) {
     		menu.findItem(R.id.pause).setTitle(R.string.pause);
     	} else {
     		menu.findItem(R.id.pause).setTitle(R.string.resume);
