@@ -12,9 +12,7 @@ import com.anthonysottile.kenken.ui.GameComponent.GameState;
 import com.anthonysottile.kenken.ui.GameComponent.GameWonEvent;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
@@ -26,6 +24,7 @@ public class KenKenAndroidActivity extends Activity {
 
 	private static final int PreferencesDialogId = 0;
 	private static final int StatisticsDialogId = 1;
+	private static final int GameWonDialogId = 2;
 
 	private static final String preferences = "com.anthonysottile.kenken";
 	private static final String saveGameBundleProperty = "SavedGame";
@@ -34,41 +33,31 @@ public class KenKenAndroidActivity extends Activity {
 	private CandidatesLayout candidatesLayout = null;
 	private ValuesLayout valuesLayout = null;
 	private TextView timerText = null;
-	
-	private void showMessageBox(String message) {
-		AlertDialog ad = new AlertDialog.Builder(this).create();
-		ad.setCancelable(false);
-		ad.setMessage(message);
-		ad.setButton(this.getString(R.string.ok), new DialogInterface.OnClickListener() {
-					
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
-			}
-		});
-		ad.show();
-	}
-	
+
+	private int gameWonGameSize;
+	private boolean gameWonNewHighScore;
+	private long gameWonTicks;
+		
 	private void gameSizeChanged() {
 		this.gameComponent.Clear();
-		this.candidatesLayout.Clear();
-		this.valuesLayout.Clear();
 	}
 	
 	private GameComponent.GameWonListener gameWonListener =
 		new GameComponent.GameWonListener() {
 			public void onGameWon(GameWonEvent event) {
 
-				boolean highScore =
+				KenKenAndroidActivity.this.gameWonNewHighScore =
 					StatisticsManager.GameEnded(
 						event.getSize(), 
 						event.getTicks()
 					);
 				
-				if(highScore) {
-					KenKenAndroidActivity.this.showMessageBox("New High Score Win!");
-				} else {
-					KenKenAndroidActivity.this.showMessageBox("Win but no new high score");
-				}
+				KenKenAndroidActivity.this.gameWonGameSize = event.getSize();
+				KenKenAndroidActivity.this.gameWonTicks = event.getTicks();
+				
+				KenKenAndroidActivity.this.showDialog(
+					KenKenAndroidActivity.GameWonDialogId
+				);
 			}		
 		};
 		
@@ -177,16 +166,12 @@ public class KenKenAndroidActivity extends Activity {
     private void showStatistics() {
     	this.gameComponent.PauseIfNotPaused();
     	this.showDialog(KenKenAndroidActivity.StatisticsDialogId);
-    	/*
-    	Intent statisticsActivity =
-			new Intent(getBaseContext(), KenKenStatistics.class);
-        startActivity(statisticsActivity);
-        */
     }
     
     private void showAbout() {
-    	this.showMessageBox("Show About Clicked");
     }
+    
+    // #region Dialogs
     
     @Override
     protected Dialog onCreateDialog(int id) {
@@ -198,6 +183,9 @@ public class KenKenAndroidActivity extends Activity {
     			break;
     		case KenKenAndroidActivity.StatisticsDialogId:
     			dialog = new StatisticsDialog(this);
+    			break;
+    		case KenKenAndroidActivity.GameWonDialogId:
+    			dialog = new GameWonDialog(this);
     			break;
 			default:
 				dialog = null;
@@ -220,12 +208,24 @@ public class KenKenAndroidActivity extends Activity {
     			((StatisticsDialog)dialog).Refresh();
     			
     			break;
+    			
+    		case KenKenAndroidActivity.GameWonDialogId:
+    			
+    			((GameWonDialog)dialog).Setup(
+					this.gameWonGameSize,
+					this.gameWonNewHighScore,
+					this.gameWonTicks
+				);
+    			
+    			break;
 			default:
 				break;	
     	}
     }
     
-    // #region Menu
+    // #endregion
+    
+    // #region Menus
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

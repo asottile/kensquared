@@ -47,6 +47,16 @@
     
         <!-- end Statistics -->
     
+        <!-- Game Win -->
+        
+        <string name="youWin">You Win!</string>
+        <string name="newHighScore">New High Score!</string>
+        <string name="gameSizeColon">Game Size:</string>
+        <string name="gameTime">Game Time:</string>
+        <string name="date">Date:</string>
+        
+        <!-- end Game Win -->
+    
     <!-- end Dialog -->
     
 </resources>
