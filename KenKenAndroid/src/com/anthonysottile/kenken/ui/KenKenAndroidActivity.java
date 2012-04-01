@@ -34,10 +34,10 @@ public class KenKenAndroidActivity extends Activity {
 	private ValuesLayout valuesLayout = null;
 	private TextView timerText = null;
 
-	private int gameWonGameSize;
-	private boolean gameWonNewHighScore;
-	private long gameWonTicks;
-		
+	private int gameWonGameSize = 4;
+	private boolean gameWonNewHighScore = false;
+	private long gameWonTicks = -1;
+	
 	private void gameSizeChanged() {
 		this.gameComponent.Clear();
 	}
@@ -65,7 +65,7 @@ public class KenKenAndroidActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        
+                
         // Give a reference to settings to our static settings manager
         // Also attach to the settings's event handler
         SharedPreferences preferences =
@@ -112,7 +112,7 @@ public class KenKenAndroidActivity extends Activity {
         		if (gameJsonString.length() > 0) {
         			try {
         				JSONObject gameAsJson = new JSONObject(gameJsonString);
-        				this.gameComponent.LoadState(gameAsJson);
+        	    		this.gameComponent.LoadState(gameAsJson);
         			} catch (JSONException e) {
         				e.printStackTrace();
         			}
@@ -131,6 +131,8 @@ public class KenKenAndroidActivity extends Activity {
     
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
+    	super.onSaveInstanceState(savedInstanceState);
+    	
     	JSONObject game = this.gameComponent.SaveState();
     	if (game != null) {
         	savedInstanceState.putString(
@@ -138,16 +140,12 @@ public class KenKenAndroidActivity extends Activity {
     			game.toString()
 			);
     	}
-    	
-    	super.onSaveInstanceState(savedInstanceState);
     }
     
     private void newGame() {
     	int gameSize = SettingsProvider.GetGameSize();
     	StatisticsManager.GameStarted(gameSize);
     	this.gameComponent.NewGame(gameSize);
-    	this.candidatesLayout.NewGame(gameSize);
-    	this.valuesLayout.NewGame(gameSize);
     }
     
     private void pauseGame() {

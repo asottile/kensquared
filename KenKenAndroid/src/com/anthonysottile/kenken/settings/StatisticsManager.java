@@ -95,7 +95,6 @@ public final class StatisticsManager {
 	 * @return The Game Statistics for the specified game size.
 	 */
 	public static GameStatistics GetGameStatistics(int gameSize) {
-		
 		if (StatisticsManager.statistics == null) {
 			StatisticsManager.Load();
 		}

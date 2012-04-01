@@ -58,6 +58,7 @@ public class GameComponent extends View {
 			}
 		};
 	
+	private boolean measured = false;
 	private int squareWidthPlusBorder;
 	private int squareHeightPlusBorder;
 	
@@ -93,6 +94,24 @@ public class GameComponent extends View {
 					}
 				}
 			}
+		}
+	};
+	private Runnable initializeThread = new Runnable() {
+		public void run() {
+
+			if(!GameComponent.this.measured) {
+				GameComponent.this.gameTimer.postDelayed(
+					this,
+					250
+				);
+				return;
+			}
+			
+			GameComponent.this.initializeGame(
+				GameComponent.this.game.getLatinSquare().getOrder()
+			);
+			
+			GameComponent.this.TogglePause();
 		}
 	};
 	
@@ -303,6 +322,14 @@ public class GameComponent extends View {
 	}
 	
 	private void initializeGame(int order) {
+
+		this.candidatesLayout.NewGame(order);
+		this.valuesLayout.NewGame(order);
+		
+		if(!this.measured) {
+			this.gameTimer.postDelayed(this.initializeThread, 250);
+			return;
+		}
 		
 		int boardWidth = this.getMeasuredWidth();
 		int boardHeight = this.getMeasuredHeight();
@@ -378,10 +405,8 @@ public class GameComponent extends View {
 		this.Clear();
 		if (gameAsJson != null) {
 			this.game = new KenKenGame(gameAsJson);
-			this.initializeGame(this.game.getLatinSquare().getOrder());
 			
-			// Pause the game
-			this.TogglePause();
+			this.gameTimer.postDelayed(this.initializeThread, 250);
 		}
 	}
 	
@@ -590,6 +615,7 @@ public class GameComponent extends View {
         }
         
 		this.setMeasuredDimension(width, height);
+		this.measured = true;
 	}
 	
 	@Override
