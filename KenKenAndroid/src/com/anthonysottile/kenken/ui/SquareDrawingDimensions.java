@@ -61,6 +61,10 @@ public class SquareDrawingDimensions {
 	private int getTop(int y) {
 		return UIConstants.BorderWidth * (y + 1) + y * this.squareHeight;
 	}
+
+	public int getOrder() {
+		return this.order;
+	}
 	
 	/**
 	 * Paints the cage text for the given square.

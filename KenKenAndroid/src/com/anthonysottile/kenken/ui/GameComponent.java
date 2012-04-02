@@ -58,9 +58,9 @@ public class GameComponent extends View {
 			}
 		};
 	
-	private boolean measured = false;
 	private int squareWidthPlusBorder;
 	private int squareHeightPlusBorder;
+	private SquareDrawingDimensions dimensions = null;
 	
 	private KenKenSquare[][] uiSquares = null;
 	private KenKenSquare selectedSquare = null;
@@ -94,24 +94,6 @@ public class GameComponent extends View {
 					}
 				}
 			}
-		}
-	};
-	private Runnable initializeThread = new Runnable() {
-		public void run() {
-
-			if(!GameComponent.this.measured) {
-				GameComponent.this.gameTimer.postDelayed(
-					this,
-					250
-				);
-				return;
-			}
-			
-			GameComponent.this.initializeGame(
-				GameComponent.this.game.getLatinSquare().getOrder()
-			);
-			
-			GameComponent.this.TogglePause();
 		}
 	};
 	
@@ -325,35 +307,14 @@ public class GameComponent extends View {
 
 		this.candidatesLayout.NewGame(order);
 		this.valuesLayout.NewGame(order);
-		
-		if(!this.measured) {
-			this.gameTimer.postDelayed(this.initializeThread, 250);
-			return;
-		}
-		
-		int boardWidth = this.getMeasuredWidth();
-		int boardHeight = this.getMeasuredHeight();
-		
-		// Adjust height / width for borders
-		int borders = UIConstants.BorderWidth * (order + 1);
-		boardWidth -= borders;
-		boardHeight -= borders;
-		
-		int squareWidth = boardWidth / order;
-		int squareHeight = boardHeight / order;
-		this.squareWidthPlusBorder = squareWidth + UIConstants.BorderWidth;
-		this.squareHeightPlusBorder = squareHeight + UIConstants.BorderWidth;
-		
-		SquareDrawingDimensions dimensions =
-			new SquareDrawingDimensions(order, squareWidth, squareHeight);
-		
+				
 		UserSquare[][] userSquares = this.game.getUserSquares();
 		
 		this.uiSquares = new KenKenSquare[order][];		
 		for (int i = 0; i < order; i += 1) {
 			this.uiSquares[i] = new KenKenSquare[order];
 			for (int j = 0; j < order; j += 1) {
-				this.uiSquares[i][j] = new KenKenSquare(userSquares[i][j], dimensions);
+				this.uiSquares[i][j] = new KenKenSquare(userSquares[i][j]);
 				this.uiSquares[i][j].AddRequestRedrawListener(this.redrawListener);
 			}
 		}
@@ -405,15 +366,17 @@ public class GameComponent extends View {
 		this.Clear();
 		if (gameAsJson != null) {
 			this.game = new KenKenGame(gameAsJson);
+
+			this.initializeGame(this.game.getLatinSquare().getOrder());
 			
-			this.gameTimer.postDelayed(this.initializeThread, 250);
+			this.TogglePause();
 		}
 	}
 	
-	public void NewGame(int order) {
+	public void NewGame(int gameSize) {
 		this.Clear();
-		this.game = new KenKenGame(order);
-		this.initializeGame(order);
+		this.game = new KenKenGame(gameSize);
+		this.initializeGame(gameSize);
 	}
 
 	public void Clear() {
@@ -615,7 +578,6 @@ public class GameComponent extends View {
         }
         
 		this.setMeasuredDimension(width, height);
-		this.measured = true;
 	}
 	
 	@Override
@@ -627,11 +589,12 @@ public class GameComponent extends View {
 			canvas.drawColor(Color.BLACK);
 			return;
 		}
-		
+
 		int order = SettingsProvider.GetGameSize();
 				
 		int boardWidth = this.getMeasuredWidth();
 		int boardHeight = this.getMeasuredHeight();
+		
 		// Adjust height / width for borders
 		int borders = UIConstants.BorderWidth * (order + 1);
 		boardWidth -= borders;
@@ -639,6 +602,13 @@ public class GameComponent extends View {
 		
 		int squareWidth = boardWidth / order;
 		int squareHeight = boardHeight / order;
+		this.squareWidthPlusBorder = squareWidth + UIConstants.BorderWidth;
+		this.squareHeightPlusBorder = squareHeight + UIConstants.BorderWidth;
+		
+		if(this.dimensions == null || this.dimensions.getOrder() != order) {
+			this.dimensions =
+				new SquareDrawingDimensions(order, squareWidth, squareHeight);
+		}
 		
 		int drawnBoardWidth = order * squareWidth + (order + 1) * UIConstants.BorderWidth;
 		int drawnBoardHeight = order * squareHeight + (order + 1) * UIConstants.BorderWidth;
@@ -691,7 +661,7 @@ public class GameComponent extends View {
 			// draw the squares themselves
 			for (KenKenSquare[] squares : this.uiSquares) {
 				for (KenKenSquare square : squares) {
-					square.drawSquare(canvas);
+					square.drawSquare(canvas, this.dimensions);
 				}
 			}
 		}

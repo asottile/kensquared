@@ -18,8 +18,6 @@ public class KenKenSquare {
 		Selected
 	}
 		
-	private SquareDrawingDimensions dimensions = null;
-	
 	private UserSquare square = null;
 	public UserSquare getUserSquare() {
 		return this.square;
@@ -46,7 +44,7 @@ public class KenKenSquare {
 		this.triggerRequestRedrawEvent();
 	}
 	
-	public void drawSquare(Canvas canvas) {
+	public void drawSquare(Canvas canvas, SquareDrawingDimensions dimensions) {
 		int x = this.square.getX();
 		int y = this.square.getY();
 		
@@ -69,7 +67,7 @@ public class KenKenSquare {
 			backgroundColor = UIConstants.GetMarkedIncorrectColor();
 		}
 		
-		this.dimensions.PaintBackgroundColor(
+		dimensions.PaintBackgroundColor(
 			canvas,
 			backgroundColor,
 			x,
@@ -78,7 +76,7 @@ public class KenKenSquare {
 		
 		// Draw cage text
 		if (this.cageText.length() > 0) {
-			this.dimensions.PaintCageText(
+			dimensions.PaintCageText(
 				canvas,
 				this.cageText,
 				x,
@@ -90,7 +88,7 @@ public class KenKenSquare {
 		int squareValue = this.square.getValue();
 		if (squareValue > 0) {
 			// Display value
-			this.dimensions.PaintValueText(
+			dimensions.PaintValueText(
 				canvas,
 				this.square.GetValueString(),
 				x,
@@ -102,7 +100,7 @@ public class KenKenSquare {
 			
 			// Only paint if there is a string there
 			if (candidatesText.length() > 0) {
-				this.dimensions.PaintCandidatesText(
+				dimensions.PaintCandidatesText(
 					canvas,
 					candidatesText,
 					x,
@@ -112,9 +110,8 @@ public class KenKenSquare {
 		}
 	}
 	
-	public KenKenSquare(UserSquare square, SquareDrawingDimensions dimensions) {
+	public KenKenSquare(UserSquare square) {
 		this.square = square;
-		this.dimensions = dimensions;
 		
 		this.square.AddChangedEventHandler(new UserSquare.UserSquareChangedListener() {
 			public void onUserSquareChanged(EventObject event) {
