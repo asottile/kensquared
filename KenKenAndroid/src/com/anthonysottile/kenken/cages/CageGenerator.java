@@ -9,12 +9,13 @@ import com.anthonysottile.kenken.Sign;
 import com.anthonysottile.kenken.SignNumber;
 
 public final class CageGenerator {
-	
-	private static Random random = new Random();
 
-	private static ICageFactory oneSquareFactory = OneSquareCageFactory.GetInstance();
+    private static final int maxRand = 100;	
+	private static final Random random = new Random();
+
+	private static final ICageFactory oneSquareFactory = OneSquareCageFactory.GetInstance();
 	
-    private static CageFactorySet simpleCageFactories =
+    private static final CageFactorySet simpleCageFactories =
         new CageFactorySet(
             new ICageFactory[] {
                 TwoSquareHorizontalFactory.GetInstance(),
@@ -25,9 +26,25 @@ public final class CageGenerator {
                 ThreeSquareUpRightFactory.GetInstance(),
                 ThreeSquareDownLeftFactory.GetInstance(),
                 ThreeSquareDownRightFactory.GetInstance()
+            },
+            new int[] {
+        		4,
+        		4,
+        		2,
+        		2,
+        		1,
+        		1,
+        		1,
+        		1
             }
         );
 	
+    /**
+     * Returns the maximum of the integer array.
+     * 
+     * @param numbers The numbers to extract the maximum from.
+     * @return The maximum in the array of integers.
+     */
 	public static int max(int[] numbers) {
 		int max = numbers[0];
 		for (int i = 1; i < numbers.length; i += 1) {
@@ -38,6 +55,12 @@ public final class CageGenerator {
 		return max;
 	}
 
+	/**
+	 * Returns the minimum of the integer array.
+	 * 
+	 * @param numbers The numbers to extract the minimum from.
+	 * @return The minimum in the array of integers.
+	 */
 	public static int min(int[] numbers) {
 		int min = numbers[0];
 		for (int i = 1; i < numbers.length; i += 1) {
@@ -48,27 +71,35 @@ public final class CageGenerator {
 		return min;
 	}
 	
+	/**
+	 * Returns the sum of the integer array.
+	 * 
+	 * @param numbers The numbers to sum.
+	 * @return The sum of the integers.
+	 */
 	public static int sum(int[] numbers) {
 		int sum = 0;
-		for (int i = 0; i < numbers.length; i += 1) {
-			sum += numbers[i];
+		for (int number : numbers) {
+			sum += number;
 		}
 		return sum;
 	}
 	
+	/**
+	 * Returns the product of the integer array.
+	 * 
+	 * @param numbers The numbers to multiply.
+	 * @return The product of the integers.
+	 */
 	public static int product(int[] numbers) {
 		int product = 1;
-		for (int i = 0; i < numbers.length; i += 1) {
-			product *= numbers[i];
+		for (int number : numbers) {
+			product *= number;
 		}
 		return product;
 	}
 
 	public static SignNumber DetermineSign(int[] numbers) {
-
-        // TODO: figure out better sign weighting
-
-        final int maxRand = 100;
 
         int max = max(numbers);
         int min = min(numbers);
@@ -90,10 +121,10 @@ public final class CageGenerator {
 
             // (0, 0) divide [0%]
             // [0, 20) subtract [20%]
-            // [20, 55) multiply [35%]
-            // [55, 100) add [45%]
+            // [20, 60) multiply [40%]
+            // [60, 100) add [45%]
             subtractCutOff += 20;
-            multiplyCutOff += 5;
+            multiplyCutOff += 10;
 
             if (max % min == 0)
             {
@@ -104,11 +135,11 @@ public final class CageGenerator {
                 // [65, 100) add [35%]
                 divideCutOff += 15;
                 subtractCutOff += 10;
-                multiplyCutOff += 10;
+                multiplyCutOff += 5;
             }
         }
 
-        int randomNumber = CageGenerator.random.nextInt(maxRand);
+        int randomNumber = CageGenerator.random.nextInt(CageGenerator.maxRand);
         if (randomNumber < divideCutOff) {
         	
             return new SignNumber(Sign.Divide, max / min);
@@ -144,7 +175,7 @@ public final class CageGenerator {
                 simpleCageFactories.Reset();
 
                 boolean appliedACage = false;
-                while (simpleCageFactories.getFactoriesLeft() > 0) {
+                while (simpleCageFactories.hasFactoriesLeft()) {
                     ICageFactory factory = simpleCageFactories.GetFactory();
 
                     if (factory.CanFit(game, p)) {
