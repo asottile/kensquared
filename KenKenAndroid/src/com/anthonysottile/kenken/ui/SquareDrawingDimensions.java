@@ -193,6 +193,7 @@ public class SquareDrawingDimensions {
 		this.candidatesTextFontSize = this.squareHeight - this.cageTextFontSize;
 		this.candidatesTextPaint = new Paint();
 		this.candidatesTextPaint.setTextSize(this.candidatesTextFontSize);
+		this.candidatesTextPaint.setColor(UIConstants.CandidatesTextColor);
 		String testMeasureString =
 			SquareDrawingDimensions.getTestCandidateString(order);
 		
