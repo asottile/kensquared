@@ -25,6 +25,7 @@ public class KenKenAndroidActivity extends Activity {
 	private static final int PreferencesDialogId = 0;
 	private static final int StatisticsDialogId = 1;
 	private static final int GameWonDialogId = 2;
+	private static final int AboutDialogId = 3;
 
 	private static final String preferences = "com.anthonysottile.kenken";
 	private static final String saveGameBundleProperty = "SavedGame";
@@ -167,6 +168,8 @@ public class KenKenAndroidActivity extends Activity {
     }
     
     private void showAbout() {
+    	this.gameComponent.PauseIfNotPaused();
+    	this.showDialog(KenKenAndroidActivity.AboutDialogId);
     }
     
     // #region Dialogs
@@ -184,6 +187,9 @@ public class KenKenAndroidActivity extends Activity {
     			break;
     		case KenKenAndroidActivity.GameWonDialogId:
     			dialog = new GameWonDialog(this);
+    			break;
+    		case KenKenAndroidActivity.AboutDialogId:
+    			dialog = new AboutDialog(this);
     			break;
 			default:
 				dialog = null;
@@ -216,6 +222,7 @@ public class KenKenAndroidActivity extends Activity {
 				);
     			
     			break;
+    		case KenKenAndroidActivity.AboutDialogId:
 			default:
 				break;	
     	}

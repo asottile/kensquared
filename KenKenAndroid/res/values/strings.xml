@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">KenKenAndroid</string>
+    <string name="app_name">KenKen</string>
+    <string name="version">1.0.0</string>
+    
+    <string name="byAuthor">by Anthony Sottile</string>
+    <string name="versionColon">Version: </string>
+    <string name="aboutText">For more information and how to play please visit anthonysottile.com/kenken for more details.</string>
     
     <!-- Game Component -->
     
