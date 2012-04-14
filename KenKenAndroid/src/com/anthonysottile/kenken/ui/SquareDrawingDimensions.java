@@ -141,6 +141,9 @@ public class SquareDrawingDimensions {
 			
 			// assign last into first to check for the next substring
 			first = last;
+			if (first < textLength && candidatesText.charAt(first) == ' ') {
+				first += 1;
+			}
 			
 			line += 1;
 		}

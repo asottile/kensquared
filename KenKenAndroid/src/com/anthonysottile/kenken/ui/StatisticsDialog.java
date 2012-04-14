@@ -5,7 +5,6 @@ import java.util.Locale;
 
 import com.anthonysottile.kenken.R;
 import com.anthonysottile.kenken.settings.GameStatistics;
-import com.anthonysottile.kenken.settings.SettingsProvider;
 import com.anthonysottile.kenken.settings.StatisticsManager;
 
 import android.app.Dialog;
@@ -158,7 +157,7 @@ public class StatisticsDialog extends Dialog {
 			);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         this.dropdown.setAdapter(spinnerAdapter);
-        this.dropdown.setSelection(SettingsProvider.GetGameSize() - UIConstants.MinGameSize);
+        this.dropdown.setSelection(0);
         this.dropdown.setOnItemSelectedListener(
     		new OnItemSelectedListener() {
 
@@ -321,8 +320,6 @@ public class StatisticsDialog extends Dialog {
 			);
         buttonsLayoutParams.setMargins(5, 25, 5, 5);
         root.addView(buttonsLayout, buttonsLayoutParams);
-        
-        this.setValues(SettingsProvider.GetGameSize());
         
         this.setContentView(root);
 	}

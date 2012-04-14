@@ -13,7 +13,7 @@ public class GameStatistics
 {			
 	// NOTE: According to http://developer.android.com/reference/java/util/Locale.html
 	//        Locale.US should be used like C#  CultureInfo.InvariantCulture
-	private final static DateFormat dateFormatter =
+	private static final DateFormat dateFormatter =
 		SimpleDateFormat.getDateInstance(
 			SimpleDateFormat.LONG,
 			Locale.US

@@ -6,7 +6,6 @@ import java.util.Locale;
 
 import com.anthonysottile.kenken.R;
 import com.anthonysottile.kenken.settings.GameStatistics;
-import com.anthonysottile.kenken.settings.SettingsProvider;
 import com.anthonysottile.kenken.settings.StatisticsManager;
 
 import android.app.Dialog;
@@ -287,9 +286,7 @@ public class GameWonDialog extends Dialog {
 			);
         buttonsLayoutParams.setMargins(5, 25, 5, 5);
         root.addView(buttonsLayout, buttonsLayoutParams);
-        
-        this.setValues(SettingsProvider.GetGameSize());
-        
+                
         this.setContentView(root);
 	}
 }

@@ -7,6 +7,7 @@ public final class UIConstants {
 
 	public static final int MinGameSize = 4;
 	public static final int MaxGameSize = 9;
+	public static final int GameSizes = UIConstants.MaxGameSize - UIConstants.MinGameSize + 1;
 	
 	public static final int BorderWidth = 2;
 	

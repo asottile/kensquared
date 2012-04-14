@@ -16,6 +16,13 @@ import android.widget.TextView;
 
 public class CandidatesLayout extends LinearLayout {
 
+	private static final LayoutParams allNoneLayoutParams =
+		new LinearLayout.LayoutParams(
+			30,
+			ViewGroup.LayoutParams.FILL_PARENT,
+			0.3f
+		);
+	
 	private static final LayoutParams buttonsLayoutParams =
 		new LinearLayout.LayoutParams(
 			30,
@@ -111,7 +118,6 @@ public class CandidatesLayout extends LinearLayout {
 				} else {
 					CandidatesLayout.this.triggerCandidateRemoved(button.getValue());
 				}
-				
 			}
 		};
 	
@@ -207,9 +213,9 @@ public class CandidatesLayout extends LinearLayout {
 			}
 		});
 		
-		this.addView(plusButton, 40, ViewGroup.LayoutParams.FILL_PARENT);
+		this.addView(plusButton, CandidatesLayout.allNoneLayoutParams);
 		this.addView(new TextView(this.getContext()), 5, ViewGroup.LayoutParams.FILL_PARENT);
-		this.addView(minusButton, 40, ViewGroup.LayoutParams.FILL_PARENT);
+		this.addView(minusButton, CandidatesLayout.allNoneLayoutParams);
 		this.addView(new TextView(this.getContext()), 5, ViewGroup.LayoutParams.FILL_PARENT);
 		
 		this.candidates = new CustomButton[gameSize];

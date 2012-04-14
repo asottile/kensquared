@@ -72,7 +72,7 @@ public class PreferencesDialog extends Dialog {
 			);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         this.dropdown.setAdapter(spinnerAdapter);
-        this.dropdown.setSelection(SettingsProvider.GetGameSize() - UIConstants.MinGameSize);
+        this.dropdown.setSelection(0);
         
         // Layout for Game Size
         // NOTE: Needed a little hack here to get the dialog to display nicely.

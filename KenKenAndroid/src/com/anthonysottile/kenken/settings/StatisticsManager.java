@@ -14,37 +14,13 @@ public final class StatisticsManager {
 	
 	private static SharedPreferences preferences = null;
 	private static GameStatistics[] statistics = null;
-	
-	/**
-	 * Clears the statistics.
-	 */
-	public static void ClearGameStatistics() {
 
-		// Create dummy JSON array
-		JSONArray array = new JSONArray();
-		try {
-			for (int i = 0; i < 6; i += 1) {
-				array.put(i, new GameStatistics(i + 4).ToJson());
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		
-		SharedPreferences.Editor editor =
-			StatisticsManager.preferences.edit();
-		
-		editor.putString(StatisticsManager.Statistics, array.toString());
-		editor.commit();
-		
-		StatisticsManager.statistics = null;
-	}
-	
 	private static void saveGameStatistics() {
 
 		// Create JSON array
 		JSONArray array = new JSONArray();
 		try {
-			for (int i = 0; i < 6; i += 1) {
+			for (int i = 0; i < UIConstants.GameSizes; i += 1) {
 				array.put(i, StatisticsManager.statistics[i].ToJson());
 			}
 		} catch (JSONException e) {
@@ -57,48 +33,53 @@ public final class StatisticsManager {
 		editor.putString(StatisticsManager.Statistics, array.toString());
 		editor.commit();
 	}
-	
-	/**
-	 * Loads the statistics.  Populates them if this is the first run.
-	 */
-	public static void Load() {
+
+	private static void loadStatistics() {
 		// First check if we have the Statistics already there
 		if (!StatisticsManager.preferences.contains(StatisticsManager.Statistics)) {
 			StatisticsManager.ClearGameStatistics();
-		}
-		
-		StatisticsManager.statistics = new GameStatistics[6];
-		
-		try {
-			JSONArray array =
-				new JSONArray(
-					StatisticsManager.preferences.getString(
-						StatisticsManager.Statistics,
-						""
-					)
-				);
+		} else {
+			StatisticsManager.statistics = new GameStatistics[UIConstants.GameSizes];
 			
-			for (int i = 0; i < 6; i += 1) {
-				StatisticsManager.statistics[i] =
-					new GameStatistics(array.getJSONObject(i));
+			try {
+				JSONArray array =
+					new JSONArray(
+						StatisticsManager.preferences.getString(
+							StatisticsManager.Statistics,
+							""
+						)
+					);
+				
+				for (int i = 0; i < UIConstants.GameSizes; i += 1) {
+					StatisticsManager.statistics[i] = new GameStatistics(array.getJSONObject(i));
+				}
+				
+			} catch (JSONException e) {
+				e.printStackTrace();
 			}
-			
-		} catch (JSONException e) {
-			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Clears the statistics.
+	 */
+	public static void ClearGameStatistics() {
 
+		StatisticsManager.statistics =	new GameStatistics[UIConstants.GameSizes];
+		for (int i = 0; i < UIConstants.GameSizes; i += 1) {
+			StatisticsManager.statistics[i] = new GameStatistics(i + UIConstants.MinGameSize);
+		}
+		
+		StatisticsManager.saveGameStatistics();
+	}
+	
 	/**
 	 * Returns the Game Statistics for the specified game size.
 	 * 
 	 * @param gameSize The game size to retrieve statistics for.
 	 * @return The Game Statistics for the specified game size.
 	 */
-	public static GameStatistics GetGameStatistics(int gameSize) {
-		if (StatisticsManager.statistics == null) {
-			StatisticsManager.Load();
-		}
-		
+	public static GameStatistics GetGameStatistics(int gameSize) {		
 		return StatisticsManager.statistics[gameSize - UIConstants.MinGameSize];
 	}
 	
@@ -108,10 +89,6 @@ public final class StatisticsManager {
 	 * @param gameSize The size of the game started.
 	 */
 	public static void GameStarted(int gameSize) {
-		if (StatisticsManager.statistics == null) {
-			StatisticsManager.Load();
-		}
-		
 		int index = gameSize - UIConstants.MinGameSize;
 		StatisticsManager.statistics[index].GameStarted();
 		
@@ -130,10 +107,6 @@ public final class StatisticsManager {
 
 		// Returns true if the game is a high score
 		boolean returnValue = false;
-		
-		if (StatisticsManager.statistics == null) {
-			StatisticsManager.Load();
-		}
 		
 		int index = gameSize - UIConstants.MinGameSize;
 		GameStatistics game = StatisticsManager.statistics[index];
@@ -159,6 +132,7 @@ public final class StatisticsManager {
 	 */
 	public static void Initialize(SharedPreferences preferences) {
 		StatisticsManager.preferences = preferences;
+		StatisticsManager.loadStatistics();
 	}
 	
 	private StatisticsManager() { }

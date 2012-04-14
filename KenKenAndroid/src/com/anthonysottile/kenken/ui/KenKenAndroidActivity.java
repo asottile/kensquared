@@ -35,13 +35,16 @@ public class KenKenAndroidActivity extends Activity {
 	private ValuesLayout valuesLayout = null;
 	private TextView timerText = null;
 
-	private int gameWonGameSize = 4;
+	private int gameWonGameSize = UIConstants.MinGameSize;
 	private boolean gameWonNewHighScore = false;
 	private long gameWonTicks = -1;
 	
-	private void gameSizeChanged() {
-		this.gameComponent.Clear();
-	}
+	private SettingsProvider.GameSizeChangedListener gameSizedListener =
+		new SettingsProvider.GameSizeChangedListener() {
+			public void onGameSizeChanged(EventObject event) {
+				KenKenAndroidActivity.this.gameComponent.Clear();
+			}
+		};
 	
 	private GameComponent.GameWonListener gameWonListener =
 		new GameComponent.GameWonListener() {
@@ -64,25 +67,22 @@ public class KenKenAndroidActivity extends Activity {
 		
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-                
+    	super.onCreate(savedInstanceState);
+
+    	new ErrorReporter().Init(this);
+    	
         // Give a reference to settings to our static settings manager
         // Also attach to the settings's event handler
         SharedPreferences preferences =
     		this.getSharedPreferences(KenKenAndroidActivity.preferences, 0);
         SettingsProvider.Initialize(preferences);
         StatisticsManager.Initialize(preferences);
-        SettingsProvider.AddGameSizeChangedListener(
-    		new SettingsProvider.GameSizeChangedListener() {
-    			public void onGameSizeChanged(EventObject event) {
-    				KenKenAndroidActivity.this.gameSizeChanged();
-    			}
-    		}
-		);
+        SettingsProvider.AddGameSizeChangedListener(this.gameSizedListener);
         
         // Give a reference to resources for Bitmap cache
         BitmapCache.Initialize(this.getResources());
+        
+        this.setContentView(R.layout.main);
         
         // Set up private references for convenience later
         this.candidatesLayout =
@@ -102,6 +102,19 @@ public class KenKenAndroidActivity extends Activity {
 		);
         
         this.gameComponent.AddGameWonListener(this.gameWonListener);
+    }
+    
+    @Override
+    protected void onPause() {
+    	super.onPause();
+
+    	// Pause the game since they are navigating away
+    	this.gameComponent.PauseIfNotPaused();
+    }
+    
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+    	super.onRestoreInstanceState(savedInstanceState);
         
         // Restore the saved state if applicable
         if (savedInstanceState != null) {
@@ -120,14 +133,6 @@ public class KenKenAndroidActivity extends Activity {
         		}
         	}
         }
-    }
-    
-    @Override
-    protected void onPause() {
-    	super.onPause();
-
-    	// Pause the game since they are navigating away
-    	this.gameComponent.PauseIfNotPaused();
     }
     
     @Override
