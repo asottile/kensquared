@@ -33,6 +33,9 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    
         <!-- Preferences -->
         
         <string name="preferences">Preferences</string>
@@ -49,6 +52,8 @@
         <string name="bestTime">Best Time:</string>
         <string name="bestTimeDate">Best Time Date:</string>
         <string name="clear">Clear</string>
+    
+        <string name="confirmClear">Are you sure you want to clear statistics?</string>
     
         <!-- end Statistics -->
     

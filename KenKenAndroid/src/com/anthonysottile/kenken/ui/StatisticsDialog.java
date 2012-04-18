@@ -7,8 +7,11 @@ import com.anthonysottile.kenken.R;
 import com.anthonysottile.kenken.settings.GameStatistics;
 import com.anthonysottile.kenken.settings.StatisticsManager;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -276,10 +279,25 @@ public class StatisticsDialog extends Dialog {
         // Cancel button
         // Doesn't set the changed value here.
         Button clearButton = new Button(context);
-        clearButton.setText(context.getString(R.string.clear));
+        clearButton.setText(R.string.clear);
         clearButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				StatisticsDialog.this.clearStatistics();
+        	public void onClick(View v) {
+        		AlertDialog.Builder builder = new AlertDialog.Builder(StatisticsDialog.this.getContext());
+        		builder.setMessage(R.string.confirmClear)
+        		.setCancelable(false)
+        		.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+        			public void onClick(DialogInterface dialog, int id) {
+        				StatisticsDialog.this.clearStatistics();
+        				dialog.dismiss();
+        			}
+        		})
+        		.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+        			public void onClick(DialogInterface dialog, int id) {
+        				dialog.dismiss();
+        			}
+        		});
+        		AlertDialog alert = builder.create();
+        		alert.show();
 			}
 		});
         
