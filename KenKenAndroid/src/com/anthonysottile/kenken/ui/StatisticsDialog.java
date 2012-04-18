@@ -7,7 +7,6 @@ import com.anthonysottile.kenken.R;
 import com.anthonysottile.kenken.settings.GameStatistics;
 import com.anthonysottile.kenken.settings.StatisticsManager;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
