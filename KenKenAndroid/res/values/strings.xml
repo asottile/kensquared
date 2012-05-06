@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">KenKen</string>
+    <string name="app_name">KenSquared</string>
     <string name="version">1.0.0</string>
     
     <string name="byAuthor">by Anthony Sottile</string>
