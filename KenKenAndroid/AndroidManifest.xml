@@ -6,8 +6,9 @@
 
     <uses-sdk android:minSdkVersion="7" />
 
+	<!-- TODO: uncomment when debugging
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
+	-->
 
     <application
         android:icon="@drawable/ic_launcher"

@@ -1,5 +1,7 @@
 package com.anthonysottile.kenken.ui;
 
+/*
+ * TODO: uncomment when debugging
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -224,3 +226,4 @@ public class ErrorReporter implements Thread.UncaughtExceptionHandler
 		}
 	}
 }
+*/

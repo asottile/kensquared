@@ -69,7 +69,8 @@ public class KenKenAndroidActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
 
-    	new ErrorReporter().Init(this);
+    	// TODO: remove this comment when debugging
+    	//new ErrorReporter().Init(this);
     	
         // Give a reference to settings to our static settings manager
         // Also attach to the settings's event handler
