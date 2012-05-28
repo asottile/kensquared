@@ -19,6 +19,9 @@ public class CustomButton extends View {
 	private final static int DefaultSize = 28;
 	private final static int TopMargin = 8;
 	
+	private final Rect destRect = new Rect();
+	private final Paint textPaint = new Paint();
+	
 	// #region Check Changed Event
 	
 	public class CheckChangedEvent extends EventObject {
@@ -352,7 +355,7 @@ public class CustomButton extends View {
 		// Draw left curve
 		if (this.hasLeftCurve) {
 			start += 7;
-			Rect destRect = new Rect(0, 0, 8, this.getMeasuredHeight());
+			this.destRect.set(0, 0, 8, this.getMeasuredHeight());
 			
 			Bitmap bitmap;
 			if (!this.enabled) {
@@ -364,7 +367,7 @@ public class CustomButton extends View {
 			}
 			
 			// Draw left curve
-			canvas.drawBitmap(bitmap, null, destRect, p);
+			canvas.drawBitmap(bitmap, null, this.destRect, p);
 				
 		} else {
 			// Draw 1px left border
@@ -374,7 +377,7 @@ public class CustomButton extends View {
 		// Draw right curve
 		if (this.hasRightCurve) {
 			end -= 7;
-			Rect destReg = new Rect(
+			this.destRect.set(
 				this.getMeasuredWidth() - 8,
 				0,
 				this.getMeasuredWidth(),
@@ -391,7 +394,7 @@ public class CustomButton extends View {
 			}
 			
 			// Draw right curve
-			canvas.drawBitmap(bitmap, null, destReg, p);
+			canvas.drawBitmap(bitmap, null, this.destRect, p);
 			
 		} else {
 			// Draw 1px right border
@@ -415,34 +418,33 @@ public class CustomButton extends View {
 			bitmap = BitmapCache.getEnabledCenter();
 		}
 		
-		Rect destReg = new Rect(
+		this.destRect.set(
 			start,
 			0,
 			end,
 			this.getMeasuredHeight()
 		);
 		
-		canvas.drawBitmap(bitmap, null, destReg, p);
+		canvas.drawBitmap(bitmap, null, this.destRect, p);
 		
 		// Paint the text
 		
 		int textSize = this.getMeasuredHeight() - CustomButton.TopMargin * 2;
 		
-		Paint textPaint = new Paint();
-		textPaint.setTextSize(textSize);
+		this.textPaint.setTextSize(textSize);
 		if (!this.enabled) {
-			textPaint.setColor(Color.rgb(0x99, 0x99, 0x99));
+			this.textPaint.setColor(Color.rgb(0x99, 0x99, 0x99));
 		} else if (checked) {
-			textPaint.setColor(Color.rgb(0, 0, 0));
+			this.textPaint.setColor(Color.rgb(0, 0, 0));
 		} else {
-			textPaint.setColor(Color.rgb(0xff, 0xff, 0xff));
+			this.textPaint.setColor(Color.rgb(0xff, 0xff, 0xff));
 		}
 		
-		float textWidth = textPaint.measureText(this.text);
+		float textWidth = this.textPaint.measureText(this.text);
 		int left = (this.getMeasuredWidth() - (int)textWidth) / 2;
 		int top = CustomButton.TopMargin + textSize;
 		
-		canvas.drawText(this.text, left, top, textPaint);
+		canvas.drawText(this.text, left, top, this.textPaint);
 	}
 	
 	public CustomButton(Context context) {
