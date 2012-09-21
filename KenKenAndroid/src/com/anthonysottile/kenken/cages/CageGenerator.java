@@ -10,11 +10,11 @@ import com.anthonysottile.kenken.SignNumber;
 
 public final class CageGenerator {
 
-    private static final int maxRand = 100;	
+    private static final int maxRand = 100;
 	private static final Random random = new Random();
 
 	private static final ICageFactory oneSquareFactory = OneSquareCageFactory.GetInstance();
-	
+
     private static final CageFactorySet simpleCageFactories =
         new CageFactorySet(
             new ICageFactory[] {
@@ -38,10 +38,10 @@ public final class CageGenerator {
         		1
             }
         );
-	
+
     /**
      * Returns the maximum of the integer array.
-     * 
+     *
      * @param numbers The numbers to extract the maximum from.
      * @return The maximum in the array of integers.
      */
@@ -57,7 +57,7 @@ public final class CageGenerator {
 
 	/**
 	 * Returns the minimum of the integer array.
-	 * 
+	 *
 	 * @param numbers The numbers to extract the minimum from.
 	 * @return The minimum in the array of integers.
 	 */
@@ -70,10 +70,10 @@ public final class CageGenerator {
 		}
 		return min;
 	}
-	
+
 	/**
 	 * Returns the sum of the integer array.
-	 * 
+	 *
 	 * @param numbers The numbers to sum.
 	 * @return The sum of the integers.
 	 */
@@ -84,10 +84,10 @@ public final class CageGenerator {
 		}
 		return sum;
 	}
-	
+
 	/**
 	 * Returns the product of the integer array.
-	 * 
+	 *
 	 * @param numbers The numbers to multiply.
 	 * @return The product of the integers.
 	 */
@@ -101,8 +101,8 @@ public final class CageGenerator {
 
 	public static SignNumber DetermineSign(int[] numbers) {
 
-        int max = max(numbers);
-        int min = min(numbers);
+        int max = CageGenerator.max(numbers);
+        int min = CageGenerator.min(numbers);
 
         // (0, 0) divide
         // (0, 0) subtract
@@ -115,7 +115,7 @@ public final class CageGenerator {
         if (numbers.length == 1) {
             // one numbered cages have no sign
             return new SignNumber(Sign.None, numbers[0]);
-            
+
         } else if (numbers.length == 2) {
             // division and subtraction are only valid for two number cages
 
@@ -141,17 +141,17 @@ public final class CageGenerator {
 
         int randomNumber = CageGenerator.random.nextInt(CageGenerator.maxRand);
         if (randomNumber < divideCutOff) {
-        	
+
             return new SignNumber(Sign.Divide, max / min);
-            
+
         } else if (randomNumber < subtractCutOff) {
-        	
+
             return new SignNumber(Sign.Subtract, max - min);
-            
+
         } else if (randomNumber < multiplyCutOff) {
-        	
+
             return new SignNumber(Sign.Multiply, CageGenerator.product(numbers));
-            
+
         } else {
             return new SignNumber(Sign.Add, CageGenerator.sum(numbers));
         }
@@ -172,11 +172,11 @@ public final class CageGenerator {
                 }
 
                 // reset it so we are drawing anew
-                simpleCageFactories.Reset();
+                CageGenerator.simpleCageFactories.Reset();
 
                 boolean appliedACage = false;
-                while (simpleCageFactories.hasFactoriesLeft()) {
-                    ICageFactory factory = simpleCageFactories.GetFactory();
+                while (CageGenerator.simpleCageFactories.hasFactoriesLeft()) {
+                    ICageFactory factory = CageGenerator.simpleCageFactories.GetFactory();
 
                     if (factory.CanFit(game, p)) {
                         factory.ApplyCage(game, p);
@@ -187,7 +187,7 @@ public final class CageGenerator {
 
                 // if no cage was applied, then the 1x1 is the only choice left
                 if (!appliedACage) {
-                    oneSquareFactory.ApplyCage(game, p);
+                    CageGenerator.oneSquareFactory.ApplyCage(game, p);
                 }
 
                 column++;
@@ -195,6 +195,6 @@ public final class CageGenerator {
             row++;
         }
     }
-	
+
 	private CageGenerator() {}
 }

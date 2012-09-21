@@ -10,10 +10,11 @@ public class TwoSquareVerticalFactory implements ICageFactory {
     private static ICageFactory factoryInstance;
 
     public static ICageFactory GetInstance() {
-        if (factoryInstance == null)
-            factoryInstance = new TwoSquareVerticalFactory();
+        if (TwoSquareVerticalFactory.factoryInstance == null) {
+            TwoSquareVerticalFactory.factoryInstance = new TwoSquareVerticalFactory();
+        }
 
-        return factoryInstance;
+        return TwoSquareVerticalFactory.factoryInstance;
     }
 
     public boolean CanFit(KenKenGame game, Point location) {

@@ -2,7 +2,9 @@ package com.anthonysottile.kenken.cages;
 
 import android.graphics.Point;
 
-import com.anthonysottile.kenken.*;
+import com.anthonysottile.kenken.KenKenGame;
+import com.anthonysottile.kenken.Points;
+import com.anthonysottile.kenken.RenderLine;
 
 public class ThreeSquareLineCage extends BaseCage {
 
@@ -20,7 +22,7 @@ public class ThreeSquareLineCage extends BaseCage {
             // +---+---+---+
             // | X | 2 | 3 |
             // +---+---+---+
-            // 
+            //
             // top, left, bottom, right
             this.renderLines.add(new RenderLine(location, 3, true));
             this.renderLines.add(new RenderLine(location, 1, false));
@@ -58,7 +60,7 @@ public class ThreeSquareLineCage extends BaseCage {
         this.squares.add(location);
         this.squares.add(secondSquare);
         this.squares.add(thirdSquare);
-        
+
         this.signNumber =
             CageGenerator.DetermineSign
             (

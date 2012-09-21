@@ -2,17 +2,19 @@ package com.anthonysottile.kenken.cages;
 
 import android.graphics.Point;
 
-import com.anthonysottile.kenken.*;
+import com.anthonysottile.kenken.KenKenGame;
+import com.anthonysottile.kenken.Points;
 
 public class ThreeSquareUpRightFactory implements ICageFactory {
 
     private static ICageFactory factoryInstance;
 
     public static ICageFactory GetInstance() {
-        if (factoryInstance == null)
-            factoryInstance = new ThreeSquareUpRightFactory();
+        if (ThreeSquareUpRightFactory.factoryInstance == null) {
+            ThreeSquareUpRightFactory.factoryInstance = new ThreeSquareUpRightFactory();
+        }
 
-        return factoryInstance;
+        return ThreeSquareUpRightFactory.factoryInstance;
     }
 
     public boolean CanFit(KenKenGame game, Point location) {

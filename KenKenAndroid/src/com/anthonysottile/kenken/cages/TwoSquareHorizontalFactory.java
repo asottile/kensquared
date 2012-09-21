@@ -10,10 +10,11 @@ public class TwoSquareHorizontalFactory implements ICageFactory {
     private static ICageFactory factoryInstance;
 
     public static ICageFactory GetInstance() {
-        if (factoryInstance == null)
-            factoryInstance = new TwoSquareHorizontalFactory();
+        if (TwoSquareHorizontalFactory.factoryInstance == null) {
+            TwoSquareHorizontalFactory.factoryInstance = new TwoSquareHorizontalFactory();
+        }
 
-        return factoryInstance;
+        return TwoSquareHorizontalFactory.factoryInstance;
     }
 
     public boolean CanFit(KenKenGame game, Point location) {
@@ -27,7 +28,7 @@ public class TwoSquareHorizontalFactory implements ICageFactory {
     public void ApplyCage(KenKenGame game, Point location) {
         game.getCages().add(new TwoSquareCage(game, location, true));
     }
-    
+
     private TwoSquareHorizontalFactory() {}
 
 }

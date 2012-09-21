@@ -10,22 +10,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class UserSquare {
-	
+
 	private int x;
 	public int getX() {
 		return this.x;
 	}
-	
+
 	private int y;
 	public int getY() {
 		return this.y;
 	}
-	
+
 	private boolean[] candidates;
 	public boolean[] getCandidates() {
 		return this.candidates;
 	}
-	
+
 	private int value = 0;
 	public int getValue() {
 		return this.value;
@@ -33,7 +33,7 @@ public class UserSquare {
 	public void setValue(int value) {
 		if (this.value != value) {
 			this.value = value;
-			
+
 			this.triggerValueSetEvent();
 
 			this.triggerChangedEvent();
@@ -43,16 +43,16 @@ public class UserSquare {
 	public List<Integer> GetIntCandidates() {
 		List<Integer> intList = new ArrayList<Integer>();
 		for (int i = 0; i < this.candidates.length; i += 1) {
-			if (this.candidates[i]) { 
+			if (this.candidates[i]) {
 				intList.add(i);
 			}
 		}
-		
+
 		return intList;
 	}
 
 	public String GetCandidatesString() {
-		
+
 		StringBuilder sb = new StringBuilder();
 		boolean first = true;
 		for (int i = 0; i < this.candidates.length; i += 1) {
@@ -64,14 +64,14 @@ public class UserSquare {
 				first = false;
 			}
 		}
-		
+
 		return sb.toString();
 	}
-	
+
 	public String GetValueString() {
 		return ((Integer)(this.value)).toString();
 	}
-	
+
 	public void AddCandidate(int value) {
 		if (!this.candidates[value - 1]) {
 			this.candidates[value - 1] = true;
@@ -79,21 +79,21 @@ public class UserSquare {
 			this.triggerChangedEvent();
 		}
 	}
-	
+
 	public void RemoveCandidate(int value) {
 		if (this.candidates[value - 1]) {
 			this.candidates[value - 1] = false;
 
 			this.triggerChangedEvent();
-		}	
+		}
 	}
-	
+
 	// #region UserSquareChanged Event
-	
+
 	public interface UserSquareChangedListener {
 		public void onUserSquareChanged(EventObject event);
 	}
-	private List<UserSquareChangedListener> changedHandlers =
+	private final List<UserSquareChangedListener> changedHandlers =
 			new ArrayList<UserSquareChangedListener>();
 	public void AddChangedEventHandler(UserSquareChangedListener handler) {
 		this.changedHandlers.add(handler);
@@ -103,38 +103,38 @@ public class UserSquare {
 	}
 	private void triggerChangedEvent() {
 		EventObject event = new EventObject(this);
-		
+
 		for (UserSquareChangedListener listener : this.changedHandlers) {
 			listener.onUserSquareChanged(event);
 		}
 	}
 
 	// #endregion
-	
+
 	// #region ValueSet Event
-	
+
 	public class ValueSetEvent extends EventObject {
-		
+
 		private static final long serialVersionUID = -2664136343305658114L;
-		
-		private int x;
+
+		private final int x;
 		public int getX() {
 			return this.x;
 		}
-		
-		private int y;
+
+		private final int y;
 		public int getY() {
 			return this.y;
 		}
-		
-		private int value;
+
+		private final int value;
 		public int getValue() {
 			return this.value;
 		}
-		
+
 		public ValueSetEvent(Object sender, int x, int y, int value) {
 			super(sender);
-			
+
 			this.x = x;
 			this.y = y;
 			this.value = value;
@@ -143,7 +143,7 @@ public class UserSquare {
 	public interface ValueSetListener extends EventListener {
 		public void onValueSet(ValueSetEvent event);
 	}
-	private List<ValueSetListener> valueSetListeners =
+	private final List<ValueSetListener> valueSetListeners =
 			new ArrayList<ValueSetListener>();
 	public void AddValueSetListener(ValueSetListener listener) {
 		this.valueSetListeners.add(listener);
@@ -156,27 +156,27 @@ public class UserSquare {
 	}
 	private void triggerValueSetEvent() {
 		ValueSetEvent event = new ValueSetEvent(this, this.x, this.y, this.value);
-		
+
 		for (ValueSetListener listener : this.valueSetListeners) {
 			listener.onValueSet(event);
 		}
 	}
-	
+
 	// #endregion
-	
+
 	public UserSquare(int x, int y, int order) {
 		this.x = x;
 		this.y = y;
 		this.candidates = new boolean[order];
 	}
-	
+
 	// #region JSON Serialization
-	
+
 	private static final String xProperty = "X";
 	private static final String yProperty = "Y";
 	private static final String valueProperty = "Value";
 	private static final String candidatesProperty = "Candidates";
-	
+
 	public JSONObject ToJson() {
 		JSONObject json = new JSONObject();
 
@@ -185,36 +185,36 @@ public class UserSquare {
 			for (int i = 0; i < this.candidates.length; i += 1) {
 				candidatesJson.put(i, this.candidates[i]);
 			}
-			
-			json.put(xProperty, this.x);
-			json.put(yProperty, this.y);
-			json.put(valueProperty, this.value);
-			json.put(candidatesProperty, candidatesJson);
+
+			json.put(UserSquare.xProperty, this.x);
+			json.put(UserSquare.yProperty, this.y);
+			json.put(UserSquare.valueProperty, this.value);
+			json.put(UserSquare.candidatesProperty, candidatesJson);
 
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
+
 		return json;
 	}
-	
+
 	public UserSquare(JSONObject json) {
-	
+
 		try {
-			this.x = json.getInt(xProperty);
-			this.y = json.getInt(yProperty);
-			this.value = json.getInt(valueProperty);
-			
-			JSONArray candidatesJson = json.getJSONArray(candidatesProperty);
+			this.x = json.getInt(UserSquare.xProperty);
+			this.y = json.getInt(UserSquare.yProperty);
+			this.value = json.getInt(UserSquare.valueProperty);
+
+			JSONArray candidatesJson = json.getJSONArray(UserSquare.candidatesProperty);
 			this.candidates = new boolean[candidatesJson.length()];
-			for (int i = 0; i < candidates.length; i += 1) {
+			for (int i = 0; i < this.candidates.length; i += 1) {
 				this.candidates[i] = candidatesJson.getBoolean(i);
 			}
-		
+
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	// #endregion
 }

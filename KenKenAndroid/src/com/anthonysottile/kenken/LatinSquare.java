@@ -10,19 +10,19 @@ public class LatinSquare {
 	public int[][] getValues() {
 		return this.values;
 	}
-	
+
 	private int order;
 	public int getOrder() {
 		return this.order;
 	}
-	
+
 	public LatinSquare(int order) {
 		this.order = order;
-		
+
 		// Initialize the numbers array
 		//  but not the inner arrays. Those get made later.
 		this.values = new int[order][];
-		
+
         NumberPicker picker = new NumberPicker(order);
 
         // Retrieve the base list
@@ -87,62 +87,62 @@ public class LatinSquare {
             this.values[i] = list;
         }
 	}
-	
+
 	// #region JSON Serialization
-	
+
 	private static final String orderProperty = "Order";
 	private static final String valuesProperty = "Values";
-	
+
 	public JSONObject ToJson() {
 		JSONObject json = new JSONObject();
-		
+
 		try {
-			json.put(orderProperty, this.order);
-			
+			json.put(LatinSquare.orderProperty, this.order);
+
 			JSONArray outerArray = new JSONArray();
-			
+
 			for (int i = 0; i < this.values.length; i += 1) {
 				JSONArray innerArray = new JSONArray();
-				
+
 				for (int j = 0; j < this.values[i].length; j += 1) {
 					innerArray.put(j, this.values[i][j]);
 				}
-				
+
 				outerArray.put(i, innerArray);
 			}
-			
-			json.put(valuesProperty, outerArray);
-			
+
+			json.put(LatinSquare.valuesProperty, outerArray);
+
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
+
 		return json;
 	}
-	
+
 	public LatinSquare(JSONObject json) {
-		
+
 		try {
-			this.order = json.getInt(orderProperty);
-			
-			JSONArray outerArray = json.getJSONArray(valuesProperty);
-			
+			this.order = json.getInt(LatinSquare.orderProperty);
+
+			JSONArray outerArray = json.getJSONArray(LatinSquare.valuesProperty);
+
 			this.values = new int[outerArray.length()][];
 			for (int i = 0; i < this.values.length; i += 1) {
-				
+
 				JSONArray innerArray = outerArray.getJSONArray(i);
 				this.values[i] = new int[this.values.length];
-				
+
 				for (int j = 0; j < this.values[i].length; j += 1) {
 					this.values[i][j] = innerArray.getInt(j);
 				}
 			}
-			
+
 		} catch(JSONException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	// #endregion
-	
+
 }

@@ -2,7 +2,9 @@ package com.anthonysottile.kenken.cages;
 
 import android.graphics.Point;
 
-import com.anthonysottile.kenken.*;
+import com.anthonysottile.kenken.KenKenGame;
+import com.anthonysottile.kenken.Points;
+import com.anthonysottile.kenken.RenderLine;
 
 public class TwoSquareCage extends BaseCage {
 
@@ -42,14 +44,14 @@ public class TwoSquareCage extends BaseCage {
         // set all the squares as occupied
         game.setOccupied(location);
         game.setOccupied(secondSquare);
-        
+
         this.squares.add(location);
         this.squares.add(secondSquare);
 
         this.signNumber =
             CageGenerator.DetermineSign
             (
-                new int[] 
+                new int[]
                 {
                     game.getLatinSquare().getValues()[location.x][location.y],
                     game.getLatinSquare().getValues()[secondSquare.x][secondSquare.y]

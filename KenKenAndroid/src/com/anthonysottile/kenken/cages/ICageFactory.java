@@ -1,8 +1,8 @@
 package com.anthonysottile.kenken.cages;
 
-import com.anthonysottile.kenken.KenKenGame;
-
 import android.graphics.Point;
+
+import com.anthonysottile.kenken.KenKenGame;
 
 public interface ICageFactory {
 

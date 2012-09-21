@@ -5,45 +5,45 @@ import java.util.EventListener;
 import java.util.EventObject;
 import java.util.List;
 
-import com.anthonysottile.kenken.ui.CustomButton.CheckChangedEvent;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.anthonysottile.kenken.ui.CustomButton.CheckChangedEvent;
+
 public class ValuesLayout extends LinearLayout {
-	
+
 	private static final LayoutParams buttonsLayoutParams =
 		new LinearLayout.LayoutParams(
 			30,
 			ViewGroup.LayoutParams.FILL_PARENT,
 			0.5f
 		);
-	
+
 	//#region Value Changed Event
-	
+
 	public class ValueEvent extends EventObject {
-		
+
 		private static final long serialVersionUID = 4677958792610955100L;
-		
-		private int value;
+
+		private final int value;
 		public int getValue() {
 			return this.value;
 		}
-		
+
 		public ValueEvent(Object sender, int value) {
 			super(sender);
-			
+
 			this.value = value;
 		}
 	}
-	
+
 	public interface ValueChangedListener extends EventListener {
 		public void onValueChanged(ValueEvent event);
 	}
-	
-	private List<ValueChangedListener> valueChangedListeners =
+
+	private final List<ValueChangedListener> valueChangedListeners =
 		new ArrayList<ValueChangedListener>();
 	public void AddValueChangedListener(ValueChangedListener listener) {
 		this.valueChangedListeners.add(listener);
@@ -53,99 +53,99 @@ public class ValuesLayout extends LinearLayout {
 	}
 	private void triggerValueChanged(int value) {
 		ValueEvent event = new ValueEvent(this, value);
-		
+
 		for (ValueChangedListener listener : this.valueChangedListeners) {
 			listener.onValueChanged(event);
 		}
 	}
-	
+
 	//#endregion
-	
+
 	private CustomButton[] valueButtons = null;
 	private CustomButton selectedButton = null;
-	
+
 	private final CustomButton.CheckChangedListener checkChangedListener =
 		new CustomButton.CheckChangedListener() {
 			public void onCheckChanged(CheckChangedEvent event) {
 				CustomButton valueButton = (CustomButton)event.getSource();
-				
+
 				if (valueButton.getChecked()) {
 					// Button became checked
 					if (ValuesLayout.this.selectedButton != null) {
 						ValuesLayout.this.selectedButton.setCheckedNoTrigger(false);
 						ValuesLayout.this.selectedButton = null;
 					}
-					
+
 					ValuesLayout.this.selectedButton = valueButton;
 					ValuesLayout.this.triggerValueChanged(valueButton.getValue());
-					
+
 				} else {
-					
+
 					// Button became unchecked
 					ValuesLayout.this.selectedButton = null;
 					ValuesLayout.this.triggerValueChanged(0);
 				}
 			}
 		};
-		
+
 	/**
 	 * Sets the values to disabled for all in the list of numbers.
-	 * 
+	 *
 	 * @param disabled The list of Values to disable.
 	 */
 	public void SetDisabled(List<Integer> disabled) {
 		// First enable all the buttons
-		for (int i = 0; i < valueButtons.length; i += 1) {
-			this.valueButtons[i].setEnabled(true);
+		for (CustomButton valueButton : this.valueButtons) {
+			valueButton.setEnabled(true);
 		}
-		
+
 		// Then disable the guys that we are supposed to
 		int disabledSize = disabled.size();
 		for (int i = 0; i < disabledSize; i += 1) {
 			this.valueButtons[disabled.get(i) - 1].setEnabled(false);
 		}
 	}
-	
+
 	/**
 	 * Disables all of the value buttons for this control.
 	 */
 	public void SetDisabled() {
 		// Disable all of the buttons.
-		for (int i = 0; i < this.valueButtons.length; i += 1) {
-			this.valueButtons[i].setEnabled(false);
+		for (CustomButton valueButton : this.valueButtons) {
+			valueButton.setEnabled(false);
 		}
 	}
-	
+
 	/**
 	 * Sets the value of this control.  Note, this does not bubble an event
 	 *  as it should only be called when selecting a square.
-	 *  
+	 *
 	 * @param value The value to set.
 	 */
 	public void SetValue(int value) {
 
 		// Do not trigger events as this should only be called from
 		//  the setup/tear-down of a square being clicked.
-		
+
 		// Uncheck the current selected button if it is checked
 		if (this.selectedButton != null) {
 			this.selectedButton.setCheckedNoTrigger(false);
 			this.selectedButton = null;
 		}
-		
+
 		// If the value is not the "uncheck" value then set the check
 		if (value != 0) {
 			this.selectedButton = this.valueButtons[value - 1];
 			this.selectedButton.setCheckedNoTrigger(true);
 		}
 	}
-	
+
 	/**
 	 * Attempts to set the value on the control.  Note, this does bubble an event
 	 *  as it should only be called from a ui element setting it (such as a key
 	 *   press).  A value will not be set if the target button is disabled.
-	 *   A value that is already set will be unset.   
-	 * 
+	 *   A value that is already set will be unset.
+	 *
 	 * @param value The value to attempt to set.
 	 */
 	public void TrySetValue(int value) {
@@ -159,37 +159,37 @@ public class ValuesLayout extends LinearLayout {
 				this.selectedButton.setChecked(false);
 				this.selectedButton = null;
 			} else {
-				
+
 				// Uncheck the current selected button if it is checked
 				if (this.selectedButton != null) {
 					this.selectedButton.setCheckedNoTrigger(false);
 					this.selectedButton = null;
 				}
-				
+
 				this.selectedButton = this.valueButtons[value - 1];
 				this.selectedButton.setChecked(true);
 			}
 		}
 	}
-	
+
 	/**
 	 * Clears the Value control removing all ui elements.
 	 */
 	public void Clear() {
 		if (this.valueButtons != null) {
 			this.removeAllViews();
-		
+
 			for (CustomButton valueButton : this.valueButtons) {
 				valueButton.ClearCheckChangedListeners();
 			}
-			
+
 			this.valueButtons = null;
 		}
 	}
-	
+
 	/**
 	 * Setup method for when a new game is started.
-	 * 
+	 *
 	 * @param gameSize The size of the game.
 	 */
 	public void NewGame(int gameSize) {
@@ -206,18 +206,18 @@ public class ValuesLayout extends LinearLayout {
 			this.valueButtons[i].setValue(i + 1);
 			this.valueButtons[i].setText(Integer.toString(i + 1, 10));
 			this.valueButtons[i].AddCheckChangedListener(this.checkChangedListener);
-			
+
 			this.addView(this.valueButtons[i], ValuesLayout.buttonsLayoutParams);
 		}
-		
+
 		// Set the first and last buttons to be curved (left and right).
 		this.valueButtons[0].setHasLeftCurve(true);
 		this.valueButtons[this.valueButtons.length - 1].setHasRightCurve(true);
 	}
-	
+
 	public ValuesLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		
+
 		this.setPadding(5, 15, 5, 15);
 	}
 }

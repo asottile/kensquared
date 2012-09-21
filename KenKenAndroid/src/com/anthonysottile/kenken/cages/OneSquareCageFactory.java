@@ -10,10 +10,11 @@ public class OneSquareCageFactory implements ICageFactory {
 
     public static ICageFactory GetInstance()
     {
-        if (factoryInstance == null)
-            factoryInstance = new OneSquareCageFactory();
+        if (OneSquareCageFactory.factoryInstance == null) {
+            OneSquareCageFactory.factoryInstance = new OneSquareCageFactory();
+        }
 
-        return factoryInstance;
+        return OneSquareCageFactory.factoryInstance;
     }
 
     public boolean CanFit(KenKenGame game, Point location) {

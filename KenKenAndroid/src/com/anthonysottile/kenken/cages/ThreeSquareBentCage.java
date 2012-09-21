@@ -2,7 +2,9 @@ package com.anthonysottile.kenken.cages;
 
 import android.graphics.Point;
 
-import com.anthonysottile.kenken.*;
+import com.anthonysottile.kenken.KenKenGame;
+import com.anthonysottile.kenken.Points;
+import com.anthonysottile.kenken.RenderLine;
 
 public class ThreeSquareBentCage extends BaseCage {
 	public ThreeSquareBentCage(KenKenGame game, Point location, boolean up, boolean left)
@@ -136,7 +138,7 @@ public class ThreeSquareBentCage extends BaseCage {
         game.setOccupied(location);
         game.setOccupied(secondSquare);
         game.setOccupied(thirdSquare);
-        
+
         this.squares.add(location);
         this.squares.add(secondSquare);
         this.squares.add(thirdSquare);

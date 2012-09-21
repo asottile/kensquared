@@ -10,7 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class GameStatistics
-{			
+{
 	// NOTE: According to http://developer.android.com/reference/java/util/Locale.html
 	//        Locale.US should be used like C#  CultureInfo.InvariantCulture
 	private static final DateFormat dateFormatter =
@@ -18,32 +18,32 @@ public class GameStatistics
 			SimpleDateFormat.LONG,
 			Locale.US
 		);
-	
+
 	private int gameSize = 0;
 	public int getGameSize() {
 		return this.gameSize;
 	}
-	
+
 	private int gamesPlayed = 0;
 	public int getGamesPlayed() {
 		return this.gamesPlayed;
 	}
-	
+
 	private int gamesWon = 0;
 	public int getGamesWon() {
 		return this.gamesWon;
 	}
-	
+
 	private int totalSeconds = 0;
 	public int getTotalSeconds() {
 		return this.totalSeconds;
 	}
-	
+
 	private int bestTime = Integer.MAX_VALUE;
 	public int getBestTime() {
 		return this.bestTime;
 	}
-	
+
 	private Date bestTimeDate = null;
 	public Date getBestTimeDate() {
 		return this.bestTimeDate;
@@ -52,17 +52,17 @@ public class GameStatistics
 	public void GameStarted() {
 		this.gamesPlayed += 1;
 	}
-	
+
 	public void GameWon(int time) {
 		this.gamesWon += 1;
 		this.totalSeconds += time;
 	}
-	
+
 	public void SetBestTime(int bestTime) {
 		this.bestTime = bestTime;
 		this.bestTimeDate = new Date();
 	}
-	
+
 	public GameStatistics(int gameSize) {
 		this.gameSize = gameSize;
 		this.gamesPlayed = 0;
@@ -71,7 +71,7 @@ public class GameStatistics
 		this.bestTime = Integer.MAX_VALUE;
 		this.bestTimeDate = null;
 	}
-	
+
 	// #region JSON Serialization
 
 	private final static String GameSize = "GameSize";
@@ -80,7 +80,7 @@ public class GameStatistics
 	private final static String TotalSeconds = "TotalSeconds";
 	private final static String BestTime = "BestTime";
 	private final static String BestTimeDate = "BestTimeDate";
-	
+
 	public JSONObject ToJson() {
 		JSONObject json = new JSONObject();
 		try {
@@ -88,7 +88,7 @@ public class GameStatistics
 			json.put(GameStatistics.GamesPlayed, this.gamesPlayed);
 			json.put(GameStatistics.GamesWon, this.gamesWon);
 			json.put(GameStatistics.TotalSeconds, this.totalSeconds);
-			
+
 			if (this.bestTimeDate != null) {
 				json.put(GameStatistics.BestTime, this.bestTime);
 				json.put(
@@ -98,23 +98,23 @@ public class GameStatistics
 					)
 				);
 			}
-			
+
 		} catch(JSONException e) {
 			// Should never except here
 			e.printStackTrace();
 		}
-		
+
 		return json;
 	}
-	
+
 	public GameStatistics(JSONObject json) {
-		
+
 		try {
 			this.gameSize = json.getInt(GameStatistics.GameSize);
 			this.gamesPlayed = json.getInt(GameStatistics.GamesPlayed);
 			this.gamesWon = json.getInt(GameStatistics.GamesWon);
 			this.totalSeconds = json.getInt(GameStatistics.TotalSeconds);
-			
+
 			if (json.has(GameStatistics.BestTimeDate)) {
 				this.bestTime = json.getInt(GameStatistics.BestTime);
 				this.bestTimeDate =
@@ -122,7 +122,7 @@ public class GameStatistics
 						json.getString(GameStatistics.BestTimeDate)
 					);
 			}
-		
+
 		} catch(JSONException e) {
 			// Big problem...
 			e.printStackTrace();
@@ -134,6 +134,6 @@ public class GameStatistics
 			e.printStackTrace();
 		}
 	}
-	
+
 	// #endregion
 }

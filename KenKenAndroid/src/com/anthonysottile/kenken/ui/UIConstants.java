@@ -8,13 +8,13 @@ public final class UIConstants {
 	public static final int MinGameSize = 4;
 	public static final int MaxGameSize = 9;
 	public static final int GameSizes = UIConstants.MaxGameSize - UIConstants.MinGameSize + 1;
-	
+
 	public static final int BorderWidth = 2;
-	
+
 	public static final int StatisticsOneIndent = 20;
 
 	public static final int CandidatesTextColor = Color.rgb(0x77, 0x77, 0x77);
-	
+
 	private static Paint gridColor = null;
 	public static Paint GetGridColor() {
 		if (UIConstants.gridColor == null) {
@@ -23,7 +23,7 @@ public final class UIConstants {
 		}
 		return UIConstants.gridColor;
 	}
-	
+
 	private static Paint cageColor = null;
 	public static Paint GetCageColor() {
 		if (UIConstants.cageColor == null) {
@@ -32,7 +32,7 @@ public final class UIConstants {
 		}
 		return UIConstants.cageColor;
 	}
-	
+
 	private static Paint hoveringColor = null;
 	public static Paint GetHoveringColor() {
 		if (UIConstants.hoveringColor == null) {
@@ -41,7 +41,7 @@ public final class UIConstants {
 		}
 		return UIConstants.hoveringColor;
 	}
-	
+
 	private static Paint selectedColor = null;
 	public static Paint GetSelectedColor() {
 		if (UIConstants.selectedColor == null) {
@@ -58,8 +58,8 @@ public final class UIConstants {
 			UIConstants.backgroundColor.setColor(Color.rgb(0xff, 0xff, 0xff));
 		}
 		return UIConstants.backgroundColor;
-	}	
-	
+	}
+
 	private static Paint markedIncorrectColor = null;
 	public static Paint GetMarkedIncorrectColor() {
 		if (UIConstants.markedIncorrectColor == null) {
@@ -68,6 +68,6 @@ public final class UIConstants {
 		}
 		return UIConstants.markedIncorrectColor;
 	}
-	
+
 	private UIConstants() { }
 }
