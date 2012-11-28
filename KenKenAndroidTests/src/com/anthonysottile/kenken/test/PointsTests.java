@@ -22,26 +22,26 @@ public class PointsTests extends TestCase {
 	private final int startPoint3X = -5;
 	private final int startPoint3Y = -7;
 	private final Point point3 = new Point(startPoint3X, startPoint3Y);
-	
+
 	public void testAddPositive() {
 		// Get result point and assert its value
 		Point resultPoint = Points.add(point, point2);
 		assertEquals(startPointX + startPoint2X, resultPoint.x);
 		assertEquals(startPointY + startPoint2Y, resultPoint.y);
-		
+
 		// Make sure original points were un altered
 		assertEquals(startPointX, point.x);
 		assertEquals(startPointY, point.y);
 		assertEquals(startPoint2X, point2.x);
 		assertEquals(startPoint2Y, point2.y);
 	}
-	
+
 	public void testAddNegative() {
 		// Get result point and assert its value
 		Point resultPoint2 = Points.add(point, point3);
 		assertEquals(startPointX + startPoint3X, resultPoint2.x);
 		assertEquals(startPointY + startPoint3Y, resultPoint2.y);
-		
+
 		// Make sure the originals were not touched
 		assertEquals(startPointX, point.x);
 		assertEquals(startPointY, point.y);
@@ -59,7 +59,7 @@ public class PointsTests extends TestCase {
 		assertEquals(startPointX, point.x);
 		assertEquals(startPointY, point.y);
 	}
-	
+
 	public void testMultiplyNegative() {
 		// Multiply and check
 		Point resultPoint2 = Points.multiply(-1, point);
@@ -70,7 +70,7 @@ public class PointsTests extends TestCase {
 		assertEquals(startPointX, point.x);
 		assertEquals(startPointY, point.y);
 	}
-	
+
 	public void testMultiplyZero() {
 		// Multiply and check
 		Point resultPoint4 = Points.multiply(0, point);
@@ -81,7 +81,7 @@ public class PointsTests extends TestCase {
 		assertEquals(startPointX, point.x);
 		assertEquals(startPointY, point.y);
 	}
-	
+
 	public void testMultiplyScalar() {
 		// Multiply and check
 		Point resultPoint5 = Points.multiply(2, point);
@@ -92,11 +92,11 @@ public class PointsTests extends TestCase {
 		assertEquals(startPointX, point.x);
 		assertEquals(startPointY, point.y);
 	}
-	
+
 	public void testToJSON() {
-		
+
 		JSONObject json = Points.ToJson(point);
-		
+
 		try {
 			assertEquals(json.getInt("X"), startPointX);
 			assertEquals(json.getInt("Y"), startPointY);
@@ -104,18 +104,18 @@ public class PointsTests extends TestCase {
 			fail("JSON Problem");
 		}
 	}
-	
+
 	public void testToPoint() {
-		
+
 		JSONObject json = new JSONObject();
-		
+
 		try {
 			json.put("X", startPointX);
 			json.put("Y", startPointY);
 		} catch (JSONException e) {
 			fail("JSON Problem");
 		}
-		
+
 		Point p = Points.ToPoint(json);
 		assertEquals(p.x, startPointX);
 		assertEquals(p.y, startPointY);

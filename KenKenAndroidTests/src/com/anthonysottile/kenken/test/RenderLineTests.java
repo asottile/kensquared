@@ -15,7 +15,7 @@ public class RenderLineTests extends TestCase {
 	private static final Point point = new Point(pointX, pointY);
 	private static final int length = 15;
 	private static final boolean horizontal = false;
-	
+
 	public void testGetPosition() {
 		RenderLine line = new RenderLine(point, length, horizontal);
 		assertEquals(line.getPosition().x, pointX);
@@ -47,14 +47,14 @@ public class RenderLineTests extends TestCase {
 			JSONObject pos = new JSONObject();
 			pos.put("X", pointX);
 			pos.put("Y", pointY);
-	
+
 			json.put("Position", pos);
 			json.put("Length", length);
 			json.put("Horizontal", horizontal);
 		} catch (JSONException e) {
 			fail("JSON Failed");
 		}
-		
+
 		RenderLine line = new RenderLine(json);
 		assertEquals(line.getPosition().x, pointX);
 		assertEquals(line.getPosition().y, pointY);
@@ -70,7 +70,7 @@ public class RenderLineTests extends TestCase {
 			JSONObject pos = json.getJSONObject("Position");
 			assertEquals(pos.getInt("X"), pointX);
 			assertEquals(pos.getInt("Y"), pointY);
-			
+
 			assertEquals(json.getInt("Length"), length);
 			assertEquals(json.getBoolean("Horizontal"), horizontal);
 		} catch (JSONException e) {

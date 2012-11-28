@@ -13,7 +13,7 @@ public class SignTests extends TestCase {
 		assertEquals(Sign.Divide.getIntValue(), 3);
 		assertEquals(Sign.None.getIntValue(), 4);
 	}
-	
+
 	public void testToString() {
 		assertEquals(Sign.Add.toString(), "+");
 		assertEquals(Sign.Subtract.toString(), "-");

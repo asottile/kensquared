@@ -41,7 +41,7 @@ public class SignNumberTests extends TestCase {
 
 	public void testSignNumberJSONObject() {
 		JSONObject json = new JSONObject();
-		
+
 		try {
 			json.put("Sign", Sign.Add.getIntValue());
 			json.put("Number", 15);
@@ -49,7 +49,7 @@ public class SignNumberTests extends TestCase {
 			e.printStackTrace();
 			fail("Json object through exception");
 		}
-		
+
 		SignNumber test = new SignNumber(json);
 		assertEquals(test.getSign(), Sign.Add);
 		assertEquals(test.getNumber(), 15);
@@ -57,7 +57,7 @@ public class SignNumberTests extends TestCase {
 
 	public void testToJson() {
 		SignNumber test = new SignNumber(Sign.Add, 15);
-		
+
 		JSONObject json = test.ToJson();
 
 		try {

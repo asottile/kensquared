@@ -203,7 +203,7 @@ public class ErrorReporter implements Thread.UncaughtExceptionHandler
 			S_mInstance = new ErrorReporter();
 		return S_mInstance;
 	}
-	
+
 	private void SaveAsFile( String ErrorContent )
 	{
 		try
