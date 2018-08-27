@@ -7,8 +7,8 @@ android {
         minSdkVersion 19
         targetSdkVersion 19
         compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_5
-            targetCompatibility JavaVersion.VERSION_1_5
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
         }
 
         testApplicationId "com.anthonysottile.kenken.test"
@@ -23,6 +23,6 @@ android {
     productFlavors {
     }
 }
-
 dependencies {
+    androidTestImplementation 'junit:junit:4.12'
 }

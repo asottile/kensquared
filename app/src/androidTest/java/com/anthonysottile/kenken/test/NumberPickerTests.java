@@ -4,6 +4,8 @@ import com.anthonysottile.kenken.NumberPicker;
 
 import junit.framework.TestCase;
 
+import org.junit.Test;
+
 import java.util.HashSet;
 import java.util.Set;
 
