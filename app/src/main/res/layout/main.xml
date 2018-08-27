@@ -8,7 +8,7 @@
         android:id="@+id/candidatesLayout"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
-        android:layout_weight="0" />
+        android:layout_weight="0" />
     <FrameLayout
         android:id="@+id/gameLayout"
         android:layout_width="fill_parent"
@@ -36,5 +36,5 @@
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:layout_weight="0" />
-    
+
 </LinearLayout>

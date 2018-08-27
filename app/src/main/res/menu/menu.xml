@@ -4,8 +4,8 @@
     <item android:id="@+id/check" android:enabled="false" android:title="@string/check"></item><item android:id="@+id/pause" android:title="@string/pause" android:enabled="false"></item><item android:id="@+id/preferences" android:title="@string/preferences"></item>
     <item android:id="@+id/statistics" android:title="@string/statistics"></item>
     <item android:id="@+id/about" android:title="@string/about"></item>
-    
-    
-    
+
+
+
 
 </menu>
