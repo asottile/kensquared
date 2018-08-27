@@ -7,16 +7,13 @@ import com.anthonysottile.kenken.Points;
 import com.anthonysottile.kenken.RenderLine;
 
 public class ThreeSquareBentCage extends BaseCage {
-	public ThreeSquareBentCage(KenKenGame game, Point location, boolean up, boolean left)
-    {
+    public ThreeSquareBentCage(KenKenGame game, Point location, boolean up, boolean left) {
         this.signLocation = location;
 
         Point secondSquare;
         Point thirdSquare;
-        if (up)
-        {
-            if (left)
-            {
+        if (up) {
+            if (left) {
                 secondSquare = Points.add(location, Points.Right);
                 thirdSquare = Points.add(location, Points.Down);
 
@@ -27,23 +24,21 @@ public class ThreeSquareBentCage extends BaseCage {
                 // +---+
                 //
                 // top, left, bottom, right, inner bottom, inner right
-            	this.renderLines.add(new RenderLine(location, 2, true));
-            	this.renderLines.add(new RenderLine(location, 2, false));
+                this.renderLines.add(new RenderLine(location, 2, true));
+                this.renderLines.add(new RenderLine(location, 2, false));
                 this.renderLines.add(
-            		new RenderLine(Points.add(location, Points.multiply(2, Points.Down)), 1, true)
-        		);
+                        new RenderLine(Points.add(location, Points.multiply(2, Points.Down)), 1, true)
+                );
                 this.renderLines.add(
-            		new RenderLine(Points.add(location, Points.multiply(2, Points.Right)), 1, false)
-        		);
+                        new RenderLine(Points.add(location, Points.multiply(2, Points.Right)), 1, false)
+                );
                 this.renderLines.add(
-            		new RenderLine(Points.add(Points.add(location, Points.Down), Points.Right), 1, true)
-        		);
+                        new RenderLine(Points.add(Points.add(location, Points.Down), Points.Right), 1, true)
+                );
                 this.renderLines.add(
-            		new RenderLine(Points.add(Points.add(location, Points.Down), Points.Right), 1, false)
-        		);
-            }
-            else
-            {
+                        new RenderLine(Points.add(Points.add(location, Points.Down), Points.Right), 1, false)
+                );
+            } else {
                 secondSquare = Points.add(location, Points.Right);
                 thirdSquare = Points.add(secondSquare, Points.Down);
 
@@ -57,26 +52,23 @@ public class ThreeSquareBentCage extends BaseCage {
                 this.renderLines.add(new RenderLine(location, 2, true));
                 this.renderLines.add(new RenderLine(location, 1, false));
                 this.renderLines.add(
-            		new RenderLine(
-        				Points.add(Points.add(location, Points.multiply(2, Points.Down)), Points.Right),
-        				1, true
-    				)
-        		);
+                        new RenderLine(
+                                Points.add(Points.add(location, Points.multiply(2, Points.Down)), Points.Right),
+                                1, true
+                        )
+                );
                 this.renderLines.add(
-            		new RenderLine(Points.add(location, Points.multiply(2, Points.Right)), 2, false)
-        		);
+                        new RenderLine(Points.add(location, Points.multiply(2, Points.Right)), 2, false)
+                );
                 this.renderLines.add(
-            		new RenderLine(Points.add(location, Points.Down), 1, true)
-        		);
+                        new RenderLine(Points.add(location, Points.Down), 1, true)
+                );
                 this.renderLines.add(
-            		new RenderLine(Points.add(Points.add(location, Points.Down), Points.Right), 1, false)
-        		);
+                        new RenderLine(Points.add(Points.add(location, Points.Down), Points.Right), 1, false)
+                );
             }
-        }
-        else
-        {
-            if (left)
-            {
+        } else {
+            if (left) {
                 secondSquare = Points.add(location, Points.Down);
                 thirdSquare = Points.add(secondSquare, Points.Right);
 
@@ -87,26 +79,24 @@ public class ThreeSquareBentCage extends BaseCage {
                 // +---+---+
                 //
                 // top, left, bottom, right, inner right, inner top
-            	this.renderLines.add(new RenderLine(location, 1, true));
-            	this.renderLines.add(new RenderLine(location, 2, false));
-            	this.renderLines.add(
-        			new RenderLine(Points.add(location, Points.multiply(2, Points.Down)), 2, true)
-    			);
-            	this.renderLines.add(
-        			new RenderLine(
-    					Points.add(Points.add(location, Points.multiply(2, Points.Right)), Points.Down),
-    					1, false
-					)
-    			);
-            	this.renderLines.add(
-        			new RenderLine(Points.add(location, Points.Right), 1, false)
-    			);
-            	this.renderLines.add(
-        			new RenderLine(Points.add(Points.add(location, Points.Right), Points.Down), 1, true)
-    			);
-            }
-            else
-            {
+                this.renderLines.add(new RenderLine(location, 1, true));
+                this.renderLines.add(new RenderLine(location, 2, false));
+                this.renderLines.add(
+                        new RenderLine(Points.add(location, Points.multiply(2, Points.Down)), 2, true)
+                );
+                this.renderLines.add(
+                        new RenderLine(
+                                Points.add(Points.add(location, Points.multiply(2, Points.Right)), Points.Down),
+                                1, false
+                        )
+                );
+                this.renderLines.add(
+                        new RenderLine(Points.add(location, Points.Right), 1, false)
+                );
+                this.renderLines.add(
+                        new RenderLine(Points.add(Points.add(location, Points.Right), Points.Down), 1, true)
+                );
+            } else {
                 secondSquare = Points.add(location, Points.Down);
                 thirdSquare = Points.add(secondSquare, Points.Left);
 
@@ -121,17 +111,17 @@ public class ThreeSquareBentCage extends BaseCage {
                 this.renderLines.add(new RenderLine(location, 1, false));
                 this.renderLines.add(new RenderLine(Points.add(location, Points.Right), 2, false));
                 this.renderLines.add(
-            		new RenderLine(Points.add(Points.add(location, Points.Down), Points.Left), 1 , true)
-        		);
+                        new RenderLine(Points.add(Points.add(location, Points.Down), Points.Left), 1, true)
+                );
                 this.renderLines.add(
-            		new RenderLine(Points.add(Points.add(location, Points.Down), Points.Left), 1 , false)
-        		);
+                        new RenderLine(Points.add(Points.add(location, Points.Down), Points.Left), 1, false)
+                );
                 this.renderLines.add(
-            		new RenderLine(
-        				Points.add(Points.add(location, Points.multiply(2, Points.Down)), Points.Left),
-        				2 , true
-    				)
-        		);
+                        new RenderLine(
+                                Points.add(Points.add(location, Points.multiply(2, Points.Down)), Points.Left),
+                                2, true
+                        )
+                );
             }
         }
 
@@ -144,14 +134,14 @@ public class ThreeSquareBentCage extends BaseCage {
         this.squares.add(thirdSquare);
 
         this.signNumber =
-            CageGenerator.DetermineSign
-            (
-                new int[]
-                {
-                    game.getLatinSquare().getValues()[location.x][location.y],
-                    game.getLatinSquare().getValues()[secondSquare.x][secondSquare.y],
-                    game.getLatinSquare().getValues()[thirdSquare.x][thirdSquare.y]
-                }
-            );
+                CageGenerator.DetermineSign
+                        (
+                                new int[]
+                                        {
+                                                game.getLatinSquare().getValues()[location.x][location.y],
+                                                game.getLatinSquare().getValues()[secondSquare.x][secondSquare.y],
+                                                game.getLatinSquare().getValues()[thirdSquare.x][thirdSquare.y]
+                                        }
+                        );
     }
 }

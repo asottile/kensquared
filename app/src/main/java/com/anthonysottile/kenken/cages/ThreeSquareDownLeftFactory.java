@@ -22,14 +22,15 @@ public class ThreeSquareDownLeftFactory implements ICageFactory {
         Point thirdSquare = Points.add(secondSquare, Points.Right);
 
         return
-            game.squareIsValid(location) &&
-            game.squareIsValid(secondSquare) &&
-            game.squareIsValid(thirdSquare);
+                game.squareIsValid(location) &&
+                        game.squareIsValid(secondSquare) &&
+                        game.squareIsValid(thirdSquare);
     }
 
     public void ApplyCage(KenKenGame game, Point location) {
         game.getCages().add(new ThreeSquareBentCage(game, location, false, true));
     }
 
-    private ThreeSquareDownLeftFactory() { }
+    private ThreeSquareDownLeftFactory() {
+    }
 }

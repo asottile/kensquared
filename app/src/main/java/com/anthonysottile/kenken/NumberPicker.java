@@ -6,17 +6,16 @@ import java.util.Random;
 
 public class NumberPicker {
 
-	private static Random random = new Random();
-	private int length;
-	private int attempted = 0;
-	private final List<Integer> collection = new ArrayList<Integer>();
+    private static Random random = new Random();
+    private int length;
+    private int attempted = 0;
+    private final List<Integer> collection = new ArrayList<Integer>();
 
-	public int GetRemaining() {
-		return this.length - this.attempted;
-	}
+    public int GetRemaining() {
+        return this.length - this.attempted;
+    }
 
-    public int GetNext()
-    {
+    public int GetNext() {
         if (this.attempted == this.length) {
             return -1;
         }
@@ -36,7 +35,7 @@ public class NumberPicker {
     }
 
     public void Reset() {
-    	this.attempted = 0;
+        this.attempted = 0;
     }
 
     public NumberPicker(int n) {

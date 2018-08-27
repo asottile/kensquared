@@ -1,26 +1,26 @@
 package com.anthonysottile.kenken.cages;
 
-import java.util.List;
-
-import org.json.JSONObject;
-
 import android.graphics.Point;
 
 import com.anthonysottile.kenken.RenderLine;
 import com.anthonysottile.kenken.SignNumber;
 import com.anthonysottile.kenken.UserSquare;
 
+import org.json.JSONObject;
+
+import java.util.List;
+
 public interface ICage {
 
-	SignNumber getSignNumber();
+    SignNumber getSignNumber();
 
-	List<RenderLine> getRenderLines();
+    List<RenderLine> getRenderLines();
 
-	List<Point> getSquares();
+    List<Point> getSquares();
 
-	Point getSignLocation();
+    Point getSignLocation();
 
-	boolean cageIsValid(UserSquare[][] userSquares);
+    boolean cageIsValid(UserSquare[][] userSquares);
 
-	JSONObject ToJson();
+    JSONObject ToJson();
 }

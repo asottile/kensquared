@@ -21,14 +21,15 @@ public class TwoSquareHorizontalFactory implements ICageFactory {
         Point secondSquare = Points.add(location, Points.Right);
 
         return
-            game.squareIsValid(location) &&
-            game.squareIsValid(secondSquare);
+                game.squareIsValid(location) &&
+                        game.squareIsValid(secondSquare);
     }
 
     public void ApplyCage(KenKenGame game, Point location) {
         game.getCages().add(new TwoSquareCage(game, location, true));
     }
 
-    private TwoSquareHorizontalFactory() {}
+    private TwoSquareHorizontalFactory() {
+    }
 
 }

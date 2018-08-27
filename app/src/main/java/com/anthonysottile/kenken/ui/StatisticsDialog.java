@@ -1,8 +1,5 @@
 package com.anthonysottile.kenken.ui;
 
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -23,116 +20,120 @@ import com.anthonysottile.kenken.R;
 import com.anthonysottile.kenken.settings.GameStatistics;
 import com.anthonysottile.kenken.settings.StatisticsManager;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 public class StatisticsDialog extends Dialog {
 
-	private static final String[] GameSizes = {
-		"4", "5", "6", "7", "8", "9"
-	};
+    private static final String[] GameSizes = {
+            "4", "5", "6", "7", "8", "9"
+    };
 
-	private Spinner dropdown = null;
-	private TextView gamesPlayed = null;
-	private TextView gamesWon = null;
-	private TextView averageTime = null;
-	private TextView bestTime = null;
-	private TextView bestTimeDate = null;
+    private Spinner dropdown = null;
+    private TextView gamesPlayed = null;
+    private TextView gamesWon = null;
+    private TextView averageTime = null;
+    private TextView bestTime = null;
+    private TextView bestTimeDate = null;
 
-	private static final SimpleDateFormat dateFormat =
-		new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    private static final SimpleDateFormat dateFormat =
+            new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
-	private static String toTimeString(int time) {
+    private static String toTimeString(int time) {
 
-		int seconds = time % 60;
-		int minutes = (time / 60) % 60;
-		int hours = time / 3600;
+        int seconds = time % 60;
+        int minutes = (time / 60) % 60;
+        int hours = time / 3600;
 
-		return
-			String.format("%02d", hours) +
-			':' +
-			String.format("%02d", minutes) +
-			':' +
-			String.format("%02d", seconds);
-	}
+        return
+                String.format("%02d", hours) +
+                        ':' +
+                        String.format("%02d", minutes) +
+                        ':' +
+                        String.format("%02d", seconds);
+    }
 
-	private static final LinearLayout.LayoutParams middleSpacer =
-		new LinearLayout.LayoutParams(1, 1, 0.1f);
+    private static final LinearLayout.LayoutParams middleSpacer =
+            new LinearLayout.LayoutParams(1, 1, 0.1f);
 
-	private static final LinearLayout.LayoutParams rightPad =
-		new LinearLayout.LayoutParams(UIConstants.StatisticsOneIndent * 2, 1);
+    private static final LinearLayout.LayoutParams rightPad =
+            new LinearLayout.LayoutParams(UIConstants.StatisticsOneIndent * 2, 1);
 
-	private static final LinearLayout.LayoutParams wrapContent =
-		new LinearLayout.LayoutParams(
-			LayoutParams.WRAP_CONTENT,
-			LayoutParams.WRAP_CONTENT
-		);
+    private static final LinearLayout.LayoutParams wrapContent =
+            new LinearLayout.LayoutParams(
+                    LayoutParams.WRAP_CONTENT,
+                    LayoutParams.WRAP_CONTENT
+            );
 
-	private static final LinearLayout.LayoutParams spacerViewLayoutParams =
-		new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 1);
-	private View getSpacerView() {
-		View spacerView = new View(this.getContext());
+    private static final LinearLayout.LayoutParams spacerViewLayoutParams =
+            new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 1);
+
+    private View getSpacerView() {
+        View spacerView = new View(this.getContext());
         spacerView.setBackgroundColor(Color.LTGRAY);
         spacerView.setLayoutParams(StatisticsDialog.spacerViewLayoutParams);
         return spacerView;
-	}
+    }
 
-	private void setValues(int gameSize) {
-		GameStatistics statistics = StatisticsManager.GetGameStatistics(gameSize);
+    private void setValues(int gameSize) {
+        GameStatistics statistics = StatisticsManager.GetGameStatistics(gameSize);
 
-		this.gamesPlayed.setText(Integer.toString(statistics.getGamesPlayed(), 10));
-		this.gamesWon.setText(Integer.toString(statistics.getGamesWon(), 10));
+        this.gamesPlayed.setText(Integer.toString(statistics.getGamesPlayed(), 10));
+        this.gamesWon.setText(Integer.toString(statistics.getGamesWon(), 10));
 
-		if (statistics.getGamesWon() > 0) {
-			this.averageTime.setText(
-				StatisticsDialog.toTimeString(
-					statistics.getTotalSeconds() / statistics.getGamesWon()
-				)
-			);
+        if (statistics.getGamesWon() > 0) {
+            this.averageTime.setText(
+                    StatisticsDialog.toTimeString(
+                            statistics.getTotalSeconds() / statistics.getGamesWon()
+                    )
+            );
 
-			this.bestTime.setText(
-				StatisticsDialog.toTimeString(
-					statistics.getBestTime()
-				)
-			);
+            this.bestTime.setText(
+                    StatisticsDialog.toTimeString(
+                            statistics.getBestTime()
+                    )
+            );
 
-			this.bestTimeDate.setText(StatisticsDialog.dateFormat.format(statistics.getBestTimeDate()));
+            this.bestTimeDate.setText(StatisticsDialog.dateFormat.format(statistics.getBestTimeDate()));
 
-		} else {
-			this.averageTime.setText("");
-			this.bestTime.setText("");
-			this.bestTimeDate.setText("");
-		}
-	}
+        } else {
+            this.averageTime.setText("");
+            this.bestTime.setText("");
+            this.bestTimeDate.setText("");
+        }
+    }
 
-	private void clearStatistics() {
-		StatisticsManager.ClearGameStatistics();
-		this.setValues(this.dropdown.getSelectedItemPosition() + UIConstants.MinGameSize);
-	}
+    private void clearStatistics() {
+        StatisticsManager.ClearGameStatistics();
+        this.setValues(this.dropdown.getSelectedItemPosition() + UIConstants.MinGameSize);
+    }
 
-	/**
-	 * Refresh the display of the Statistics Dialog.  This is so when showing
-	 *  the dialog again after the first show it is updated with whatever
-	 *  games were played.
-	 */
-	public void Refresh() {
-		this.setValues(this.dropdown.getSelectedItemPosition() + UIConstants.MinGameSize);
-	}
+    /**
+     * Refresh the display of the Statistics Dialog.  This is so when showing
+     * the dialog again after the first show it is updated with whatever
+     * games were played.
+     */
+    public void Refresh() {
+        this.setValues(this.dropdown.getSelectedItemPosition() + UIConstants.MinGameSize);
+    }
 
-	public StatisticsDialog(Context context) {
-		super(context);
-	}
+    public StatisticsDialog(Context context) {
+        super(context);
+    }
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		Context context = this.getContext();
+        Context context = this.getContext();
 
-		this.setTitle(context.getString(R.string.statistics));
+        this.setTitle(context.getString(R.string.statistics));
 
         LinearLayout.LayoutParams rootLayout =
-    		new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT,
-				LayoutParams.MATCH_PARENT
-			);
+                new LinearLayout.LayoutParams(
+                        LayoutParams.MATCH_PARENT,
+                        LayoutParams.MATCH_PARENT
+                );
         LinearLayout root = new LinearLayout(context);
         root.setLayoutParams(rootLayout);
         root.setOrientation(LinearLayout.VERTICAL);
@@ -140,7 +141,7 @@ public class StatisticsDialog extends Dialog {
         // Add a spacer at the top
         root.addView(this.getSpacerView());
 
-		// Game size Label
+        // Game size Label
         TextView gameSizeLabel = new TextView(context);
         gameSizeLabel.setText(context.getString(R.string.gameSize));
         gameSizeLabel.setTextSize(18);
@@ -150,27 +151,28 @@ public class StatisticsDialog extends Dialog {
         // Game Size dropdown
         this.dropdown = new Spinner(context);
         ArrayAdapter<String> spinnerAdapter =
-    		new ArrayAdapter<String>(
-				context,
-				android.R.layout.simple_spinner_item,
-				StatisticsDialog.GameSizes
-			);
+                new ArrayAdapter<String>(
+                        context,
+                        android.R.layout.simple_spinner_item,
+                        StatisticsDialog.GameSizes
+                );
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         this.dropdown.setAdapter(spinnerAdapter);
         this.dropdown.setSelection(0);
         this.dropdown.setOnItemSelectedListener(
-    		new OnItemSelectedListener() {
+                new OnItemSelectedListener() {
 
-    			public void onItemSelected(AdapterView<?> adapter, View view,
-    					int selectedIndex, long id) {
-    				StatisticsDialog.this.setValues(
-						UIConstants.MinGameSize + selectedIndex
-					);
-    			}
+                    public void onItemSelected(AdapterView<?> adapter, View view,
+                                               int selectedIndex, long id) {
+                        StatisticsDialog.this.setValues(
+                                UIConstants.MinGameSize + selectedIndex
+                        );
+                    }
 
-    			public void onNothingSelected(AdapterView<?> arg0) { }
-    		}
-		);
+                    public void onNothingSelected(AdapterView<?> arg0) {
+                    }
+                }
+        );
 
         // Layout for Game Size
         // NOTE: Needed a little hack here to get the dialog to display nicely.
@@ -179,18 +181,18 @@ public class StatisticsDialog extends Dialog {
         //        I wanted it to anyways.
         LinearLayout gameSizeLayout = new LinearLayout(context);
         gameSizeLayout.addView(
-    		gameSizeLabel,
-    		LayoutParams.WRAP_CONTENT,
-    		LayoutParams.WRAP_CONTENT
-		);
+                gameSizeLabel,
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT
+        );
         gameSizeLayout.addView(
-    		new View(context),
-    		new LinearLayout.LayoutParams(1, 1, 0.3f)
-		);
+                new View(context),
+                new LinearLayout.LayoutParams(1, 1, 0.3f)
+        );
         gameSizeLayout.addView(
-    		this.dropdown,
-    		new LinearLayout.LayoutParams(1, LayoutParams.WRAP_CONTENT, 0.7f)
-		);
+                this.dropdown,
+                new LinearLayout.LayoutParams(1, LayoutParams.WRAP_CONTENT, 0.7f)
+        );
 
         root.addView(gameSizeLayout, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
@@ -205,7 +207,7 @@ public class StatisticsDialog extends Dialog {
         LinearLayout gamesPlayedLayout = new LinearLayout(context);
         gamesPlayedLayout.addView(gamesPlayedLabel, StatisticsDialog.wrapContent);
         gamesPlayedLayout.addView(new View(context), StatisticsDialog.middleSpacer);
-        gamesPlayedLayout.addView(this.gamesPlayed,  StatisticsDialog.wrapContent);
+        gamesPlayedLayout.addView(this.gamesPlayed, StatisticsDialog.wrapContent);
         gamesPlayedLayout.addView(new View(context), StatisticsDialog.rightPad);
         root.addView(gamesPlayedLayout, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
@@ -268,9 +270,9 @@ public class StatisticsDialog extends Dialog {
         Button okButton = new Button(context);
         okButton.setText(context.getString(R.string.ok));
         okButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				StatisticsDialog.this.dismiss();
-			}
+            public void onClick(View v) {
+                StatisticsDialog.this.dismiss();
+            }
         });
 
         // Cancel button
@@ -278,64 +280,64 @@ public class StatisticsDialog extends Dialog {
         Button clearButton = new Button(context);
         clearButton.setText(R.string.clear);
         clearButton.setOnClickListener(new View.OnClickListener() {
-        	public void onClick(View v) {
-        		AlertDialog.Builder builder = new AlertDialog.Builder(StatisticsDialog.this.getContext());
-        		builder.setMessage(R.string.confirmClear)
-        		.setCancelable(false)
-        		.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-        			public void onClick(DialogInterface dialog, int id) {
-        				StatisticsDialog.this.clearStatistics();
-        				dialog.dismiss();
-        			}
-        		})
-        		.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-        			public void onClick(DialogInterface dialog, int id) {
-        				dialog.dismiss();
-        			}
-        		});
-        		AlertDialog alert = builder.create();
-        		alert.show();
-			}
-		});
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(StatisticsDialog.this.getContext());
+                builder.setMessage(R.string.confirmClear)
+                        .setCancelable(false)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                StatisticsDialog.this.clearStatistics();
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
+            }
+        });
 
         // Layout for the OK and Clear buttons
         // NOTE: I had to do some weird things to prevent the dialog displaying
         //        weirdly.  Still not sure why this works...
         LinearLayout buttonsLayout = new LinearLayout(context);
         buttonsLayout.addView(
-    		new View(context),
-    		new LinearLayout.LayoutParams(1, 1, .5f)
-		);
+                new View(context),
+                new LinearLayout.LayoutParams(1, 1, .5f)
+        );
         buttonsLayout.addView(
-    		okButton,
-    		new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT,
-				.3f
-			)
-		);
+                okButton,
+                new LinearLayout.LayoutParams(
+                        LayoutParams.WRAP_CONTENT,
+                        LayoutParams.WRAP_CONTENT,
+                        .3f
+                )
+        );
         buttonsLayout.addView(
-    		clearButton,
-    		new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT,
-				.3f
-			)
-		);
+                clearButton,
+                new LinearLayout.LayoutParams(
+                        LayoutParams.WRAP_CONTENT,
+                        LayoutParams.WRAP_CONTENT,
+                        .3f
+                )
+        );
         buttonsLayout.addView(
-    		new View(context),
-    		new LinearLayout.LayoutParams(1, 1, .5f)
-		);
+                new View(context),
+                new LinearLayout.LayoutParams(1, 1, .5f)
+        );
 
         // Add buttons
         LinearLayout.LayoutParams buttonsLayoutParams =
-        	new LinearLayout.LayoutParams(
-    			LayoutParams.MATCH_PARENT,
-    			LayoutParams.WRAP_CONTENT
-			);
+                new LinearLayout.LayoutParams(
+                        LayoutParams.MATCH_PARENT,
+                        LayoutParams.WRAP_CONTENT
+                );
         buttonsLayoutParams.setMargins(5, 25, 5, 5);
         root.addView(buttonsLayout, buttonsLayoutParams);
 
         this.setContentView(root);
-	}
+    }
 }

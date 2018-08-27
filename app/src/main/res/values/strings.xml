@@ -36,36 +36,36 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
-        <!-- Preferences -->
+    <!-- Preferences -->
 
-        <string name="preferences">Preferences</string>
-        <string name="preferencesWarning">Note: Changing game size will end the current game.</string>
+    <string name="preferences">Preferences</string>
+    <string name="preferencesWarning">Note: Changing game size will end the current game.</string>
 
-        <!-- end Preferences -->
+    <!-- end Preferences -->
 
-        <!-- Statistics -->
+    <!-- Statistics -->
 
-        <string name="statistics">Statistics</string>
-        <string name="gamesPlayed">Games Played:</string>
-        <string name="gamesWon">Games Won:</string>
-        <string name="averageTime">Average Time:</string>
-        <string name="bestTime">Best Time:</string>
-        <string name="bestTimeDate">Best Time Date:</string>
-        <string name="clear">Clear</string>
+    <string name="statistics">Statistics</string>
+    <string name="gamesPlayed">Games Played:</string>
+    <string name="gamesWon">Games Won:</string>
+    <string name="averageTime">Average Time:</string>
+    <string name="bestTime">Best Time:</string>
+    <string name="bestTimeDate">Best Time Date:</string>
+    <string name="clear">Clear</string>
 
-        <string name="confirmClear">Are you sure you want to clear statistics?</string>
+    <string name="confirmClear">Are you sure you want to clear statistics?</string>
 
-        <!-- end Statistics -->
+    <!-- end Statistics -->
 
-        <!-- Game Win -->
+    <!-- Game Win -->
 
-        <string name="youWin">You Win!</string>
-        <string name="newHighScore">New High Score!</string>
-        <string name="gameSizeColon">Game Size:</string>
-        <string name="gameTime">Game Time:</string>
-        <string name="date">Date:</string>
+    <string name="youWin">You Win!</string>
+    <string name="newHighScore">New High Score!</string>
+    <string name="gameSizeColon">Game Size:</string>
+    <string name="gameTime">Game Time:</string>
+    <string name="date">Date:</string>
 
-        <!-- end Game Win -->
+    <!-- end Game Win -->
 
     <!-- end Dialog -->
 

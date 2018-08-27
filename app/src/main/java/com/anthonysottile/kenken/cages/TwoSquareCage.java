@@ -12,8 +12,7 @@ public class TwoSquareCage extends BaseCage {
         this.signLocation = location;
 
         Point secondSquare;
-        if (horizontal)
-        {
+        if (horizontal) {
             secondSquare = Points.add(location, Points.Right);
 
             // +---+---+
@@ -49,13 +48,13 @@ public class TwoSquareCage extends BaseCage {
         this.squares.add(secondSquare);
 
         this.signNumber =
-            CageGenerator.DetermineSign
-            (
-                new int[]
-                {
-                    game.getLatinSquare().getValues()[location.x][location.y],
-                    game.getLatinSquare().getValues()[secondSquare.x][secondSquare.y]
-                }
-            );
+                CageGenerator.DetermineSign
+                        (
+                                new int[]
+                                        {
+                                                game.getLatinSquare().getValues()[location.x][location.y],
+                                                game.getLatinSquare().getValues()[secondSquare.x][secondSquare.y]
+                                        }
+                        );
     }
 }

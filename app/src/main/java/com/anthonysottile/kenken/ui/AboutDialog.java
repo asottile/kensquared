@@ -17,33 +17,34 @@ import com.anthonysottile.kenken.R;
 
 public class AboutDialog extends Dialog {
 
-	public AboutDialog(Context context) {
-		super(context);
-	}
+    public AboutDialog(Context context) {
+        super(context);
+    }
 
-	private static final LinearLayout.LayoutParams spacerViewLayoutParams =
-		new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 1);
-	private View getSpacerView() {
-		View spacerView = new View(this.getContext());
+    private static final LinearLayout.LayoutParams spacerViewLayoutParams =
+            new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 1);
+
+    private View getSpacerView() {
+        View spacerView = new View(this.getContext());
         spacerView.setBackgroundColor(Color.LTGRAY);
         spacerView.setLayoutParams(AboutDialog.spacerViewLayoutParams);
         return spacerView;
-	}
+    }
 
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		Context context = this.getContext();
+        Context context = this.getContext();
 
-		this.setTitle(context.getString(R.string.about));
+        this.setTitle(context.getString(R.string.about));
 
         LinearLayout.LayoutParams rootLayout =
-    		new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT,
-				LayoutParams.MATCH_PARENT
-			);
+                new LinearLayout.LayoutParams(
+                        LayoutParams.MATCH_PARENT,
+                        LayoutParams.MATCH_PARENT
+                );
         LinearLayout root = new LinearLayout(context);
         root.setLayoutParams(rootLayout);
         root.setOrientation(LinearLayout.VERTICAL);
@@ -52,9 +53,9 @@ public class AboutDialog extends Dialog {
         root.addView(this.getSpacerView());
 
         String appTextBuilder =
-            context.getString(R.string.app_name) +
-            ' ' +
-            context.getString(R.string.byAuthor);
+                context.getString(R.string.app_name) +
+                        ' ' +
+                        context.getString(R.string.byAuthor);
 
         TextView appText = new TextView(context);
         appText.setText(appTextBuilder);
@@ -62,9 +63,9 @@ public class AboutDialog extends Dialog {
         root.addView(appText);
 
         String versionBuilder =
-            context.getString(R.string.versionColon) +
-            ' ' +
-            context.getString(R.string.version);
+                context.getString(R.string.versionColon) +
+                        ' ' +
+                        context.getString(R.string.version);
 
         TextView versionText = new TextView(context);
         versionText.setText(versionBuilder);
@@ -75,7 +76,7 @@ public class AboutDialog extends Dialog {
 
         TextView aboutText = new TextView(context);
         final SpannableString s =
-             new SpannableString(context.getText(R.string.aboutText));
+                new SpannableString(context.getText(R.string.aboutText));
         Linkify.addLinks(s, Linkify.WEB_URLS);
         aboutText.setText(s);
         aboutText.setMovementMethod(LinkMovementMethod.getInstance());
@@ -90,39 +91,39 @@ public class AboutDialog extends Dialog {
         Button okButton = new Button(context);
         okButton.setText(context.getString(R.string.ok));
         okButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				AboutDialog.this.dismiss();
-			}
+            public void onClick(View v) {
+                AboutDialog.this.dismiss();
+            }
         });
 
         LinearLayout buttonsLayout = new LinearLayout(context);
         buttonsLayout.addView(
-    		new View(context),
-    		new LinearLayout.LayoutParams(1, 1, .5f)
-		);
+                new View(context),
+                new LinearLayout.LayoutParams(1, 1, .5f)
+        );
         buttonsLayout.addView(
-    		okButton,
-    		new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT,
-				.3f
-			)
-		);
+                okButton,
+                new LinearLayout.LayoutParams(
+                        LayoutParams.WRAP_CONTENT,
+                        LayoutParams.WRAP_CONTENT,
+                        .3f
+                )
+        );
         buttonsLayout.addView(
-    		new View(context),
-    		new LinearLayout.LayoutParams(1, 1, .5f)
-		);
+                new View(context),
+                new LinearLayout.LayoutParams(1, 1, .5f)
+        );
 
         // Add buttons
         LinearLayout.LayoutParams buttonsLayoutParams =
-        	new LinearLayout.LayoutParams(
-    			LayoutParams.MATCH_PARENT,
-    			LayoutParams.WRAP_CONTENT
-			);
+                new LinearLayout.LayoutParams(
+                        LayoutParams.MATCH_PARENT,
+                        LayoutParams.WRAP_CONTENT
+                );
         buttonsLayoutParams.setMargins(5, 25, 5, 5);
         root.addView(buttonsLayout, buttonsLayoutParams);
 
         this.setContentView(root);
-	}
+    }
 
 }

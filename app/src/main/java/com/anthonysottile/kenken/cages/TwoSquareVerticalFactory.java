@@ -21,14 +21,15 @@ public class TwoSquareVerticalFactory implements ICageFactory {
         Point secondSquare = Points.add(location, Points.Down);
 
         return
-            game.squareIsValid(location) &&
-            game.squareIsValid(secondSquare);
+                game.squareIsValid(location) &&
+                        game.squareIsValid(secondSquare);
     }
 
     public void ApplyCage(KenKenGame game, Point location) {
         game.getCages().add(new TwoSquareCage(game, location, false));
     }
 
-    private TwoSquareVerticalFactory() { }
+    private TwoSquareVerticalFactory() {
+    }
 
 }

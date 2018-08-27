@@ -5,56 +5,58 @@ import org.json.JSONObject;
 
 public class SignNumber {
 
-	private Sign sign;
-	public Sign getSign() {
-		return this.sign;
-	}
+    private Sign sign;
 
-	private int number;
-	public int getNumber() {
-		return this.number;
-	}
+    public Sign getSign() {
+        return this.sign;
+    }
 
-	@Override
-	public String toString() {
+    private int number;
+
+    public int getNumber() {
+        return this.number;
+    }
+
+    @Override
+    public String toString() {
         return
-            String.valueOf(this.number) +
-            ' ' +
-            this.sign.toString();
-	}
+                String.valueOf(this.number) +
+                        ' ' +
+                        this.sign.toString();
+    }
 
-	public SignNumber(Sign sign, int number) {
-		this.sign = sign;
-		this.number = number;
-	}
+    public SignNumber(Sign sign, int number) {
+        this.sign = sign;
+        this.number = number;
+    }
 
-	// #region JSON Serialization
+    // #region JSON Serialization
 
-	private static final String signProperty = "Sign";
-	private static final String numberProperty = "Number";
+    private static final String signProperty = "Sign";
+    private static final String numberProperty = "Number";
 
-	public SignNumber(JSONObject json) {
+    public SignNumber(JSONObject json) {
 
-		try {
-			this.sign = Sign.toSign(json.getInt(SignNumber.signProperty));
-			this.number = json.getInt(SignNumber.numberProperty);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-	}
+        try {
+            this.sign = Sign.toSign(json.getInt(SignNumber.signProperty));
+            this.number = json.getInt(SignNumber.numberProperty);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public JSONObject ToJson() {
-		JSONObject json = new JSONObject();
+    public JSONObject ToJson() {
+        JSONObject json = new JSONObject();
 
-		try {
-			json.put(SignNumber.signProperty, this.sign.getIntValue());
-			json.put(SignNumber.numberProperty, this.number);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+        try {
+            json.put(SignNumber.signProperty, this.sign.getIntValue());
+            json.put(SignNumber.numberProperty, this.number);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-		return json;
-	}
+        return json;
+    }
 
-	// #endregion
+    // #endregion
 }

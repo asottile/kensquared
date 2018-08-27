@@ -26,10 +26,10 @@ public class OneSquareCage extends BaseCage {
         game.setOccupied(location);
 
         this.signNumber =
-    		CageGenerator.DetermineSign(
-				new int[] {
-					game.getLatinSquare().getValues()[location.x][location.y]
-				}
-			);
+                CageGenerator.DetermineSign(
+                        new int[]{
+                                game.getLatinSquare().getValues()[location.x][location.y]
+                        }
+                );
     }
 }

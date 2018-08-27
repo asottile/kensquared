@@ -17,45 +17,46 @@ import com.anthonysottile.kenken.settings.SettingsProvider;
 
 public class PreferencesDialog extends Dialog {
 
-	private static final String[] GameSizes = {
-		"4", "5", "6", "7", "8", "9"
-	};
+    private static final String[] GameSizes = {
+            "4", "5", "6", "7", "8", "9"
+    };
 
-	private Spinner dropdown = null;
+    private Spinner dropdown = null;
 
-	private static final LinearLayout.LayoutParams spacerViewLayoutParams =
-		new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 1);
-	private View getSpacerView() {
-		View spacerView = new View(this.getContext());
+    private static final LinearLayout.LayoutParams spacerViewLayoutParams =
+            new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 1);
+
+    private View getSpacerView() {
+        View spacerView = new View(this.getContext());
         spacerView.setBackgroundColor(Color.LTGRAY);
         spacerView.setLayoutParams(PreferencesDialog.spacerViewLayoutParams);
         return spacerView;
-	}
+    }
 
-	/**
-	 * Sets the Dialog's spinner to the value specified.
-	 *
-	 * @param gameSize The gameSize to set.  Note: this should be between
-	 *                  {@link UIConstants#MinGameSize}
-	 *                  and {@link UIConstants#MaxGameSize}.
-	 */
-	public void SetSpinner(int gameSize) {
-		this.dropdown.setSelection(gameSize - UIConstants.MinGameSize);
-	}
+    /**
+     * Sets the Dialog's spinner to the value specified.
+     *
+     * @param gameSize The gameSize to set.  Note: this should be between
+     *                 {@link UIConstants#MinGameSize}
+     *                 and {@link UIConstants#MaxGameSize}.
+     */
+    public void SetSpinner(int gameSize) {
+        this.dropdown.setSelection(gameSize - UIConstants.MinGameSize);
+    }
 
-	public PreferencesDialog(Context context) {
-		super(context);
-	}
+    public PreferencesDialog(Context context) {
+        super(context);
+    }
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		Context context = this.getContext();
+        Context context = this.getContext();
 
-		this.setTitle(context.getString(R.string.preferences));
+        this.setTitle(context.getString(R.string.preferences));
 
-		// Game size Label
+        // Game size Label
         TextView gameSizeLabel = new TextView(context);
         gameSizeLabel.setText(context.getString(R.string.gameSize));
         gameSizeLabel.setTextSize(18);
@@ -65,11 +66,11 @@ public class PreferencesDialog extends Dialog {
         // Game Size dropdown
         this.dropdown = new Spinner(context);
         ArrayAdapter<String> spinnerAdapter =
-    		new ArrayAdapter<String>(
-				context,
-				android.R.layout.simple_spinner_item,
-				PreferencesDialog.GameSizes
-			);
+                new ArrayAdapter<String>(
+                        context,
+                        android.R.layout.simple_spinner_item,
+                        PreferencesDialog.GameSizes
+                );
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         this.dropdown.setAdapter(spinnerAdapter);
         this.dropdown.setSelection(0);
@@ -81,18 +82,18 @@ public class PreferencesDialog extends Dialog {
         //        I wanted it to anyways.
         LinearLayout gameSizeLayout = new LinearLayout(context);
         gameSizeLayout.addView(
-    		gameSizeLabel,
-    		LayoutParams.WRAP_CONTENT,
-    		LayoutParams.WRAP_CONTENT
-		);
+                gameSizeLabel,
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT
+        );
         gameSizeLayout.addView(
-    		new View(context),
-    		new LinearLayout.LayoutParams(1, 1, 0.3f)
-		);
+                new View(context),
+                new LinearLayout.LayoutParams(1, 1, 0.3f)
+        );
         gameSizeLayout.addView(
-    		this.dropdown,
-    		new LinearLayout.LayoutParams(1, LayoutParams.WRAP_CONTENT, 0.7f)
-		);
+                this.dropdown,
+                new LinearLayout.LayoutParams(1, LayoutParams.WRAP_CONTENT, 0.7f)
+        );
 
         // Warning text label.  This is warning that the current game ends when
         //  clicking on preferences.
@@ -105,14 +106,14 @@ public class PreferencesDialog extends Dialog {
         Button okButton = new Button(context);
         okButton.setText(context.getString(R.string.ok));
         okButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				SettingsProvider.SetGameSize(
-					PreferencesDialog.this.dropdown.getSelectedItemPosition()
-					+ UIConstants.MinGameSize
-				);
+            public void onClick(View v) {
+                SettingsProvider.SetGameSize(
+                        PreferencesDialog.this.dropdown.getSelectedItemPosition()
+                                + UIConstants.MinGameSize
+                );
 
-				PreferencesDialog.this.dismiss();
-			}
+                PreferencesDialog.this.dismiss();
+            }
         });
 
         // Cancel button
@@ -120,45 +121,45 @@ public class PreferencesDialog extends Dialog {
         Button cancelButton = new Button(context);
         cancelButton.setText(context.getString(R.string.cancel));
         cancelButton.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				PreferencesDialog.this.cancel();
-			}
-		});
+            public void onClick(View v) {
+                PreferencesDialog.this.cancel();
+            }
+        });
 
         // Layout for the OK and Cancel buttons
         // NOTE: I had to do some weird things to prevent the dialog displaying
         //        weirdly.  Still not sure why this works...
         LinearLayout buttonsLayout = new LinearLayout(context);
         buttonsLayout.addView(
-    		new View(context),
-    		new LinearLayout.LayoutParams(1, 1, .5f)
-		);
+                new View(context),
+                new LinearLayout.LayoutParams(1, 1, .5f)
+        );
         buttonsLayout.addView(
-    		okButton,
-    		new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT,
-				.3f
-			)
-		);
+                okButton,
+                new LinearLayout.LayoutParams(
+                        LayoutParams.WRAP_CONTENT,
+                        LayoutParams.WRAP_CONTENT,
+                        .3f
+                )
+        );
         buttonsLayout.addView(
-    		cancelButton,
-    		new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT,
-				.3f
-			)
-		);
+                cancelButton,
+                new LinearLayout.LayoutParams(
+                        LayoutParams.WRAP_CONTENT,
+                        LayoutParams.WRAP_CONTENT,
+                        .3f
+                )
+        );
         buttonsLayout.addView(
-    		new View(context),
-    		new LinearLayout.LayoutParams(1, 1, .5f)
-		);
+                new View(context),
+                new LinearLayout.LayoutParams(1, 1, .5f)
+        );
 
         LinearLayout.LayoutParams rootLayout =
-    		new LinearLayout.LayoutParams(
-				LayoutParams.MATCH_PARENT,
-				LayoutParams.WRAP_CONTENT
-			);
+                new LinearLayout.LayoutParams(
+                        LayoutParams.MATCH_PARENT,
+                        LayoutParams.WRAP_CONTENT
+                );
 
         // Root layout
         LinearLayout root = new LinearLayout(context);
@@ -170,30 +171,30 @@ public class PreferencesDialog extends Dialog {
 
         // Add game size
         root.addView(
-    		gameSizeLayout,
-    		LayoutParams.MATCH_PARENT,
-    		LayoutParams.WRAP_CONTENT
-		);
+                gameSizeLayout,
+                LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT
+        );
 
         // Add warning text
         root.addView(
-    		warning,
-    		LayoutParams.WRAP_CONTENT,
-    		LayoutParams.WRAP_CONTENT
-		);
+                warning,
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT
+        );
 
         // Add spacer
         root.addView(this.getSpacerView());
 
         // Add buttons
         LinearLayout.LayoutParams buttonsLayoutParams =
-        	new LinearLayout.LayoutParams(
-    			LayoutParams.MATCH_PARENT,
-    			LayoutParams.WRAP_CONTENT
-			);
+                new LinearLayout.LayoutParams(
+                        LayoutParams.MATCH_PARENT,
+                        LayoutParams.WRAP_CONTENT
+                );
         buttonsLayoutParams.setMargins(5, 25, 5, 5);
         root.addView(buttonsLayout, buttonsLayoutParams);
 
         this.setContentView(root);
-	}
+    }
 }

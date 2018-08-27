@@ -21,32 +21,33 @@ public enum Sign {
     private static final String noneString = "";
 
     private static final Sign[] signsByInt = {
-    	Sign.Add,
-    	Sign.Subtract,
-    	Sign.Multiply,
-    	Sign.Divide,
-    	Sign.None
+            Sign.Add,
+            Sign.Subtract,
+            Sign.Multiply,
+            Sign.Divide,
+            Sign.None
     };
 
     /**
      * Converts the number passed in to the enumeration type.
      *
      * @param n The number to convert to the Sign enum.  Must be inclusively between
-     *           [Sign.Add.getIntValue(), Sign.None.getIntValue()]
+     *          [Sign.Add.getIntValue(), Sign.None.getIntValue()]
      * @return Returns the Sign enum from the integer.
      */
     public static Sign toSign(int n) {
-    	return Sign.signsByInt[n];
+        return Sign.signsByInt[n];
     }
 
     private int n;
+
     /**
      * Returns the integer representation of the enum.
      *
      * @return The integer representation of the enum.
      */
     public int getIntValue() {
-    	return this.n;
+        return this.n;
     }
 
     private String s;
@@ -56,11 +57,11 @@ public enum Sign {
      */
     @Override
     public String toString() {
-    	return this.s;
+        return this.s;
     }
 
     Sign(int n, String s) {
-    	this.n = n;
-    	this.s = s;
+        this.n = n;
+        this.s = s;
     }
 }

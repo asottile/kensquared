@@ -8,8 +8,7 @@ public class OneSquareCageFactory implements ICageFactory {
 
     private static OneSquareCageFactory factoryInstance = null;
 
-    public static ICageFactory GetInstance()
-    {
+    public static ICageFactory GetInstance() {
         if (OneSquareCageFactory.factoryInstance == null) {
             OneSquareCageFactory.factoryInstance = new OneSquareCageFactory();
         }
@@ -22,9 +21,10 @@ public class OneSquareCageFactory implements ICageFactory {
     }
 
     public void ApplyCage(KenKenGame game, Point location) {
-    	game.getCages().add(new OneSquareCage(game, location));
+        game.getCages().add(new OneSquareCage(game, location));
     }
 
     // private constructor to disallow instantiation
-    private OneSquareCageFactory() { }
+    private OneSquareCageFactory() {
+    }
 }

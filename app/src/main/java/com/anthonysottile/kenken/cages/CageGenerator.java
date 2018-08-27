@@ -1,43 +1,43 @@
 package com.anthonysottile.kenken.cages;
 
-import java.util.Random;
-
 import android.graphics.Point;
 
 import com.anthonysottile.kenken.KenKenGame;
 import com.anthonysottile.kenken.Sign;
 import com.anthonysottile.kenken.SignNumber;
 
+import java.util.Random;
+
 public final class CageGenerator {
 
     private static final int maxRand = 100;
-	private static final Random random = new Random();
+    private static final Random random = new Random();
 
-	private static final ICageFactory oneSquareFactory = OneSquareCageFactory.GetInstance();
+    private static final ICageFactory oneSquareFactory = OneSquareCageFactory.GetInstance();
 
     private static final CageFactorySet simpleCageFactories =
-        new CageFactorySet(
-            new ICageFactory[] {
-                TwoSquareHorizontalFactory.GetInstance(),
-                TwoSquareVerticalFactory.GetInstance(),
-                ThreeSquareVerticalFactory.GetInstance(),
-                ThreeSquareHorizontalFactory.GetInstance(),
-                ThreeSquareUpLeftFactory.GetInstance(),
-                ThreeSquareUpRightFactory.GetInstance(),
-                ThreeSquareDownLeftFactory.GetInstance(),
-                ThreeSquareDownRightFactory.GetInstance()
-            },
-            new int[] {
-        		4,
-        		4,
-        		2,
-        		2,
-        		1,
-        		1,
-        		1,
-        		1
-            }
-        );
+            new CageFactorySet(
+                    new ICageFactory[]{
+                            TwoSquareHorizontalFactory.GetInstance(),
+                            TwoSquareVerticalFactory.GetInstance(),
+                            ThreeSquareVerticalFactory.GetInstance(),
+                            ThreeSquareHorizontalFactory.GetInstance(),
+                            ThreeSquareUpLeftFactory.GetInstance(),
+                            ThreeSquareUpRightFactory.GetInstance(),
+                            ThreeSquareDownLeftFactory.GetInstance(),
+                            ThreeSquareDownRightFactory.GetInstance()
+                    },
+                    new int[]{
+                            4,
+                            4,
+                            2,
+                            2,
+                            1,
+                            1,
+                            1,
+                            1
+                    }
+            );
 
     /**
      * Returns the maximum of the integer array.
@@ -45,61 +45,61 @@ public final class CageGenerator {
      * @param numbers The numbers to extract the maximum from.
      * @return The maximum in the array of integers.
      */
-	public static int max(int[] numbers) {
-		int max = numbers[0];
-		for (int i = 1; i < numbers.length; i += 1) {
-			if (numbers[i] > max) {
-				max = numbers[i];
-			}
-		}
-		return max;
-	}
+    public static int max(int[] numbers) {
+        int max = numbers[0];
+        for (int i = 1; i < numbers.length; i += 1) {
+            if (numbers[i] > max) {
+                max = numbers[i];
+            }
+        }
+        return max;
+    }
 
-	/**
-	 * Returns the minimum of the integer array.
-	 *
-	 * @param numbers The numbers to extract the minimum from.
-	 * @return The minimum in the array of integers.
-	 */
-	public static int min(int[] numbers) {
-		int min = numbers[0];
-		for (int i = 1; i < numbers.length; i += 1) {
-			if (numbers[i] < min) {
-				min = numbers[i];
-			}
-		}
-		return min;
-	}
+    /**
+     * Returns the minimum of the integer array.
+     *
+     * @param numbers The numbers to extract the minimum from.
+     * @return The minimum in the array of integers.
+     */
+    public static int min(int[] numbers) {
+        int min = numbers[0];
+        for (int i = 1; i < numbers.length; i += 1) {
+            if (numbers[i] < min) {
+                min = numbers[i];
+            }
+        }
+        return min;
+    }
 
-	/**
-	 * Returns the sum of the integer array.
-	 *
-	 * @param numbers The numbers to sum.
-	 * @return The sum of the integers.
-	 */
-	public static int sum(int[] numbers) {
-		int sum = 0;
-		for (int number : numbers) {
-			sum += number;
-		}
-		return sum;
-	}
+    /**
+     * Returns the sum of the integer array.
+     *
+     * @param numbers The numbers to sum.
+     * @return The sum of the integers.
+     */
+    public static int sum(int[] numbers) {
+        int sum = 0;
+        for (int number : numbers) {
+            sum += number;
+        }
+        return sum;
+    }
 
-	/**
-	 * Returns the product of the integer array.
-	 *
-	 * @param numbers The numbers to multiply.
-	 * @return The product of the integers.
-	 */
-	public static int product(int[] numbers) {
-		int product = 1;
-		for (int number : numbers) {
-			product *= number;
-		}
-		return product;
-	}
+    /**
+     * Returns the product of the integer array.
+     *
+     * @param numbers The numbers to multiply.
+     * @return The product of the integers.
+     */
+    public static int product(int[] numbers) {
+        int product = 1;
+        for (int number : numbers) {
+            product *= number;
+        }
+        return product;
+    }
 
-	public static SignNumber DetermineSign(int[] numbers) {
+    public static SignNumber DetermineSign(int[] numbers) {
 
         int max = CageGenerator.max(numbers);
         int min = CageGenerator.min(numbers);
@@ -126,8 +126,7 @@ public final class CageGenerator {
             subtractCutOff += 20;
             multiplyCutOff += 10;
 
-            if (max % min == 0)
-            {
+            if (max % min == 0) {
                 // can do division
                 // [0, 15) divide [15%]
                 // [15, 30) subtract [15%]
@@ -155,7 +154,7 @@ public final class CageGenerator {
         } else {
             return new SignNumber(Sign.Add, CageGenerator.sum(numbers));
         }
-	}
+    }
 
     public static void Generate(KenKenGame game) {
         int order = game.getLatinSquare().getOrder();
@@ -196,5 +195,6 @@ public final class CageGenerator {
         }
     }
 
-	private CageGenerator() {}
+    private CageGenerator() {
+    }
 }

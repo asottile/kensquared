@@ -3,18 +3,19 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:baselineAligned="false" >
+    android:baselineAligned="false">
 
     <com.anthonysottile.kenken.ui.CandidatesLayout
         android:id="@+id/candidatesLayout"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:layout_weight="0" />
+
     <FrameLayout
         android:id="@+id/gameLayout"
         android:layout_width="fill_parent"
         android:layout_height="145dp"
-        android:layout_weight="1" >
+        android:layout_weight="1">
 
         <com.anthonysottile.kenken.ui.GameComponent
             android:id="@+id/gameComponent"
