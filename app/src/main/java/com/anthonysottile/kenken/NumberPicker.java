@@ -7,7 +7,7 @@ import java.util.Random;
 public class NumberPicker {
 
 	private static Random random = new Random();
-	private int length = 0;
+	private int length;
 	private int attempted = 0;
 	private final List<Integer> collection = new ArrayList<Integer>();
 

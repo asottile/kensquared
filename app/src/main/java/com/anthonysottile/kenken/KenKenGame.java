@@ -17,209 +17,211 @@ import com.anthonysottile.kenken.cages.ICage;
 
 public class KenKenGame {
 
-	// Update this as squares obtain values
-	private int squaresWithValues = 0;
-	public int getSquaresWithValues() {
-		return this.squaresWithValues;
-	}
+    // Update this as squares obtain values
+    private int squaresWithValues = 0;
 
-	private Date gameStartTime;
-	public Date getGameStartTime() {
-		return this.gameStartTime;
-	}
+    public int getSquaresWithValues() {
+        return this.squaresWithValues;
+    }
 
-	/**
-	 * Resets the game time to the specified milliseconds.
-	 * @param milliseconds The amount of elapsed time to set the game time
-	 *                      to.
-	 */
-	public void ResetGameStartTime(long milliseconds) {
-		Date date = new Date();
-		date.setTime(date.getTime() - milliseconds);
-		this.gameStartTime = date;
-	}
+    private Date gameStartTime;
 
-	public void PenalizeGameStartTime(long milliseconds) {
-		this.gameStartTime.setTime(this.gameStartTime.getTime() - milliseconds);
-	}
+    public Date getGameStartTime() {
+        return this.gameStartTime;
+    }
 
-	private LatinSquare latinSquare;
-	public LatinSquare getLatinSquare() {
-		return this.latinSquare;
-	}
+    /**
+     * Resets the game time to the specified milliseconds.
+     *
+     * @param milliseconds The amount of elapsed time to set the game time
+     *                     to.
+     */
+    public void ResetGameStartTime(long milliseconds) {
+        Date date = new Date();
+        date.setTime(date.getTime() - milliseconds);
+        this.gameStartTime = date;
+    }
 
-	private boolean[][] cageSquareOccupied;
+    public void PenalizeGameStartTime(long milliseconds) {
+        this.gameStartTime.setTime(this.gameStartTime.getTime() - milliseconds);
+    }
 
-	private List<ICage> cages;
-	public List<ICage> getCages() {
-		return this.cages;
-	}
+    private LatinSquare latinSquare;
 
-	private UserSquare[][] userSquares;
-	public UserSquare[][] getUserSquares() {
-		return this.userSquares;
-	}
+    public LatinSquare getLatinSquare() {
+        return this.latinSquare;
+    }
 
-	public boolean squareIsOffBoard(Point p) {
-		int order = this.latinSquare.getOrder();
+    private boolean[][] cageSquareOccupied;
 
-		return
-				p.x >= order ||
-				p.y >= order ||
-				p.x < 0 ||
-				p.y < 0;
-	}
+    private List<ICage> cages;
 
-	public boolean squareIsValid(Point p) {
-		if (this.squareIsOffBoard(p)) {
-			return false;
-		}
+    public List<ICage> getCages() {
+        return this.cages;
+    }
 
-		return !this.cageSquareOccupied[p.x][p.y];
-	}
+    private UserSquare[][] userSquares;
 
-	public void setOccupied(Point p) {
-		this.cageSquareOccupied[p.x][p.y] = true;
-	}
+    public UserSquare[][] getUserSquares() {
+        return this.userSquares;
+    }
 
-	private final UserSquare.ValueSetListener valueSetListener =
-		new UserSquare.ValueSetListener() {
-			public void onValueSet(ValueSetEvent event) {
-				if (event.getValue() > 0) {
-					KenKenGame.this.squaresWithValues += 1;
-				} else {
-					KenKenGame.this.squaresWithValues -= 1;
-				}
-			}
-		};
+    public boolean squareIsOffBoard(Point p) {
+        int order = this.latinSquare.getOrder();
 
-	private void postInitialize() {
-		// For shared "constructor" code
+        return
+                p.x >= order ||
+                        p.y >= order ||
+                        p.x < 0 ||
+                        p.y < 0;
+    }
 
-		// We are going to attach to the value set event on our user squares to
-		//  make sure they have a value when being selected.  This way we can count
-		//  the number of squares the user has filled in and allow for a faster
-		//  calculation of the winning condition.
+    public boolean squareIsValid(Point p) {
+        return !this.squareIsOffBoard(p) && !this.cageSquareOccupied[p.x][p.y];
+    }
 
-		int order = this.latinSquare.getOrder();
+    public void setOccupied(Point p) {
+        this.cageSquareOccupied[p.x][p.y] = true;
+    }
 
-		for (int i = 0; i < order; i += 1) {
-			for (int j = 0; j < order; j += 1) {
-				this.userSquares[i][j].AddValueSetListener(this.valueSetListener);
-			}
-		}
-	}
+    private final UserSquare.ValueSetListener valueSetListener =
+            new UserSquare.ValueSetListener() {
+                public void onValueSet(ValueSetEvent event) {
+                    if (event.getValue() > 0) {
+                        KenKenGame.this.squaresWithValues += 1;
+                    } else {
+                        KenKenGame.this.squaresWithValues -= 1;
+                    }
+                }
+            };
 
-	public KenKenGame(int order) {
-		this.latinSquare = new LatinSquare(order);
+    private void postInitialize() {
+        // For shared "constructor" code
 
-		this.cageSquareOccupied = new boolean[order][];
-		this.userSquares = new UserSquare[order][];
-		for (int i = 0; i < order; i += 1) {
-			this.cageSquareOccupied[i] = new boolean[order];
-			this.userSquares[i] = new UserSquare[order];
+        // We are going to attach to the value set event on our user squares to
+        //  make sure they have a value when being selected.  This way we can count
+        //  the number of squares the user has filled in and allow for a faster
+        //  calculation of the winning condition.
 
-			for (int j = 0; j < order; j += 1) {
-				this.cageSquareOccupied[i][j] = false;
-				this.userSquares[i][j] = new UserSquare(i, j, order);
-			}
-		}
+        int order = this.latinSquare.getOrder();
 
-		this.cages = new ArrayList<ICage>();
+        for (int i = 0; i < order; i += 1) {
+            for (int j = 0; j < order; j += 1) {
+                this.userSquares[i][j].AddValueSetListener(this.valueSetListener);
+            }
+        }
+    }
 
-		CageGenerator.Generate(this);
+    public KenKenGame(int order) {
+        this.latinSquare = new LatinSquare(order);
 
-		this.gameStartTime = new Date();
+        this.cageSquareOccupied = new boolean[order][];
+        this.userSquares = new UserSquare[order][];
+        for (int i = 0; i < order; i += 1) {
+            this.cageSquareOccupied[i] = new boolean[order];
+            this.userSquares[i] = new UserSquare[order];
 
-		this.postInitialize();
-	}
+            for (int j = 0; j < order; j += 1) {
+                this.cageSquareOccupied[i][j] = false;
+                this.userSquares[i][j] = new UserSquare(i, j, order);
+            }
+        }
 
-	// #region JSON Serialization
+        this.cages = new ArrayList<ICage>();
 
-	private static final String squaresWithValuesProperty = "SquaresWithValues";
-	private static final String gameTimeElapsedProperty = "GameTimeElapsed";
-	private static final String latinSquareProperty = "LatinSquare";
-	private static final String cagesProperty = "Cages";
-	private static final String userSquaresProperty = "UserSquares";
+        CageGenerator.Generate(this);
 
-	public JSONObject ToJson() {
-		JSONObject json = new JSONObject();
+        this.gameStartTime = new Date();
 
-		try {
+        this.postInitialize();
+    }
 
-			Date now = new Date();
-			long timeElapsed = now.getTime() - this.gameStartTime.getTime();
+    // #region JSON Serialization
 
-			JSONArray cagesJson = new JSONArray();
-			int cagesLength = this.cages.size();
-			for (int i = 0; i < cagesLength; i += 1) {
-				cagesJson.put(i, this.cages.get(i).ToJson());
-			}
+    private static final String squaresWithValuesProperty = "SquaresWithValues";
+    private static final String gameTimeElapsedProperty = "GameTimeElapsed";
+    private static final String latinSquareProperty = "LatinSquare";
+    private static final String cagesProperty = "Cages";
+    private static final String userSquaresProperty = "UserSquares";
 
-			JSONArray userSquaresJson = new JSONArray();
-			for (int i = 0; i < this.userSquares.length; i += 1) {
+    public JSONObject ToJson() {
+        JSONObject json = new JSONObject();
 
-				JSONArray innerArray = new JSONArray();
+        try {
 
-				for (int j = 0; j < this.userSquares[i].length; j += 1) {
-					innerArray.put(j, this.userSquares[i][j].ToJson());
-				}
+            Date now = new Date();
+            long timeElapsed = now.getTime() - this.gameStartTime.getTime();
 
-				userSquaresJson.put(i, innerArray);
-			}
+            JSONArray cagesJson = new JSONArray();
+            int cagesLength = this.cages.size();
+            for (int i = 0; i < cagesLength; i += 1) {
+                cagesJson.put(i, this.cages.get(i).ToJson());
+            }
 
-			json.put(KenKenGame.squaresWithValuesProperty, this.squaresWithValues);
-			json.put(KenKenGame.gameTimeElapsedProperty, timeElapsed);
-			json.put(KenKenGame.latinSquareProperty, this.latinSquare.ToJson());
-			json.put(KenKenGame.cagesProperty, cagesJson);
-			json.put(KenKenGame.userSquaresProperty, userSquaresJson);
+            JSONArray userSquaresJson = new JSONArray();
+            for (int i = 0; i < this.userSquares.length; i += 1) {
 
-		} catch(JSONException e) {
-			e.printStackTrace();
-		}
+                JSONArray innerArray = new JSONArray();
 
-		return json;
-	}
+                for (int j = 0; j < this.userSquares[i].length; j += 1) {
+                    innerArray.put(j, this.userSquares[i][j].ToJson());
+                }
 
-	public KenKenGame(JSONObject json) {
-		try {
+                userSquaresJson.put(i, innerArray);
+            }
 
-			this.squaresWithValues = json.getInt(KenKenGame.squaresWithValuesProperty);
+            json.put(KenKenGame.squaresWithValuesProperty, this.squaresWithValues);
+            json.put(KenKenGame.gameTimeElapsedProperty, timeElapsed);
+            json.put(KenKenGame.latinSquareProperty, this.latinSquare.ToJson());
+            json.put(KenKenGame.cagesProperty, cagesJson);
+            json.put(KenKenGame.userSquaresProperty, userSquaresJson);
 
-			long timeElapsed = json.getLong(KenKenGame.gameTimeElapsedProperty);
-			this.gameStartTime = new Date();
-			this.gameStartTime.setTime(this.gameStartTime.getTime() - timeElapsed);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-			this.latinSquare =	new LatinSquare(json.getJSONObject(KenKenGame.latinSquareProperty));
+        return json;
+    }
 
-			JSONArray cagesJson = json.getJSONArray(KenKenGame.cagesProperty);
-			this.cages = new ArrayList<ICage>();
-			int cagesSize = cagesJson.length();
-			for (int i = 0; i < cagesSize; i += 1) {
-				this.cages.add(BaseCage.ToCage(cagesJson.getJSONObject(i)));
-			}
+    public KenKenGame(JSONObject json) {
+        try {
 
-			JSONArray userSquareJson = json.getJSONArray(KenKenGame.userSquaresProperty);
-			this.userSquares = new UserSquare[userSquareJson.length()][];
-			for (int i = 0; i < this.userSquares.length; i += 1) {
+            this.squaresWithValues = json.getInt(KenKenGame.squaresWithValuesProperty);
 
-				this.userSquares[i] = new UserSquare[this.userSquares.length];
-				JSONArray innerArray = userSquareJson.getJSONArray(i);
+            long timeElapsed = json.getLong(KenKenGame.gameTimeElapsedProperty);
+            this.gameStartTime = new Date();
+            this.gameStartTime.setTime(this.gameStartTime.getTime() - timeElapsed);
 
-				for (int j = 0; j < this.userSquares[i].length; j += 1) {
-					this.userSquares[i][j] =
-						new UserSquare(
-							innerArray.getJSONObject(j)
-						);
-				}
-			}
+            this.latinSquare = new LatinSquare(json.getJSONObject(KenKenGame.latinSquareProperty));
 
-			this.postInitialize();
+            JSONArray cagesJson = json.getJSONArray(KenKenGame.cagesProperty);
+            this.cages = new ArrayList<ICage>();
+            int cagesSize = cagesJson.length();
+            for (int i = 0; i < cagesSize; i += 1) {
+                this.cages.add(BaseCage.ToCage(cagesJson.getJSONObject(i)));
+            }
 
-		} catch(JSONException e) {
-			e.printStackTrace();
-		}
-	}
+            JSONArray userSquareJson = json.getJSONArray(KenKenGame.userSquaresProperty);
+            this.userSquares = new UserSquare[userSquareJson.length()][];
+            for (int i = 0; i < this.userSquares.length; i += 1) {
 
-	// #endregion
+                this.userSquares[i] = new UserSquare[this.userSquares.length];
+                JSONArray innerArray = userSquareJson.getJSONArray(i);
+
+                for (int j = 0; j < this.userSquares[i].length; j += 1) {
+                    this.userSquares[i][j] =
+                            new UserSquare(
+                                    innerArray.getJSONObject(j)
+                            );
+                }
+            }
+
+            this.postInitialize();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // #endregion
 }

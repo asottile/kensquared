@@ -12,15 +12,15 @@ import com.anthonysottile.kenken.UserSquare;
 
 public interface ICage {
 
-	public SignNumber getSignNumber();
+	SignNumber getSignNumber();
 
-	public List<RenderLine> getRenderLines();
+	List<RenderLine> getRenderLines();
 
-	public List<Point> getSquares();
+	List<Point> getSquares();
 
-	public Point getSignLocation();
+	Point getSignLocation();
 
-	public boolean cageIsValid(UserSquare[][] userSquares);
+	boolean cageIsValid(UserSquare[][] userSquares);
 
-	public JSONObject ToJson();
+	JSONObject ToJson();
 }

@@ -17,7 +17,7 @@ public class ValuesLayout extends LinearLayout {
 	private static final LayoutParams buttonsLayoutParams =
 		new LinearLayout.LayoutParams(
 			30,
-			ViewGroup.LayoutParams.FILL_PARENT,
+			ViewGroup.LayoutParams.MATCH_PARENT,
 			0.5f
 		);
 
@@ -40,7 +40,7 @@ public class ValuesLayout extends LinearLayout {
 	}
 
 	public interface ValueChangedListener extends EventListener {
-		public void onValueChanged(ValueEvent event);
+		void onValueChanged(ValueEvent event);
 	}
 
 	private final List<ValueChangedListener> valueChangedListeners =
@@ -150,7 +150,7 @@ public class ValuesLayout extends LinearLayout {
 	 */
 	public void TrySetValue(int value) {
 		// Only set the value if it is enabled
-		// Also when checking or unchecking the target button,
+		// Also when checking or un-checking the target button,
 		//  trigger the check events.
 		if (this.valueButtons[value - 1].getEnabled()) {
 			if (this.valueButtons[value - 1].getChecked()) {

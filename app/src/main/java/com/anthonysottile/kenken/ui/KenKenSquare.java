@@ -18,7 +18,7 @@ public class KenKenSquare {
 		Selected
 	}
 
-	private UserSquare square = null;
+	private UserSquare square;
 	public UserSquare getUserSquare() {
 		return this.square;
 	}
@@ -123,7 +123,7 @@ public class KenKenSquare {
 	// #region Request Redraw Event
 
 	public interface RequestRedrawListener extends EventListener {
-		public void onRequestRedraw(EventObject event);
+		void onRequestRedraw(EventObject event);
 	}
 
 	private final List<RequestRedrawListener> requestRedrawListeners =

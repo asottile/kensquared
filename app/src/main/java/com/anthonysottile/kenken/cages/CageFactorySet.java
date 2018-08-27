@@ -6,12 +6,12 @@ import java.util.Random;
 public class CageFactorySet {
 
 	private class WeightedTuple {
-		private int weight = 0;
+		private int weight;
 		public int getWeight() {
 			return this.weight;
 		}
 
-		private ICageFactory factory = null;
+		private ICageFactory factory;
 		public ICageFactory getFactory() {
 			return this.factory;
 		}
@@ -24,11 +24,11 @@ public class CageFactorySet {
 
     private final Random random = new Random();
 
-    private WeightedTuple[] weightedCollection = null;
-    private int length = 0;
-    private int attempted = 0;
-    private int weightSum = 0;
-    private int weightLeft = 0;
+    private WeightedTuple[] weightedCollection;
+    private int length;
+    private int attempted;
+    private int weightSum;
+    private int weightLeft;
 
 	public CageFactorySet(ICageFactory[] factories, int[] weights) {
 		this.attempted = 0;

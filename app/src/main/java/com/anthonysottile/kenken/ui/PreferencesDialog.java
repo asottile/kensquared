@@ -24,7 +24,7 @@ public class PreferencesDialog extends Dialog {
 	private Spinner dropdown = null;
 
 	private static final LinearLayout.LayoutParams spacerViewLayoutParams =
-		new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, 1);
+		new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 1);
 	private View getSpacerView() {
 		View spacerView = new View(this.getContext());
         spacerView.setBackgroundColor(Color.LTGRAY);
@@ -37,7 +37,7 @@ public class PreferencesDialog extends Dialog {
 	 *
 	 * @param gameSize The gameSize to set.  Note: this should be between
 	 *                  {@link UIConstants#MinGameSize}
-	 *                  and {@link UIConstants.MaxGameSize}.
+	 *                  and {@link UIConstants#MaxGameSize}.
 	 */
 	public void SetSpinner(int gameSize) {
 		this.dropdown.setSelection(gameSize - UIConstants.MinGameSize);
@@ -156,7 +156,7 @@ public class PreferencesDialog extends Dialog {
 
         LinearLayout.LayoutParams rootLayout =
     		new LinearLayout.LayoutParams(
-				LayoutParams.FILL_PARENT,
+				LayoutParams.MATCH_PARENT,
 				LayoutParams.WRAP_CONTENT
 			);
 
@@ -171,7 +171,7 @@ public class PreferencesDialog extends Dialog {
         // Add game size
         root.addView(
     		gameSizeLayout,
-    		LayoutParams.FILL_PARENT,
+    		LayoutParams.MATCH_PARENT,
     		LayoutParams.WRAP_CONTENT
 		);
 
@@ -188,7 +188,7 @@ public class PreferencesDialog extends Dialog {
         // Add buttons
         LinearLayout.LayoutParams buttonsLayoutParams =
         	new LinearLayout.LayoutParams(
-    			LayoutParams.FILL_PARENT,
+    			LayoutParams.MATCH_PARENT,
     			LayoutParams.WRAP_CONTENT
 			);
         buttonsLayoutParams.setMargins(5, 25, 5, 5);

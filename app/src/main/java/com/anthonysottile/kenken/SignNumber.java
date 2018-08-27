@@ -17,12 +17,11 @@ public class SignNumber {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(this.number);
-		sb.append(' ');
-		sb.append(this.sign.toString());
-
-		return sb.toString();    }
+        return
+            String.valueOf(this.number) +
+            ' ' +
+            this.sign.toString();
+	}
 
 	public SignNumber(Sign sign, int number) {
 		this.sign = sign;

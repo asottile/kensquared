@@ -49,9 +49,9 @@ public class SquareDrawingDimensions {
 	private final int valueTextFontSize;
 	private int candidatesTextFontSize;
 
-	private Paint cageTextPaint = null;
-	private Paint valueTextPaint = null;
-	private Paint candidatesTextPaint = null;
+	private Paint cageTextPaint;
+	private Paint valueTextPaint;
+	private Paint candidatesTextPaint;
 
 
 	private int getLeft(int x) {

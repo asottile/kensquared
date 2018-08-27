@@ -28,7 +28,7 @@ public class CustomButton extends View {
 
 		private static final long serialVersionUID = 5703235645865455757L;
 
-		private boolean checked = false;
+		private boolean checked;
 		public boolean getChecked() {
 			return this.checked;
 		}
@@ -40,7 +40,7 @@ public class CustomButton extends View {
 	}
 	public interface CheckChangedListener extends EventListener {
 
-		public void onCheckChanged(CheckChangedEvent event);
+		void onCheckChanged(CheckChangedEvent event);
 	}
 	private final List<CheckChangedListener> checkChangedListeners =
 			new ArrayList<CheckChangedListener>();
@@ -66,7 +66,7 @@ public class CustomButton extends View {
 	// #region Click Event
 
 	public interface ClickListener extends EventListener {
-		public void onClick(EventObject event);
+		void onClick(EventObject event);
 	}
 
 	private final List<ClickListener> clickListeners = new ArrayList<ClickListener>();
@@ -188,18 +188,18 @@ public class CustomButton extends View {
 	private boolean isCheckable = false;
 
 	/**
-	 * Returns whether the button reacts to clicking by checking and unchecking.
+	 * Returns whether the button reacts to clicking by checking and un-checking.
 	 *
-	 * @return Whether the button reacts to clicking by checking and unchecking.
+	 * @return Whether the button reacts to clicking by checking and un-checking.
 	 */
 	public boolean getIsCheckable() {
 		return this.isCheckable;
 	}
 
 	/**
-	 * Sets whether the button reacts to clicking by checking and unchecking.
+	 * Sets whether the button reacts to clicking by checking and un-checking.
 	 *
-	 * @param isCheckable Whether the button reacts to clicking by checking and unchecking.
+	 * @param isCheckable Whether the button reacts to clicking by checking and un-checking.
 	 */
 	public void setIsCheckable(boolean isCheckable) {
 		this.isCheckable = isCheckable;
@@ -323,7 +323,8 @@ public class CustomButton extends View {
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
-        int width = -1, height = -1;
+        int width;
+        int height;
         if (widthMode == MeasureSpec.EXACTLY) {
         	width = widthSize;
         } else {

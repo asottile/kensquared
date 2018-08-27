@@ -40,14 +40,12 @@ public class GameWonDialog extends Dialog {
 		int minutes = (time / 60) % 60;
 		int hours = time / 3600;
 
-		StringBuilder builder = new StringBuilder();
-		builder.append(String.format("%02d", hours));
-		builder.append(':');
-		builder.append(String.format("%02d", minutes));
-		builder.append(':');
-		builder.append(String.format("%02d", seconds));
-
-		return builder.toString();
+        return
+            String.format("%02d", hours) +
+            ':' +
+            String.format("%02d", minutes) +
+            ':' +
+            String.format("%02d", seconds);
 	}
 
 	private static final LinearLayout.LayoutParams middleSpacer =
@@ -63,7 +61,7 @@ public class GameWonDialog extends Dialog {
 		);
 
 	private static final LinearLayout.LayoutParams spacerViewLayoutParams =
-		new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, 1);
+		new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 1);
 	private View getSpacerView() {
 		View spacerView = new View(this.getContext());
         spacerView.setBackgroundColor(Color.LTGRAY);
@@ -121,8 +119,8 @@ public class GameWonDialog extends Dialog {
 
         LinearLayout.LayoutParams rootLayout =
     		new LinearLayout.LayoutParams(
-				LayoutParams.FILL_PARENT,
-				LayoutParams.FILL_PARENT
+				LayoutParams.MATCH_PARENT,
+				LayoutParams.MATCH_PARENT
 			);
         LinearLayout root = new LinearLayout(context);
         root.setLayoutParams(rootLayout);
@@ -140,7 +138,7 @@ public class GameWonDialog extends Dialog {
     		0
 		);
 
-        root.addView(this.newHighScore, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        root.addView(this.newHighScore, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
         TextView winTimeLabel = new TextView(context);
         winTimeLabel.setText(context.getString(R.string.gameTime));
@@ -153,7 +151,7 @@ public class GameWonDialog extends Dialog {
         winTimeLayout.addView(new View(context), GameWonDialog.middleSpacer);
         winTimeLayout.addView(this.winTime,  GameWonDialog.wrapContent);
         winTimeLayout.addView(new View(context), GameWonDialog.rightPad);
-        root.addView(winTimeLayout, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        root.addView(winTimeLayout, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
         TextView winDateLabel = new TextView(context);
         winDateLabel.setText(context.getString(R.string.date));
@@ -166,7 +164,7 @@ public class GameWonDialog extends Dialog {
         winDateLayout.addView(new View(context), GameWonDialog.middleSpacer);
         winDateLayout.addView(this.winDate,  GameWonDialog.wrapContent);
         winDateLayout.addView(new View(context), GameWonDialog.rightPad);
-        root.addView(winDateLayout, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        root.addView(winDateLayout, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
         root.addView(this.getSpacerView());
 
@@ -181,7 +179,7 @@ public class GameWonDialog extends Dialog {
         gameSizeLayout.addView(new View(context), GameWonDialog.middleSpacer);
         gameSizeLayout.addView(this.gameSize,  GameWonDialog.wrapContent);
         gameSizeLayout.addView(new View(context), GameWonDialog.rightPad);
-        root.addView(gameSizeLayout, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        root.addView(gameSizeLayout, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
         TextView gamesPlayedLabel = new TextView(context);
         gamesPlayedLabel.setText(context.getString(R.string.gamesPlayed));
@@ -194,7 +192,7 @@ public class GameWonDialog extends Dialog {
         gamesPlayedLayout.addView(new View(context), GameWonDialog.middleSpacer);
         gamesPlayedLayout.addView(this.gamesPlayed,  GameWonDialog.wrapContent);
         gamesPlayedLayout.addView(new View(context), GameWonDialog.rightPad);
-        root.addView(gamesPlayedLayout, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        root.addView(gamesPlayedLayout, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
         TextView gamesWonLabel = new TextView(context);
         gamesWonLabel.setText(context.getString(R.string.gamesWon));
@@ -207,7 +205,7 @@ public class GameWonDialog extends Dialog {
         gamesWonLayout.addView(new View(context), GameWonDialog.middleSpacer);
         gamesWonLayout.addView(this.gamesWon, GameWonDialog.wrapContent);
         gamesWonLayout.addView(new View(context), GameWonDialog.rightPad);
-        root.addView(gamesWonLayout, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        root.addView(gamesWonLayout, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
         TextView averageTimeLabel = new TextView(context);
         averageTimeLabel.setText(context.getString(R.string.averageTime));
@@ -220,7 +218,7 @@ public class GameWonDialog extends Dialog {
         averageTimeLayout.addView(new View(context), GameWonDialog.middleSpacer);
         averageTimeLayout.addView(this.averageTime, GameWonDialog.wrapContent);
         averageTimeLayout.addView(new View(context), GameWonDialog.rightPad);
-        root.addView(averageTimeLayout, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        root.addView(averageTimeLayout, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
         TextView bestTimeLabel = new TextView(context);
         bestTimeLabel.setText(context.getString(R.string.bestTime));
@@ -233,7 +231,7 @@ public class GameWonDialog extends Dialog {
         bestTimeLayout.addView(new View(context), GameWonDialog.middleSpacer);
         bestTimeLayout.addView(this.bestTime, GameWonDialog.wrapContent);
         bestTimeLayout.addView(new View(context), GameWonDialog.rightPad);
-        root.addView(bestTimeLayout, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        root.addView(bestTimeLayout, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
         TextView bestTimeDateLabel = new TextView(context);
         bestTimeDateLabel.setText(context.getString(R.string.bestTimeDate));
@@ -246,7 +244,7 @@ public class GameWonDialog extends Dialog {
         bestTimeDateLayout.addView(new View(context), GameWonDialog.middleSpacer);
         bestTimeDateLayout.addView(this.bestTimeDate, GameWonDialog.wrapContent);
         bestTimeDateLayout.addView(new View(context), GameWonDialog.rightPad);
-        root.addView(bestTimeDateLayout, LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        root.addView(bestTimeDateLayout, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
         root.addView(this.getSpacerView());
 
@@ -281,7 +279,7 @@ public class GameWonDialog extends Dialog {
         // Add buttons
         LinearLayout.LayoutParams buttonsLayoutParams =
         	new LinearLayout.LayoutParams(
-    			LayoutParams.FILL_PARENT,
+    			LayoutParams.MATCH_PARENT,
     			LayoutParams.WRAP_CONTENT
 			);
         buttonsLayoutParams.setMargins(5, 25, 5, 5);

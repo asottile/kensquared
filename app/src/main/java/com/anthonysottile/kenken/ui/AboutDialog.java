@@ -22,7 +22,7 @@ public class AboutDialog extends Dialog {
 	}
 
 	private static final LinearLayout.LayoutParams spacerViewLayoutParams =
-		new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, 1);
+		new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 1);
 	private View getSpacerView() {
 		View spacerView = new View(this.getContext());
         spacerView.setBackgroundColor(Color.LTGRAY);
@@ -41,8 +41,8 @@ public class AboutDialog extends Dialog {
 
         LinearLayout.LayoutParams rootLayout =
     		new LinearLayout.LayoutParams(
-				LayoutParams.FILL_PARENT,
-				LayoutParams.FILL_PARENT
+				LayoutParams.MATCH_PARENT,
+				LayoutParams.MATCH_PARENT
 			);
         LinearLayout root = new LinearLayout(context);
         root.setLayoutParams(rootLayout);
@@ -51,23 +51,23 @@ public class AboutDialog extends Dialog {
         // Add a spacer at the top
         root.addView(this.getSpacerView());
 
-        StringBuilder appTextBuilder = new StringBuilder();
-        appTextBuilder.append(context.getString(R.string.app_name));
-        appTextBuilder.append(' ');
-        appTextBuilder.append(context.getString(R.string.byAuthor));
+        String appTextBuilder =
+            context.getString(R.string.app_name) +
+            ' ' +
+            context.getString(R.string.byAuthor);
 
         TextView appText = new TextView(context);
-        appText.setText(appTextBuilder.toString());
+        appText.setText(appTextBuilder);
         appText.setPadding(5, 5, 5, 5);
         root.addView(appText);
 
-        StringBuilder versionBuidler = new StringBuilder();
-        versionBuidler.append(context.getString(R.string.versionColon));
-        versionBuidler.append(' ');
-        versionBuidler.append(context.getString(R.string.version));
+        String versionBuilder =
+            context.getString(R.string.versionColon) +
+            ' ' +
+            context.getString(R.string.version);
 
         TextView versionText = new TextView(context);
-        versionText.setText(versionBuidler.toString());
+        versionText.setText(versionBuilder);
         versionText.setPadding(5, 5, 5, 5);
         root.addView(versionText);
 
@@ -116,7 +116,7 @@ public class AboutDialog extends Dialog {
         // Add buttons
         LinearLayout.LayoutParams buttonsLayoutParams =
         	new LinearLayout.LayoutParams(
-    			LayoutParams.FILL_PARENT,
+    			LayoutParams.MATCH_PARENT,
     			LayoutParams.WRAP_CONTENT
 			);
         buttonsLayoutParams.setMargins(5, 25, 5, 5);

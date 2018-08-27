@@ -16,7 +16,6 @@ public final class StatisticsManager {
 	private static GameStatistics[] statistics = null;
 
 	private static void saveGameStatistics() {
-
 		// Create JSON array
 		JSONArray array = new JSONArray();
 		try {
@@ -31,7 +30,7 @@ public final class StatisticsManager {
 			StatisticsManager.preferences.edit();
 
 		editor.putString(StatisticsManager.Statistics, array.toString());
-		editor.commit();
+		editor.apply();
 	}
 
 	private static void loadStatistics() {

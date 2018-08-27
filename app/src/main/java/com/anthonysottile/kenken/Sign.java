@@ -59,7 +59,7 @@ public enum Sign {
     	return this.s;
     }
 
-    private Sign(int n, String s) {
+    Sign(int n, String s) {
     	this.n = n;
     	this.s = s;
     }

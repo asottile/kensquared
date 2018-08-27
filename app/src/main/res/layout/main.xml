@@ -4,7 +4,8 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:baselineAligned="false" >
-    <com.anthonysottile.kenken.ui.CandidatesLayout
+
+    <com.anthonysottile.kenken.ui.CandidatesLayout
         android:id="@+id/candidatesLayout"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
@@ -28,10 +29,12 @@
         android:layout_height="wrap_content"
         android:layout_weight="0"
         android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:paddingTop="5dp"
-        android:textSize="15dp" />
+        android:textSize="15sp" />
 
-    <com.anthonysottile.kenken.ui.ValuesLayout
+
+    <com.anthonysottile.kenken.ui.ValuesLayout
         android:id="@+id/valuesLayout"
         android:layout_width="fill_parent"
         android:layout_height="50dp"

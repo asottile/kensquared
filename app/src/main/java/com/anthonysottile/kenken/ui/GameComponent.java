@@ -1,13 +1,5 @@
 package com.anthonysottile.kenken.ui;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.EventListener;
-import java.util.EventObject;
-import java.util.List;
-
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -29,6 +21,14 @@ import com.anthonysottile.kenken.settings.SettingsProvider;
 import com.anthonysottile.kenken.ui.KenKenSquare.SquareTouchState;
 import com.anthonysottile.kenken.ui.ValuesLayout.ValueEvent;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.EventListener;
+import java.util.EventObject;
+import java.util.List;
+
 public class GameComponent extends View {
 
 	public enum GameState {
@@ -36,7 +36,7 @@ public class GameComponent extends View {
 		InGame,
 		Paused,
 		Won
-	};
+	}
 
 	private final static int defaultSize = 100;
 
@@ -105,14 +105,14 @@ public class GameComponent extends View {
 		int minutes = tickSeconds / 60 % 60;
 		int hours = tickSeconds / 3600;
 
-		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("%02d", hours));
-		sb.append(':');
-		sb.append(String.format("%02d", minutes));
-		sb.append(':');
-		sb.append(String.format("%02d", seconds));
+		String sb =
+			String.format("%02d", hours) +
+			':' +
+			String.format("%02d", minutes) +
+			':' +
+			String.format("%02d", seconds);
 
-		this.timerText.setText(sb.toString());
+		this.timerText.setText(sb);
 	}
 
 	private boolean isGameWon() {
@@ -560,7 +560,8 @@ public class GameComponent extends View {
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
-        int width = -1, height = -1;
+        int width;
+		int height;
         if (widthMode == MeasureSpec.EXACTLY) {
         	width = widthSize;
         } else {
@@ -710,7 +711,7 @@ public class GameComponent extends View {
 		 *
 		 * @param event The event object of the Game Won event.
 		 */
-		public void onGameWon(GameWonEvent event);
+        void onGameWon(GameWonEvent event);
 	}
 
 	private final List<GameWonListener> gameWonListeners =

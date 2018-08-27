@@ -22,7 +22,7 @@ public final class SettingsProvider {
 	// #region Game Size Changed Event
 
 	public interface GameSizeChangedListener extends EventListener {
-		public void onGameSizeChanged(EventObject event);
+		void onGameSizeChanged(EventObject event);
 	}
 
 	private static List<GameSizeChangedListener> gameSizeChangedListeners =
@@ -62,7 +62,7 @@ public final class SettingsProvider {
 			SettingsProvider.gameSize = gameSize;
 			SharedPreferences.Editor editor = SettingsProvider.preferences.edit();
 			editor.putInt(SettingsProvider.GameSize, SettingsProvider.gameSize);
-			editor.commit();
+			editor.apply();
 
 			SettingsProvider.triggerGameSizeChanged();
 		}

@@ -35,8 +35,7 @@ public final class Points {
 	 * @return The sum of the two points.
 	 */
 	public static Point add(Point lhs, Point rhs) {
-		Point newPoint = new Point(lhs.x + rhs.x, lhs.y + rhs.y);
-		return newPoint;
+		return new Point(lhs.x + rhs.x, lhs.y + rhs.y);
 	}
 
 	/**
@@ -47,8 +46,7 @@ public final class Points {
 	 * @return A new point which is the result of the point multiplied by the scalar.
 	 */
 	public static Point multiply(int multiplier, Point p) {
-		Point newPoint = new Point(p.x * multiplier, p.y * multiplier);
-		return newPoint;
+		return new Point(p.x * multiplier, p.y * multiplier);
 	}
 
 	// #region JSON serialization

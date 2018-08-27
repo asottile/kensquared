@@ -91,7 +91,7 @@ public class UserSquare {
 	// #region UserSquareChanged Event
 
 	public interface UserSquareChangedListener {
-		public void onUserSquareChanged(EventObject event);
+		void onUserSquareChanged(EventObject event);
 	}
 	private final List<UserSquareChangedListener> changedHandlers =
 			new ArrayList<UserSquareChangedListener>();
@@ -141,7 +141,7 @@ public class UserSquare {
 		}
 	}
 	public interface ValueSetListener extends EventListener {
-		public void onValueSet(ValueSetEvent event);
+		void onValueSet(ValueSetEvent event);
 	}
 	private final List<ValueSetListener> valueSetListeners =
 			new ArrayList<ValueSetListener>();
