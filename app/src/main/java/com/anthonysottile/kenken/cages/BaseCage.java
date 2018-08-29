@@ -84,7 +84,7 @@ public abstract class BaseCage implements ICage {
             JSONArray renderLinesJson = new JSONArray();
             int size = this.renderLines.size();
             for (int i = 0; i < size; i += 1) {
-                renderLinesJson.put(i, this.renderLines.get(i).ToJson());
+                renderLinesJson.put(i, this.renderLines.get(i).toJson());
             }
 
             JSONArray squaresJson = new JSONArray();
