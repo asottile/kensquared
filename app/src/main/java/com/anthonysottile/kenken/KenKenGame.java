@@ -172,7 +172,7 @@ public class KenKenGame {
 
             json.put(KenKenGame.squaresWithValuesProperty, this.squaresWithValues);
             json.put(KenKenGame.gameTimeElapsedProperty, timeElapsed);
-            json.put(KenKenGame.latinSquareProperty, this.latinSquare.ToJson());
+            json.put(KenKenGame.latinSquareProperty, this.latinSquare.toJson());
             json.put(KenKenGame.cagesProperty, cagesJson);
             json.put(KenKenGame.userSquaresProperty, userSquaresJson);
 
