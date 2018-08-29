@@ -107,7 +107,7 @@ public class KenKenGame {
 
         for (int i = 0; i < order; i += 1) {
             for (int j = 0; j < order; j += 1) {
-                this.userSquares[i][j].AddValueSetListener(this.valueSetListener);
+                this.userSquares[i][j].addValueSetListener(this.valueSetListener);
             }
         }
     }
@@ -164,7 +164,7 @@ public class KenKenGame {
                 JSONArray innerArray = new JSONArray();
 
                 for (int j = 0; j < this.userSquares[i].length; j += 1) {
-                    innerArray.put(j, this.userSquares[i][j].ToJson());
+                    innerArray.put(j, this.userSquares[i][j].toJson());
                 }
 
                 userSquaresJson.put(i, innerArray);

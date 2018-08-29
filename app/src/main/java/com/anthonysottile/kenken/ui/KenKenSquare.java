@@ -95,13 +95,13 @@ public class KenKenSquare {
             // Display value
             dimensions.PaintValueText(
                     canvas,
-                    this.square.GetValueString(),
+                    Integer.toString(squareValue),
                     x,
                     y
             );
         } else {
             // Display candidates
-            String candidatesText = this.square.GetCandidatesString();
+            String candidatesText = this.square.getCandidatesString();
 
             // Only paint if there is a string there
             if (candidatesText.length() > 0) {
@@ -118,7 +118,7 @@ public class KenKenSquare {
     public KenKenSquare(UserSquare square) {
         this.square = square;
 
-        this.square.AddChangedEventHandler(new UserSquare.UserSquareChangedListener() {
+        this.square.addChangedEventHandler(new UserSquare.UserSquareChangedListener() {
             public void onUserSquareChanged(EventObject event) {
                 KenKenSquare.this.triggerRequestRedrawEvent();
             }

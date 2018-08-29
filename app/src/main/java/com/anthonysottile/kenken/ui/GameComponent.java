@@ -170,11 +170,11 @@ public class GameComponent extends View {
             for (int i = 0; i < order; i += 1) {
 
                 if (i != row) {
-                    userSquares[col][i].RemoveCandidate(value);
+                    userSquares[col][i].removeCandidate(value);
                 }
 
                 if (i != col) {
-                    userSquares[i][row].RemoveCandidate(value);
+                    userSquares[i][row].removeCandidate(value);
                 }
             }
 
@@ -397,7 +397,7 @@ public class GameComponent extends View {
             }
 
             if (this.selectedSquare != null) {
-                this.selectedSquare.getUserSquare().ClearValueSetListeners();
+                this.selectedSquare.getUserSquare().clearValueSetListeners();
             }
 
             this.gameTimer.removeCallbacks(this.updater);
@@ -432,7 +432,7 @@ public class GameComponent extends View {
                     public void onCandidateAdded(CandidatesLayout.CandidateEvent event) {
                         GameComponent.this.selectedSquare
                                 .getUserSquare()
-                                .AddCandidate(event.getCandidate());
+                                .addCandidate(event.getCandidate());
                     }
                 }
         );
@@ -442,7 +442,7 @@ public class GameComponent extends View {
                     public void onCandidateRemoved(CandidatesLayout.CandidateEvent event) {
                         GameComponent.this.selectedSquare
                                 .getUserSquare()
-                                .RemoveCandidate(event.getCandidate());
+                                .removeCandidate(event.getCandidate());
                     }
                 }
         );
@@ -529,12 +529,12 @@ public class GameComponent extends View {
                     // Then set the selected square and set the touched state
                     //  and rebind the event handler.
                     this.selectedSquare.setTouchState(SquareTouchState.None);
-                    this.selectedSquare.getUserSquare().RemoveValueSetListener(
+                    this.selectedSquare.getUserSquare().removeValueSetListener(
                             this.valueSetListener
                     );
                     this.selectedSquare = targetSquare;
                     this.selectedSquare.setTouchState(SquareTouchState.Selected);
-                    this.selectedSquare.getUserSquare().AddValueSetListener(
+                    this.selectedSquare.getUserSquare().addValueSetListener(
                             this.valueSetListener
                     );
 
