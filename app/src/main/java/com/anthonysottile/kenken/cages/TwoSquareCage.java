@@ -13,7 +13,7 @@ public class TwoSquareCage extends BaseCage {
 
         Point secondSquare;
         if (horizontal) {
-            secondSquare = Points.add(location, Points.Right);
+            secondSquare = Points.INSTANCE.add(location, Points.INSTANCE.getRight());
 
             // +---+---+
             // | X   2 |
@@ -22,10 +22,10 @@ public class TwoSquareCage extends BaseCage {
             // top, left, bottom, right
             this.renderLines.add(new RenderLine(location, 2, true));
             this.renderLines.add(new RenderLine(location, 1, false));
-            this.renderLines.add(new RenderLine(Points.add(location, Points.Down), 2, true));
-            this.renderLines.add(new RenderLine(Points.add(location, Points.multiply(2, Points.Right)), 1, false));
+            this.renderLines.add(new RenderLine(Points.INSTANCE.add(location, Points.INSTANCE.getDown()), 2, true));
+            this.renderLines.add(new RenderLine(Points.INSTANCE.add(location, Points.INSTANCE.multiply(2, Points.INSTANCE.getRight())), 1, false));
         } else {
-            secondSquare = Points.add(location, Points.Down);
+            secondSquare = Points.INSTANCE.add(location, Points.INSTANCE.getDown());
 
             // +---+
             // | X |
@@ -36,8 +36,8 @@ public class TwoSquareCage extends BaseCage {
             // top, left, bottom, right
             this.renderLines.add(new RenderLine(location, 1, true));
             this.renderLines.add(new RenderLine(location, 2, false));
-            this.renderLines.add(new RenderLine(Points.add(location, Points.multiply(2, Points.Down)), 1, true));
-            this.renderLines.add(new RenderLine(Points.add(location, Points.Right), 2, false));
+            this.renderLines.add(new RenderLine(Points.INSTANCE.add(location, Points.INSTANCE.multiply(2, Points.INSTANCE.getDown())), 1, true));
+            this.renderLines.add(new RenderLine(Points.INSTANCE.add(location, Points.INSTANCE.getRight()), 2, false));
         }
 
         // set all the squares as occupied

@@ -18,8 +18,8 @@ public class OneSquareCage extends BaseCage {
         // top, left, bottom, right
         this.renderLines.add(new RenderLine(location, 1, true));
         this.renderLines.add(new RenderLine(location, 1, false));
-        this.renderLines.add(new RenderLine(Points.add(location, Points.Down), 1, true));
-        this.renderLines.add(new RenderLine(Points.add(location, Points.Right), 1, false));
+        this.renderLines.add(new RenderLine(Points.INSTANCE.add(location, Points.INSTANCE.getDown()), 1, true));
+        this.renderLines.add(new RenderLine(Points.INSTANCE.add(location, Points.INSTANCE.getRight()), 1, false));
 
         this.squares.add(location);
 

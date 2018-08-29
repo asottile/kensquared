@@ -90,13 +90,13 @@ public abstract class BaseCage implements ICage {
             JSONArray squaresJson = new JSONArray();
             int squaresSize = this.squares.size();
             for (int i = 0; i < squaresSize; i += 1) {
-                squaresJson.put(i, Points.ToJson(this.squares.get(i)));
+                squaresJson.put(i, Points.INSTANCE.toJson(this.squares.get(i)));
             }
 
             json.put(BaseCage.signNumberProperty, this.signNumber.toJson());
             json.put(BaseCage.renderLinesProperty, renderLinesJson);
             json.put(BaseCage.squaresProperty, squaresJson);
-            json.put(BaseCage.signLocationProperty, Points.ToJson(this.signLocation));
+            json.put(BaseCage.signLocationProperty, Points.INSTANCE.toJson(this.signLocation));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -127,7 +127,7 @@ public abstract class BaseCage implements ICage {
                 int squaresLength = squaresJson.length();
                 for (int i = 0; i < squaresLength; i += 1) {
                     Point point =
-                            Points.ToPoint(squaresJson.getJSONObject(i));
+                            Points.INSTANCE.toPoint(squaresJson.getJSONObject(i));
                     this.squares.add(point);
                 }
 
@@ -136,7 +136,7 @@ public abstract class BaseCage implements ICage {
                                 json.getJSONObject(BaseCage.signNumberProperty)
                         );
                 this.signLocation =
-                        Points.ToPoint(
+                        Points.INSTANCE.toPoint(
                                 json.getJSONObject(BaseCage.signLocationProperty)
                         );
             } catch (JSONException e) {

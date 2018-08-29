@@ -18,7 +18,7 @@ public class TwoSquareHorizontalFactory implements ICageFactory {
     }
 
     public boolean CanFit(KenKenGame game, Point location) {
-        Point secondSquare = Points.add(location, Points.Right);
+        Point secondSquare = Points.INSTANCE.add(location, Points.INSTANCE.getRight());
 
         return
                 game.squareIsValid(location) &&

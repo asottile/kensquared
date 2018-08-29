@@ -14,8 +14,8 @@ public class ThreeSquareBentCage extends BaseCage {
         Point thirdSquare;
         if (up) {
             if (left) {
-                secondSquare = Points.add(location, Points.Right);
-                thirdSquare = Points.add(location, Points.Down);
+                secondSquare = Points.INSTANCE.add(location, Points.INSTANCE.getRight());
+                thirdSquare = Points.INSTANCE.add(location, Points.INSTANCE.getDown());
 
                 // +---+---+
                 // | X | 2 |
@@ -27,20 +27,20 @@ public class ThreeSquareBentCage extends BaseCage {
                 this.renderLines.add(new RenderLine(location, 2, true));
                 this.renderLines.add(new RenderLine(location, 2, false));
                 this.renderLines.add(
-                        new RenderLine(Points.add(location, Points.multiply(2, Points.Down)), 1, true)
+                        new RenderLine(Points.INSTANCE.add(location, Points.INSTANCE.multiply(2, Points.INSTANCE.getDown())), 1, true)
                 );
                 this.renderLines.add(
-                        new RenderLine(Points.add(location, Points.multiply(2, Points.Right)), 1, false)
+                        new RenderLine(Points.INSTANCE.add(location, Points.INSTANCE.multiply(2, Points.INSTANCE.getRight())), 1, false)
                 );
                 this.renderLines.add(
-                        new RenderLine(Points.add(Points.add(location, Points.Down), Points.Right), 1, true)
+                        new RenderLine(Points.INSTANCE.add(Points.INSTANCE.add(location, Points.INSTANCE.getDown()), Points.INSTANCE.getRight()), 1, true)
                 );
                 this.renderLines.add(
-                        new RenderLine(Points.add(Points.add(location, Points.Down), Points.Right), 1, false)
+                        new RenderLine(Points.INSTANCE.add(Points.INSTANCE.add(location, Points.INSTANCE.getDown()), Points.INSTANCE.getRight()), 1, false)
                 );
             } else {
-                secondSquare = Points.add(location, Points.Right);
-                thirdSquare = Points.add(secondSquare, Points.Down);
+                secondSquare = Points.INSTANCE.add(location, Points.INSTANCE.getRight());
+                thirdSquare = Points.INSTANCE.add(secondSquare, Points.INSTANCE.getDown());
 
                 // +---+---+
                 // | X | 2 |
@@ -53,24 +53,24 @@ public class ThreeSquareBentCage extends BaseCage {
                 this.renderLines.add(new RenderLine(location, 1, false));
                 this.renderLines.add(
                         new RenderLine(
-                                Points.add(Points.add(location, Points.multiply(2, Points.Down)), Points.Right),
+                                Points.INSTANCE.add(Points.INSTANCE.add(location, Points.INSTANCE.multiply(2, Points.INSTANCE.getDown())), Points.INSTANCE.getRight()),
                                 1, true
                         )
                 );
                 this.renderLines.add(
-                        new RenderLine(Points.add(location, Points.multiply(2, Points.Right)), 2, false)
+                        new RenderLine(Points.INSTANCE.add(location, Points.INSTANCE.multiply(2, Points.INSTANCE.getRight())), 2, false)
                 );
                 this.renderLines.add(
-                        new RenderLine(Points.add(location, Points.Down), 1, true)
+                        new RenderLine(Points.INSTANCE.add(location, Points.INSTANCE.getDown()), 1, true)
                 );
                 this.renderLines.add(
-                        new RenderLine(Points.add(Points.add(location, Points.Down), Points.Right), 1, false)
+                        new RenderLine(Points.INSTANCE.add(Points.INSTANCE.add(location, Points.INSTANCE.getDown()), Points.INSTANCE.getRight()), 1, false)
                 );
             }
         } else {
             if (left) {
-                secondSquare = Points.add(location, Points.Down);
-                thirdSquare = Points.add(secondSquare, Points.Right);
+                secondSquare = Points.INSTANCE.add(location, Points.INSTANCE.getDown());
+                thirdSquare = Points.INSTANCE.add(secondSquare, Points.INSTANCE.getRight());
 
                 // +---+
                 // | X |
@@ -82,23 +82,23 @@ public class ThreeSquareBentCage extends BaseCage {
                 this.renderLines.add(new RenderLine(location, 1, true));
                 this.renderLines.add(new RenderLine(location, 2, false));
                 this.renderLines.add(
-                        new RenderLine(Points.add(location, Points.multiply(2, Points.Down)), 2, true)
+                        new RenderLine(Points.INSTANCE.add(location, Points.INSTANCE.multiply(2, Points.INSTANCE.getDown())), 2, true)
                 );
                 this.renderLines.add(
                         new RenderLine(
-                                Points.add(Points.add(location, Points.multiply(2, Points.Right)), Points.Down),
+                                Points.INSTANCE.add(Points.INSTANCE.add(location, Points.INSTANCE.multiply(2, Points.INSTANCE.getRight())), Points.INSTANCE.getDown()),
                                 1, false
                         )
                 );
                 this.renderLines.add(
-                        new RenderLine(Points.add(location, Points.Right), 1, false)
+                        new RenderLine(Points.INSTANCE.add(location, Points.INSTANCE.getRight()), 1, false)
                 );
                 this.renderLines.add(
-                        new RenderLine(Points.add(Points.add(location, Points.Right), Points.Down), 1, true)
+                        new RenderLine(Points.INSTANCE.add(Points.INSTANCE.add(location, Points.INSTANCE.getRight()), Points.INSTANCE.getDown()), 1, true)
                 );
             } else {
-                secondSquare = Points.add(location, Points.Down);
-                thirdSquare = Points.add(secondSquare, Points.Left);
+                secondSquare = Points.INSTANCE.add(location, Points.INSTANCE.getDown());
+                thirdSquare = Points.INSTANCE.add(secondSquare, Points.INSTANCE.getLeft());
 
                 //     +---+
                 //     | X |
@@ -109,16 +109,16 @@ public class ThreeSquareBentCage extends BaseCage {
                 // top, inner left, right, inner top, left, bottom
                 this.renderLines.add(new RenderLine(location, 1, true));
                 this.renderLines.add(new RenderLine(location, 1, false));
-                this.renderLines.add(new RenderLine(Points.add(location, Points.Right), 2, false));
+                this.renderLines.add(new RenderLine(Points.INSTANCE.add(location, Points.INSTANCE.getRight()), 2, false));
                 this.renderLines.add(
-                        new RenderLine(Points.add(Points.add(location, Points.Down), Points.Left), 1, true)
+                        new RenderLine(Points.INSTANCE.add(Points.INSTANCE.add(location, Points.INSTANCE.getDown()), Points.INSTANCE.getLeft()), 1, true)
                 );
                 this.renderLines.add(
-                        new RenderLine(Points.add(Points.add(location, Points.Down), Points.Left), 1, false)
+                        new RenderLine(Points.INSTANCE.add(Points.INSTANCE.add(location, Points.INSTANCE.getDown()), Points.INSTANCE.getLeft()), 1, false)
                 );
                 this.renderLines.add(
                         new RenderLine(
-                                Points.add(Points.add(location, Points.multiply(2, Points.Down)), Points.Left),
+                                Points.INSTANCE.add(Points.INSTANCE.add(location, Points.INSTANCE.multiply(2, Points.INSTANCE.getDown())), Points.INSTANCE.getLeft()),
                                 2, true
                         )
                 );

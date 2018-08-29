@@ -18,7 +18,7 @@ public class TwoSquareVerticalFactory implements ICageFactory {
     }
 
     public boolean CanFit(KenKenGame game, Point location) {
-        Point secondSquare = Points.add(location, Points.Down);
+        Point secondSquare = Points.INSTANCE.add(location, Points.INSTANCE.getDown());
 
         return
                 game.squareIsValid(location) &&

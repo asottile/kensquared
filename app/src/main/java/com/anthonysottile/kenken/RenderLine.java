@@ -40,7 +40,7 @@ public class RenderLine {
     public RenderLine(JSONObject json) {
 
         try {
-            this.position = Points.ToPoint(json.getJSONObject(RenderLine.positionProperty));
+            this.position = Points.INSTANCE.toPoint(json.getJSONObject(RenderLine.positionProperty));
             this.length = json.getInt(RenderLine.lengthProperty);
             this.horizontal = json.getBoolean(RenderLine.horizontalProperty);
         } catch (JSONException e) {
@@ -52,7 +52,7 @@ public class RenderLine {
         JSONObject json = new JSONObject();
 
         try {
-            json.put(RenderLine.positionProperty, Points.ToJson(this.position));
+            json.put(RenderLine.positionProperty, Points.INSTANCE.toJson(this.position));
             json.put(RenderLine.lengthProperty, this.length);
             json.put(RenderLine.horizontalProperty, this.horizontal);
         } catch (JSONException e) {

@@ -14,8 +14,8 @@ public class ThreeSquareLineCage extends BaseCage {
         Point secondSquare;
         Point thirdSquare;
         if (horizontal) {
-            secondSquare = Points.add(location, Points.Right);
-            thirdSquare = Points.add(secondSquare, Points.Right);
+            secondSquare = Points.INSTANCE.add(location, Points.INSTANCE.getRight());
+            thirdSquare = Points.INSTANCE.add(secondSquare, Points.INSTANCE.getRight());
 
             // +---+---+---+
             // | X | 2 | 3 |
@@ -24,13 +24,13 @@ public class ThreeSquareLineCage extends BaseCage {
             // top, left, bottom, right
             this.renderLines.add(new RenderLine(location, 3, true));
             this.renderLines.add(new RenderLine(location, 1, false));
-            this.renderLines.add(new RenderLine(Points.add(location, Points.Down), 3, true));
+            this.renderLines.add(new RenderLine(Points.INSTANCE.add(location, Points.INSTANCE.getDown()), 3, true));
             this.renderLines.add(
-                    new RenderLine(Points.add(location, Points.multiply(3, Points.Right)), 1, false)
+                    new RenderLine(Points.INSTANCE.add(location, Points.INSTANCE.multiply(3, Points.INSTANCE.getRight())), 1, false)
             );
         } else {
-            secondSquare = Points.add(location, Points.Down);
-            thirdSquare = Points.add(secondSquare, Points.Down);
+            secondSquare = Points.INSTANCE.add(location, Points.INSTANCE.getDown());
+            thirdSquare = Points.INSTANCE.add(secondSquare, Points.INSTANCE.getDown());
 
             // +---+
             // | X |
@@ -44,9 +44,9 @@ public class ThreeSquareLineCage extends BaseCage {
             this.renderLines.add(new RenderLine(location, 1, true));
             this.renderLines.add(new RenderLine(location, 3, false));
             this.renderLines.add(
-                    new RenderLine(Points.add(location, Points.multiply(3, Points.Down)), 1, true)
+                    new RenderLine(Points.INSTANCE.add(location, Points.INSTANCE.multiply(3, Points.INSTANCE.getDown())), 1, true)
             );
-            this.renderLines.add(new RenderLine(Points.add(location, Points.Right), 3, false));
+            this.renderLines.add(new RenderLine(Points.INSTANCE.add(location, Points.INSTANCE.getRight()), 3, false));
         }
 
         game.setOccupied(location);

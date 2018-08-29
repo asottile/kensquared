@@ -18,8 +18,8 @@ public class ThreeSquareDownRightFactory implements ICageFactory {
     }
 
     public boolean CanFit(KenKenGame game, Point location) {
-        Point secondSquare = Points.add(location, Points.Down);
-        Point thirdSquare = Points.add(secondSquare, Points.Left);
+        Point secondSquare = Points.INSTANCE.add(location, Points.INSTANCE.getDown());
+        Point thirdSquare = Points.INSTANCE.add(secondSquare, Points.INSTANCE.getLeft());
 
         return
                 game.squareIsValid(location) &&

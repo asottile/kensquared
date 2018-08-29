@@ -25,7 +25,7 @@ public class PointsTests extends TestCase {
 
     public void testAddPositive() {
         // Get result point and assert its value
-        Point resultPoint = Points.add(point, point2);
+        Point resultPoint = Points.INSTANCE.add(point, point2);
         assertEquals(startPointX + startPoint2X, resultPoint.x);
         assertEquals(startPointY + startPoint2Y, resultPoint.y);
 
@@ -38,7 +38,7 @@ public class PointsTests extends TestCase {
 
     public void testAddNegative() {
         // Get result point and assert its value
-        Point resultPoint2 = Points.add(point, point3);
+        Point resultPoint2 = Points.INSTANCE.add(point, point3);
         assertEquals(startPointX + startPoint3X, resultPoint2.x);
         assertEquals(startPointY + startPoint3Y, resultPoint2.y);
 
@@ -51,7 +51,7 @@ public class PointsTests extends TestCase {
 
     public void testMultiplyIdentity() {
         // Multiply and check
-        Point resultPoint3 = Points.multiply(1, point);
+        Point resultPoint3 = Points.INSTANCE.multiply(1, point);
         assertEquals(startPointX, resultPoint3.x);
         assertEquals(startPointY, resultPoint3.y);
 
@@ -62,7 +62,7 @@ public class PointsTests extends TestCase {
 
     public void testMultiplyNegative() {
         // Multiply and check
-        Point resultPoint2 = Points.multiply(-1, point);
+        Point resultPoint2 = Points.INSTANCE.multiply(-1, point);
         assertEquals(-1 * startPointX, resultPoint2.x);
         assertEquals(-1 * startPointY, resultPoint2.y);
 
@@ -73,7 +73,7 @@ public class PointsTests extends TestCase {
 
     public void testMultiplyZero() {
         // Multiply and check
-        Point resultPoint4 = Points.multiply(0, point);
+        Point resultPoint4 = Points.INSTANCE.multiply(0, point);
         assertEquals(0, resultPoint4.x);
         assertEquals(0, resultPoint4.y);
 
@@ -84,7 +84,7 @@ public class PointsTests extends TestCase {
 
     public void testMultiplyScalar() {
         // Multiply and check
-        Point resultPoint5 = Points.multiply(2, point);
+        Point resultPoint5 = Points.INSTANCE.multiply(2, point);
         assertEquals(2 * startPointX, resultPoint5.x);
         assertEquals(2 * startPointY, resultPoint5.y);
 
@@ -95,7 +95,7 @@ public class PointsTests extends TestCase {
 
     public void testToJSON() {
 
-        JSONObject json = Points.ToJson(point);
+        JSONObject json = Points.INSTANCE.toJson(point);
 
         try {
             assertEquals(json.getInt("X"), startPointX);
@@ -116,7 +116,7 @@ public class PointsTests extends TestCase {
             fail("JSON Problem");
         }
 
-        Point p = Points.ToPoint(json);
+        Point p = Points.INSTANCE.toPoint(json);
         assertEquals(p.x, startPointX);
         assertEquals(p.y, startPointY);
     }
