@@ -30,16 +30,16 @@ public class LatinSquare {
         // Retrieve the base list
         int[] baseList = new int[order];
         for (int i = 0; i < order; i += 1) {
-            baseList[i] = picker.GetNext();
+            baseList[i] = picker.getNext();
         }
 
         // Generate the rows
         // Rows is indexed [row][column]
         int[][] rows = new int[order][];
-        picker.Reset();
+        picker.reset();
         for (int i = 0; i < order; i += 1) {
             int[] list = new int[order];
-            int shift = picker.GetNext() - 1;
+            int shift = picker.getNext() - 1;
             for (int j = 0; j < order; j += 1) {
                 // To shift the index correctly
                 int index = (j + shift) % order;
@@ -63,8 +63,8 @@ public class LatinSquare {
         // Swap a column with its next column
         // This needs to be a single swap with a column next to it
         //  otherwise the original ordering property is restored :(
-        picker.Reset();
-        int columnIndex = picker.GetNext() - 1;
+        picker.reset();
+        int columnIndex = picker.getNext() - 1;
         int columnIndexNext = (columnIndex + 1) % order;
 
         int[] tempColumn = columns[columnIndex];
@@ -72,9 +72,9 @@ public class LatinSquare {
         columns[columnIndexNext] = tempColumn;
 
         // Rotate the square once more and "shuffle" rows
-        picker.Reset();
+        picker.reset();
         for (int i = 0; i < order; i += 1) {
-            int row = picker.GetNext() - 1;
+            int row = picker.getNext() - 1;
             int[] list = new int[order];
             for (int j = 0; j < order; j += 1) {
                 list[j] = columns[j][row];

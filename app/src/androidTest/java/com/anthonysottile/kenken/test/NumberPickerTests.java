@@ -18,30 +18,30 @@ public class NumberPickerTests extends TestCase {
     @Test
     public void testGetRemaining() {
 
-        // Reset the number picker before the test
-        this.numberPicker.Reset();
+        // reset the number picker before the test
+        this.numberPicker.reset();
 
         // Since the number picker was instantiated with the test size
-        assertEquals(NumberPickerSize, numberPicker.GetRemaining());
+        assertEquals(NumberPickerSize, numberPicker.getRemaining());
 
         // Test the entire size
         for (int i = 1; i <= NumberPickerSize; i += 1) {
-            numberPicker.GetNext();
-            assertEquals(NumberPickerSize - i, numberPicker.GetRemaining());
+            numberPicker.getNext();
+            assertEquals(NumberPickerSize - i, numberPicker.getRemaining());
         }
     }
 
     @Test
     public void testGetNext() {
 
-        // Reset the number picker before the test
-        this.numberPicker.Reset();
+        // reset the number picker before the test
+        this.numberPicker.reset();
 
         // Instantiate a set to track the integers we receive
         Set<Integer> receivedIntegers = new HashSet<Integer>();
 
         for (int i = 0; i < NumberPickerSize; i += 1) {
-            int receivedInteger = this.numberPicker.GetNext();
+            int receivedInteger = this.numberPicker.getNext();
 
             // Assert that the integer we got out is in the correct range
             assert (receivedInteger > 0 && receivedInteger <= NumberPickerSize);
@@ -51,25 +51,25 @@ public class NumberPickerTests extends TestCase {
         }
 
         // Make sure that the numberPicker throws an exception when empty
-        assertEquals(-1, this.numberPicker.GetNext());
+        assertEquals(-1, this.numberPicker.getNext());
     }
 
     @Test
     public void testReset() {
 
-        // Reset before the test...
-        this.numberPicker.Reset();
+        // reset before the test...
+        this.numberPicker.reset();
 
         // After the first reset the number should be equal to size.
-        assertEquals(NumberPickerSize, this.numberPicker.GetRemaining());
+        assertEquals(NumberPickerSize, this.numberPicker.getRemaining());
 
         // Eat two numbers
-        numberPicker.GetNext();
-        numberPicker.GetNext();
+        numberPicker.getNext();
+        numberPicker.getNext();
 
         // reset and check
-        this.numberPicker.Reset();
-        assertEquals(NumberPickerSize, this.numberPicker.GetRemaining());
+        this.numberPicker.reset();
+        assertEquals(NumberPickerSize, this.numberPicker.getRemaining());
     }
 
     @Test
@@ -77,7 +77,7 @@ public class NumberPickerTests extends TestCase {
         // Tests for the constructor
         for (int i = 1; i < 5; i += 1) {
             NumberPicker picker = new NumberPicker(i);
-            assertEquals(i, picker.GetRemaining());
+            assertEquals(i, picker.getRemaining());
         }
     }
 }
