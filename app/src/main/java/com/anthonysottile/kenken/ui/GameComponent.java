@@ -257,7 +257,7 @@ public class GameComponent extends View {
         if (this.gameState == GameState.Paused) {
 
             // UnPause game
-            this.game.ResetGameStartTime(this.pausedTime);
+            this.game.resetGameStartTime(this.pausedTime);
 
             this.gameState = GameState.InGame;
             this.setFromSquare();
@@ -284,7 +284,7 @@ public class GameComponent extends View {
     public void Check() {
 
         // Penalize the game playing time by 15 seconds
-        this.game.PenalizeGameStartTime(15000);
+        this.game.penalizeGameStartTime(15000);
         this.updateTime();
 
         LatinSquare latinSquare = this.game.getLatinSquare();
@@ -355,10 +355,10 @@ public class GameComponent extends View {
 
         // If we are paused, we want to set the correct time before saving it out.
         if (this.gameState == GameState.Paused) {
-            this.game.ResetGameStartTime(this.pausedTime);
+            this.game.resetGameStartTime(this.pausedTime);
         }
 
-        JSONObject gameAsJson = this.game.ToJson();
+        JSONObject gameAsJson = this.game.toJson();
 
         this.PauseIfNotPaused();
 
