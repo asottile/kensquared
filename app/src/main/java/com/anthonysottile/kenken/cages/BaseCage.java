@@ -93,7 +93,7 @@ public abstract class BaseCage implements ICage {
                 squaresJson.put(i, Points.ToJson(this.squares.get(i)));
             }
 
-            json.put(BaseCage.signNumberProperty, this.signNumber.ToJson());
+            json.put(BaseCage.signNumberProperty, this.signNumber.toJson());
             json.put(BaseCage.renderLinesProperty, renderLinesJson);
             json.put(BaseCage.squaresProperty, squaresJson);
             json.put(BaseCage.signLocationProperty, Points.ToJson(this.signLocation));

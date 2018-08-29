@@ -58,7 +58,7 @@ public class SignNumberTests extends TestCase {
     public void testToJson() {
         SignNumber test = new SignNumber(Sign.Add, 15);
 
-        JSONObject json = test.ToJson();
+        JSONObject json = test.toJson();
 
         try {
             assertEquals(json.getInt("Sign"), Sign.Add.getIntValue());
