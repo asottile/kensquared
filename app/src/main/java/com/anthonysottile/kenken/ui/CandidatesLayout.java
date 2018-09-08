@@ -7,7 +7,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.anthonysottile.kenken.R;
-import com.anthonysottile.kenken.ui.CustomButton.CheckChangedEvent;
 
 import java.util.ArrayList;
 import java.util.EventListener;
@@ -32,13 +31,13 @@ public class CandidatesLayout extends LinearLayout {
             );
 
     public class CandidateEvent extends EventObject {
-        private int candidate;
+        private final int candidate;
 
         public int getCandidate() {
             return this.candidate;
         }
 
-        public CandidateEvent(Object object, int candidate) {
+        CandidateEvent(Object object, int candidate) {
             super(object);
             this.candidate = candidate;
         }
@@ -53,7 +52,7 @@ public class CandidatesLayout extends LinearLayout {
     }
 
     private final List<CandidateAddedListener> candidateAddedListeners =
-            new ArrayList<CandidateAddedListener>();
+            new ArrayList<>();
 
     public void AddCandidateAddedListener(CandidateAddedListener listener) {
         this.candidateAddedListeners.add(listener);
@@ -69,7 +68,7 @@ public class CandidatesLayout extends LinearLayout {
     }
 
     private final List<CandidateRemovedListener> candidateRemovedListeners =
-            new ArrayList<CandidateRemovedListener>();
+            new ArrayList<>();
 
     public void AddCandidateRemovedListener(CandidateRemovedListener listener) {
         this.candidateRemovedListeners.add(listener);
@@ -202,14 +201,8 @@ public class CandidatesLayout extends LinearLayout {
      * Clears the candidates control removing all ui elements.
      */
     public void Clear() {
-        // Remove candidate views if they are there
         if (this.candidates != null) {
             this.removeAllViews();
-
-            for (CustomButton candidate : this.candidates) {
-                candidate.ClearCheckChangedListeners();
-            }
-
             this.candidates = null;
         }
     }

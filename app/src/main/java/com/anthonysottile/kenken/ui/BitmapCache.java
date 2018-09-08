@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory;
 
 import com.anthonysottile.kenken.R;
 
-public final class BitmapCache {
+final class BitmapCache {
 
     private static Resources resources = null;
 

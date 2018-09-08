@@ -13,8 +13,6 @@ public final class UIConstants {
 
     public static final int StatisticsOneIndent = 20;
 
-    public static final int CandidatesTextColor = Color.rgb(0x77, 0x77, 0x77);
-
     private static Paint gridColor = null;
 
     public static Paint GetGridColor() {

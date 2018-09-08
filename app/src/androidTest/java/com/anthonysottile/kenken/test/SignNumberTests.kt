@@ -2,10 +2,7 @@ package com.anthonysottile.kenken.test
 
 import com.anthonysottile.kenken.Sign
 import com.anthonysottile.kenken.SignNumber
-
 import junit.framework.TestCase
-
-import org.json.JSONException
 import org.json.JSONObject
 
 class SignNumberTests : TestCase() {

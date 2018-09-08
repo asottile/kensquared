@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class GameWonDialog extends Dialog {
+class GameWonDialog extends Dialog {
 
     private TextView newHighScore = null;
     private TextView winTime = null;
@@ -253,11 +253,7 @@ public class GameWonDialog extends Dialog {
         // On click of the OK button the dialog exits
         Button okButton = new Button(context);
         okButton.setText(context.getString(R.string.ok));
-        okButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                GameWonDialog.this.dismiss();
-            }
-        });
+        okButton.setOnClickListener(v -> GameWonDialog.this.dismiss());
 
         LinearLayout buttonsLayout = new LinearLayout(context);
         buttonsLayout.addView(

@@ -3,22 +3,22 @@ package com.anthonysottile.kenken.cages;
 import java.util.Random;
 
 
-public class CageFactorySet {
+class CageFactorySet {
 
     private class WeightedTuple {
-        private int weight;
+        private final int weight;
 
-        public int getWeight() {
+        int getWeight() {
             return this.weight;
         }
 
-        private ICageFactory factory;
+        private final ICageFactory factory;
 
-        public ICageFactory getFactory() {
+        ICageFactory getFactory() {
             return this.factory;
         }
 
-        public WeightedTuple(int weight, ICageFactory factory) {
+        WeightedTuple(int weight, ICageFactory factory) {
             this.weight = weight;
             this.factory = factory;
         }
@@ -26,10 +26,10 @@ public class CageFactorySet {
 
     private final Random random = new Random();
 
-    private WeightedTuple[] weightedCollection;
-    private int length;
+    private final WeightedTuple[] weightedCollection;
+    private final int length;
     private int attempted;
-    private int weightSum;
+    private final int weightSum;
     private int weightLeft;
 
     public CageFactorySet(ICageFactory[] factories, int[] weights) {

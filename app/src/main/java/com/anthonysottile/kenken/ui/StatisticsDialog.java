@@ -3,7 +3,6 @@ package com.anthonysottile.kenken.ui;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -23,7 +22,7 @@ import com.anthonysottile.kenken.settings.StatisticsManager;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-public class StatisticsDialog extends Dialog {
+class StatisticsDialog extends Dialog {
 
     private static final String[] GameSizes = {
             "4", "5", "6", "7", "8", "9"
@@ -151,7 +150,7 @@ public class StatisticsDialog extends Dialog {
         // Game Size dropdown
         this.dropdown = new Spinner(context);
         ArrayAdapter<String> spinnerAdapter =
-                new ArrayAdapter<String>(
+                new ArrayAdapter<>(
                         context,
                         android.R.layout.simple_spinner_item,
                         StatisticsDialog.GameSizes
@@ -269,35 +268,23 @@ public class StatisticsDialog extends Dialog {
         // On click of the OK button the dialog exits
         Button okButton = new Button(context);
         okButton.setText(context.getString(R.string.ok));
-        okButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                StatisticsDialog.this.dismiss();
-            }
-        });
+        okButton.setOnClickListener(v -> StatisticsDialog.this.dismiss());
 
         // Cancel button
         // Doesn't set the changed value here.
         Button clearButton = new Button(context);
         clearButton.setText(R.string.clear);
-        clearButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(StatisticsDialog.this.getContext());
-                builder.setMessage(R.string.confirmClear)
-                        .setCancelable(false)
-                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                StatisticsDialog.this.clearStatistics();
-                                dialog.dismiss();
-                            }
-                        })
-                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.dismiss();
-                            }
-                        });
-                AlertDialog alert = builder.create();
-                alert.show();
-            }
+        clearButton.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(StatisticsDialog.this.getContext());
+            builder.setMessage(R.string.confirmClear)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.yes, (dialog, id) -> {
+                        StatisticsDialog.this.clearStatistics();
+                        dialog.dismiss();
+                    })
+                    .setNegativeButton(R.string.no, (dialog, id) -> dialog.dismiss());
+            AlertDialog alert = builder.create();
+            alert.show();
         });
 
         // Layout for the OK and Clear buttons

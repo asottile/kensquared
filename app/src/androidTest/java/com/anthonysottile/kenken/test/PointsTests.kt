@@ -1,12 +1,8 @@
 package com.anthonysottile.kenken.test
 
 import android.graphics.Point
-
 import com.anthonysottile.kenken.Points
-
 import junit.framework.TestCase
-
-import org.json.JSONException
 import org.json.JSONObject
 
 class PointsTests : TestCase() {

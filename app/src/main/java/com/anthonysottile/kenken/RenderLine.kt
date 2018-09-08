@@ -1,8 +1,6 @@
 package com.anthonysottile.kenken
 
 import android.graphics.Point
-
-import org.json.JSONException
 import org.json.JSONObject
 
 class RenderLine {
@@ -25,7 +23,7 @@ class RenderLine {
     fun toJson(): JSONObject {
         val json = JSONObject()
 
-        json.put(RenderLine.positionProperty, Points.toJson(this.position!!))
+        json.put(RenderLine.positionProperty, Points.toJson(this.position))
         json.put(RenderLine.lengthProperty, this.length)
         json.put(RenderLine.horizontalProperty, this.horizontal)
 

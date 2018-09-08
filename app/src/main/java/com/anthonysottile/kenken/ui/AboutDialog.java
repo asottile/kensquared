@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.anthonysottile.kenken.R;
 
-public class AboutDialog extends Dialog {
+class AboutDialog extends Dialog {
 
     public AboutDialog(Context context) {
         super(context);
@@ -90,11 +90,7 @@ public class AboutDialog extends Dialog {
         // On click of the OK button the dialog exits
         Button okButton = new Button(context);
         okButton.setText(context.getString(R.string.ok));
-        okButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                AboutDialog.this.dismiss();
-            }
-        });
+        okButton.setOnClickListener(v -> AboutDialog.this.dismiss());
 
         LinearLayout buttonsLayout = new LinearLayout(context);
         buttonsLayout.addView(

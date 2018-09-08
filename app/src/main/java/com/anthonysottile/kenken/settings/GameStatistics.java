@@ -125,15 +125,8 @@ public class GameStatistics {
                                 json.getString(GameStatistics.BestTimeDate)
                         );
             }
-
-        } catch (JSONException e) {
+        } catch (JSONException | ParseException e) {
             // Big problem...
-            e.printStackTrace();
-        } catch (ParseException e) {
-            // This catches the parse exception
-            // Though this should never occur since the only time
-            //  that the stuff is ever written is by the formatter
-            //  itself.
             e.printStackTrace();
         }
     }

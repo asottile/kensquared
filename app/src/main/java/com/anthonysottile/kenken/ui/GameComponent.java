@@ -6,8 +6,6 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -50,9 +48,6 @@ public class GameComponent extends View {
     private final KenKenSquare.RequestRedrawListener redrawListener =
             event -> GameComponent.this.postInvalidate();
 
-    private final UserSquare.ValueSetListener valueSetListener =
-            event -> GameComponent.this.valueSetEvent(event);
-
     private int squareWidthPlusBorder;
     private int squareHeightPlusBorder;
     private SquareDrawingDimensions dimensions = null;
@@ -70,10 +65,6 @@ public class GameComponent extends View {
     private long pausedTime;
 
     private KenKenGame game = null;
-
-    public KenKenGame getGame() {
-        return this.game;
-    }
 
     private final Handler gameTimer = new Handler();
     private final Runnable updater = new Runnable() {
@@ -303,7 +294,7 @@ public class GameComponent extends View {
         for (int i = 0; i < order; i += 1) {
             this.uiSquares[i] = new KenKenSquare[order];
             for (int j = 0; j < order; j += 1) {
-                userSquares[i][j].addValueSetListener(this.valueSetListener);
+                userSquares[i][j].addValueSetListener(this::valueSetEvent);
                 this.uiSquares[i][j] = new KenKenSquare(userSquares[i][j]);
                 this.uiSquares[i][j].addRequestRedrawListener(this.redrawListener);
             }
@@ -702,7 +693,7 @@ public class GameComponent extends View {
             return this.size;
         }
 
-        public GameWonEvent(Object sender, long ticks, int size) {
+        GameWonEvent(Object sender, long ticks, int size) {
             super(sender);
 
             this.ticks = ticks;
@@ -720,7 +711,7 @@ public class GameComponent extends View {
     }
 
     private final List<GameWonListener> gameWonListeners =
-            new ArrayList<GameWonListener>();
+            new ArrayList<>();
 
     private void triggerGameWon(long ticks, int size) {
         GameWonEvent event = new GameWonEvent(this, ticks, size);
@@ -730,22 +721,8 @@ public class GameComponent extends View {
         }
     }
 
-    /**
-     * Adds the listener to the Game Won listeners.
-     *
-     * @param listener The Game Won listener to add to the listeners.
-     */
     public void AddGameWonListener(GameWonListener listener) {
         this.gameWonListeners.add(listener);
-    }
-
-    /**
-     * Removes the listener from the Game Won listeners.
-     *
-     * @param listener The Game Won listener to remove from the listeners.
-     */
-    public void RemoveGameWonListener(GameWonListener listener) {
-        this.gameWonListeners.remove(listener);
     }
 
     public GameComponent(Context context, AttributeSet attrs) {

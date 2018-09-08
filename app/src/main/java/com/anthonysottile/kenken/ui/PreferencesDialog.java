@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.anthonysottile.kenken.R;
 import com.anthonysottile.kenken.settings.SettingsProvider;
 
-public class PreferencesDialog extends Dialog {
+class PreferencesDialog extends Dialog {
 
     private static final String[] GameSizes = {
             "4", "5", "6", "7", "8", "9"
@@ -66,7 +66,7 @@ public class PreferencesDialog extends Dialog {
         // Game Size dropdown
         this.dropdown = new Spinner(context);
         ArrayAdapter<String> spinnerAdapter =
-                new ArrayAdapter<String>(
+                new ArrayAdapter<>(
                         context,
                         android.R.layout.simple_spinner_item,
                         PreferencesDialog.GameSizes
@@ -105,26 +105,20 @@ public class PreferencesDialog extends Dialog {
         // On click of the OK button, the value is saved and the dialog exits
         Button okButton = new Button(context);
         okButton.setText(context.getString(R.string.ok));
-        okButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                SettingsProvider.SetGameSize(
-                        PreferencesDialog.this.dropdown.getSelectedItemPosition()
-                                + UIConstants.MinGameSize
-                );
+        okButton.setOnClickListener(v -> {
+            SettingsProvider.SetGameSize(
+                    PreferencesDialog.this.dropdown.getSelectedItemPosition()
+                            + UIConstants.MinGameSize
+            );
 
-                PreferencesDialog.this.dismiss();
-            }
+            PreferencesDialog.this.dismiss();
         });
 
         // Cancel button
         // Doesn't set the changed value here.
         Button cancelButton = new Button(context);
         cancelButton.setText(context.getString(R.string.cancel));
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                PreferencesDialog.this.cancel();
-            }
-        });
+        cancelButton.setOnClickListener(v -> PreferencesDialog.this.cancel());
 
         // Layout for the OK and Cancel buttons
         // NOTE: I had to do some weird things to prevent the dialog displaying

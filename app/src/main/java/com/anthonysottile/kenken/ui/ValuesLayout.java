@@ -5,8 +5,6 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.anthonysottile.kenken.ui.CustomButton.CheckChangedEvent;
-
 import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.EventObject;
@@ -29,7 +27,7 @@ public class ValuesLayout extends LinearLayout {
             return this.value;
         }
 
-        public ValueEvent(Object sender, int value) {
+        ValueEvent(Object sender, int value) {
             super(sender);
 
             this.value = value;
@@ -41,7 +39,7 @@ public class ValuesLayout extends LinearLayout {
     }
 
     private final List<ValueChangedListener> valueChangedListeners =
-            new ArrayList<ValueChangedListener>();
+            new ArrayList<>();
 
     public void AddValueChangedListener(ValueChangedListener listener) {
         this.valueChangedListeners.add(listener);
@@ -122,11 +120,6 @@ public class ValuesLayout extends LinearLayout {
     public void Clear() {
         if (this.valueButtons != null) {
             this.removeAllViews();
-
-            for (CustomButton valueButton : this.valueButtons) {
-                valueButton.ClearCheckChangedListeners();
-            }
-
             this.valueButtons = null;
         }
     }

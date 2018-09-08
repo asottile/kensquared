@@ -23,13 +23,13 @@ public class CustomButton extends View {
     private final Paint textPaint = new Paint();
 
     public class CheckChangedEvent extends EventObject {
-        private boolean checked;
+        private final boolean checked;
 
         public boolean getChecked() {
             return this.checked;
         }
 
-        public CheckChangedEvent(CustomButton object, boolean checked) {
+        CheckChangedEvent(CustomButton object, boolean checked) {
             super(object);
             this.checked = checked;
         }
@@ -41,18 +41,10 @@ public class CustomButton extends View {
     }
 
     private final List<CheckChangedListener> checkChangedListeners =
-            new ArrayList<CheckChangedListener>();
+            new ArrayList<>();
 
     public void AddCheckChangedListener(CheckChangedListener listener) {
         this.checkChangedListeners.add(listener);
-    }
-
-    public void RemoveCheckChangedListener(CheckChangedListener listener) {
-        this.checkChangedListeners.remove(listener);
-    }
-
-    public void ClearCheckChangedListeners() {
-        this.checkChangedListeners.clear();
     }
 
     private void triggerCheckChanged() {
@@ -67,18 +59,10 @@ public class CustomButton extends View {
         void onClick(EventObject event);
     }
 
-    private final List<ClickListener> clickListeners = new ArrayList<ClickListener>();
+    private final List<ClickListener> clickListeners = new ArrayList<>();
 
     public void AddClickListener(ClickListener listener) {
         this.clickListeners.add(listener);
-    }
-
-    public void RemoveClickListener(ClickListener listener) {
-        this.clickListeners.remove(listener);
-    }
-
-    public void ClearClickListeners() {
-        this.clickListeners.clear();
     }
 
     private void triggerClick() {
@@ -91,40 +75,20 @@ public class CustomButton extends View {
 
     private int value = 0;
 
-    /**
-     * Returns the integer value of this button.
-     *
-     * @return The value of the button.
-     */
     public int getValue() {
         return this.value;
     }
 
-    /**
-     * Sets the integer value of this button.
-     *
-     * @param value The value to set on the button.
-     */
     public void setValue(int value) {
         this.value = value;
     }
 
     private boolean enabled = false;
 
-    /**
-     * Returns whether the button is enabled.
-     *
-     * @return Whether the button is enabled.
-     */
     public boolean getEnabled() {
         return this.enabled;
     }
 
-    /**
-     * Sets whether the button is enabled.
-     *
-     * @param enabled Whether the button should be enabled.
-     */
     @Override
     public void setEnabled(boolean enabled) {
         if (this.enabled != enabled) {
@@ -137,20 +101,6 @@ public class CustomButton extends View {
 
     private boolean hasLeftCurve = false;
 
-    /**
-     * Returns whether the button has a left curve.
-     *
-     * @return Whether the button has a left curve.
-     */
-    public boolean getHasLeftCurve() {
-        return this.hasLeftCurve;
-    }
-
-    /**
-     * Sets whether the button has a left curve.
-     *
-     * @param hasLeftCurve Whether the button has a left curve.
-     */
     public void setHasLeftCurve(boolean hasLeftCurve) {
         if (this.hasLeftCurve != hasLeftCurve) {
             this.hasLeftCurve = hasLeftCurve;
@@ -162,20 +112,6 @@ public class CustomButton extends View {
 
     private boolean hasRightCurve = false;
 
-    /**
-     * Returns whether the button has a right curve.
-     *
-     * @return Whether the button has a right curve.
-     */
-    public boolean getHasRightCurve() {
-        return this.hasRightCurve;
-    }
-
-    /**
-     * Sets whether the button has a right curve.
-     *
-     * @param hasRightCurve Whether the button has a right curve.
-     */
     public void setHasRightCurve(boolean hasRightCurve) {
         if (this.hasRightCurve != hasRightCurve) {
             this.hasRightCurve = hasRightCurve;
@@ -187,20 +123,6 @@ public class CustomButton extends View {
 
     private boolean isCheckable = false;
 
-    /**
-     * Returns whether the button reacts to clicking by checking and un-checking.
-     *
-     * @return Whether the button reacts to clicking by checking and un-checking.
-     */
-    public boolean getIsCheckable() {
-        return this.isCheckable;
-    }
-
-    /**
-     * Sets whether the button reacts to clicking by checking and un-checking.
-     *
-     * @param isCheckable Whether the button reacts to clicking by checking and un-checking.
-     */
     public void setIsCheckable(boolean isCheckable) {
         this.isCheckable = isCheckable;
     }
@@ -246,23 +168,7 @@ public class CustomButton extends View {
         }
     }
 
-    /**
-     * Toggles the checked state of the button. Note this triggers check changed.
-     */
-    public void toggleChecked() {
-        this.setChecked(!this.checked);
-    }
-
     private String text = "";
-
-    /**
-     * Returns the text of the button.
-     *
-     * @return The text of the button.
-     */
-    public String getText() {
-        return this.text;
-    }
 
     /**
      * Sets the text of the button.

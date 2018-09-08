@@ -17,8 +17,6 @@ import com.anthonysottile.kenken.ui.GameComponent.GameState;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.EventObject;
-
 public class KenKenAndroidActivity extends Activity {
 
     private static final int PreferencesDialogId = 0;

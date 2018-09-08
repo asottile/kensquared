@@ -6,7 +6,7 @@ import com.anthonysottile.kenken.KenKenGame;
 import com.anthonysottile.kenken.Points;
 import com.anthonysottile.kenken.RenderLine;
 
-public class ThreeSquareLineCage extends BaseCage {
+class ThreeSquareLineCage extends BaseCage {
 
     public ThreeSquareLineCage(KenKenGame game, Point location, boolean horizontal) {
         this.signLocation = location;

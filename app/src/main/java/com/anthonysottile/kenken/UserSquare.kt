@@ -23,7 +23,7 @@ class UserSquare {
     private val valueSetListeners = ArrayList<ValueSetListener>()
 
     fun getCandidatesString(): String {
-        var numbers = mutableListOf<Int>()
+        val numbers = mutableListOf<Int>()
         for ((i, v) in this.candidates.withIndex()) {
             if (v) {
                 numbers.add(i + 1)
@@ -114,7 +114,7 @@ class UserSquare {
         val candidatesJson = json.getJSONArray(UserSquare.candidatesProperty)
         this.candidates = BooleanArray(candidatesJson.length())
         for (i in this.candidates.indices) {
-            this.candidates[i] = candidatesJson.getBoolean(i);
+            this.candidates[i] = candidatesJson.getBoolean(i)
         }
     }
 

@@ -23,15 +23,11 @@ public final class SettingsProvider {
         void onGameSizeChanged(EventObject event);
     }
 
-    private static List<GameSizeChangedListener> gameSizeChangedListeners =
-            new ArrayList<GameSizeChangedListener>();
+    private static final List<GameSizeChangedListener> gameSizeChangedListeners =
+            new ArrayList<>();
 
     public static void AddGameSizeChangedListener(GameSizeChangedListener listener) {
         SettingsProvider.gameSizeChangedListeners.add(listener);
-    }
-
-    public static void RemoveGameSizeChangedListener(GameSizeChangedListener listener) {
-        SettingsProvider.gameSizeChangedListeners.remove(listener);
     }
 
     private static void triggerGameSizeChanged() {

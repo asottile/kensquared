@@ -16,10 +16,10 @@ import java.util.List;
 
 public abstract class BaseCage implements ICage {
 
-    protected SignNumber signNumber;
-    protected List<RenderLine> renderLines = new ArrayList<RenderLine>();
-    protected List<Point> squares = new ArrayList<Point>();
-    protected Point signLocation;
+    SignNumber signNumber;
+    final List<RenderLine> renderLines = new ArrayList<>();
+    final List<Point> squares = new ArrayList<>();
+    Point signLocation;
 
     public SignNumber getSignNumber() {
         return this.signNumber;
@@ -105,7 +105,7 @@ public abstract class BaseCage implements ICage {
 
     private static class JsonCage extends BaseCage {
 
-        public JsonCage(JSONObject json) {
+        JsonCage(JSONObject json) {
 
             try {
                 JSONArray renderLinesJson = json.getJSONArray(BaseCage.renderLinesProperty);
@@ -148,6 +148,6 @@ public abstract class BaseCage implements ICage {
         return new JsonCage(json);
     }
 
-    protected BaseCage() {
+    BaseCage() {
     }
 }

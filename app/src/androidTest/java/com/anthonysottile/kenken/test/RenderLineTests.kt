@@ -1,12 +1,8 @@
 package com.anthonysottile.kenken.test
 
 import android.graphics.Point
-
 import com.anthonysottile.kenken.RenderLine
-
 import junit.framework.TestCase
-
-import org.json.JSONException
 import org.json.JSONObject
 
 class RenderLineTests : TestCase() {

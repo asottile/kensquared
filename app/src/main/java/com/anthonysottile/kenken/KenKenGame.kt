@@ -150,7 +150,7 @@ class KenKenGame {
         }
 
         val userSquareJson = json.getJSONArray(KenKenGame.userSquaresProperty)
-        var order = userSquareJson.length()
+        val order = userSquareJson.length()
         this.userSquares = Array(order) { i ->
             val inner = userSquareJson.getJSONArray(i)
             return@Array Array(order) { j -> UserSquare(inner.getJSONObject(j)) }
