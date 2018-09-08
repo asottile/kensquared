@@ -166,8 +166,6 @@ public class KenKenAndroidActivity extends Activity {
         this.showDialog(KenKenAndroidActivity.AboutDialogId);
     }
 
-    // #region Dialogs
-
     @Override
     protected Dialog onCreateDialog(int id) {
 
@@ -222,10 +220,6 @@ public class KenKenAndroidActivity extends Activity {
         }
     }
 
-    // #endregion
-
-    // #region Menus
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = this.getMenuInflater();
@@ -274,7 +268,4 @@ public class KenKenAndroidActivity extends Activity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    // #endregion
-
 }

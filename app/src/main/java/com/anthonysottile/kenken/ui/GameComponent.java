@@ -431,8 +431,6 @@ public class GameComponent extends View {
         );
     }
 
-    // #region Touch Event
-
     private KenKenSquare getSquareFromPosition(int x, int y) {
         int xIndex = (x - UIConstants.BorderWidth) / this.squareWidthPlusBorder;
         int yIndex = (y - UIConstants.BorderWidth) / this.squareHeightPlusBorder;
@@ -562,10 +560,6 @@ public class GameComponent extends View {
         return false;
     }
 
-    // #endregion
-
-    // #region Measure and Draw
-
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
@@ -682,10 +676,6 @@ public class GameComponent extends View {
         }
     }
 
-    // #endregion
-
-    // #region Game Won Event
-
     public class GameWonEvent extends EventObject {
 
         private static final long serialVersionUID = -6896411724437170770L;
@@ -757,8 +747,6 @@ public class GameComponent extends View {
     public void RemoveGameWonListener(GameWonListener listener) {
         this.gameWonListeners.remove(listener);
     }
-
-    // #endregion
 
     public GameComponent(Context context, AttributeSet attrs) {
         super(context, attrs);

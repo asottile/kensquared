@@ -69,8 +69,6 @@ public abstract class BaseCage implements ICage {
         }
     }
 
-    // #region JSON Serialization
-
     private static final String signNumberProperty = "SignNumber";
     private static final String renderLinesProperty = "RenderLines";
     private static final String squaresProperty = "Squares";
@@ -149,8 +147,6 @@ public abstract class BaseCage implements ICage {
     public static ICage ToCage(JSONObject json) {
         return new JsonCage(json);
     }
-
-    // #endregion
 
     protected BaseCage() {
     }

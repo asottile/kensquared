@@ -19,8 +19,6 @@ public final class SettingsProvider {
 
     // TODO: implement dirty cache methodology
 
-    // #region Game Size Changed Event
-
     public interface GameSizeChangedListener extends EventListener {
         void onGameSizeChanged(EventObject event);
     }
@@ -43,8 +41,6 @@ public final class SettingsProvider {
             listener.onGameSizeChanged(event);
         }
     }
-
-    // #endregion
 
     /**
      * Returns the setting for the game size.

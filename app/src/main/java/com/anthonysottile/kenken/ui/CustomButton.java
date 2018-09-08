@@ -22,8 +22,6 @@ public class CustomButton extends View {
     private final Rect destRect = new Rect();
     private final Paint textPaint = new Paint();
 
-    // #region Check Changed Event
-
     public class CheckChangedEvent extends EventObject {
         private boolean checked;
 
@@ -65,10 +63,6 @@ public class CustomButton extends View {
         }
     }
 
-    // #endregion
-
-    // #region Click Event
-
     public interface ClickListener extends EventListener {
         void onClick(EventObject event);
     }
@@ -94,8 +88,6 @@ public class CustomButton extends View {
             listener.onClick(event);
         }
     }
-
-    // #endregion
 
     private int value = 0;
 

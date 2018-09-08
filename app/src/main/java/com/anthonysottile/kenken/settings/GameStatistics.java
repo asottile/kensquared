@@ -77,8 +77,6 @@ public class GameStatistics {
         this.bestTimeDate = null;
     }
 
-    // #region JSON Serialization
-
     private final static String GameSize = "GameSize";
     private final static String GamesPlayed = "GamesPlayed";
     private final static String GamesWon = "GamesWon";
@@ -139,6 +137,4 @@ public class GameStatistics {
             e.printStackTrace();
         }
     }
-
-    // #endregion
 }
