@@ -318,7 +318,7 @@ public class GameComponent extends View {
             this.uiSquares[i] = new KenKenSquare[order];
             for (int j = 0; j < order; j += 1) {
                 this.uiSquares[i][j] = new KenKenSquare(userSquares[i][j]);
-                this.uiSquares[i][j].AddRequestRedrawListener(this.redrawListener);
+                this.uiSquares[i][j].addRequestRedrawListener(this.redrawListener);
             }
         }
 
@@ -392,7 +392,7 @@ public class GameComponent extends View {
             // remove event stuff
             for (KenKenSquare[] squares : this.uiSquares) {
                 for (KenKenSquare square : squares) {
-                    square.ClearRequestRedrawListeners();
+                    square.clearRequestRedrawListeners();
                 }
             }
 
