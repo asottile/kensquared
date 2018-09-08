@@ -8,7 +8,7 @@ import java.util.*
 
 class ValuesLayout(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
 
-    private val valueChangedListeners = ArrayList<ValueChangedListener>()
+    private val valueChangedListeners = ArrayList<(Int) -> Unit>()
 
     private var valueButtons: Array<CustomButton>? = null
     private var selectedButton: CustomButton? = null
@@ -31,21 +31,13 @@ class ValuesLayout(context: Context, attrs: AttributeSet) : LinearLayout(context
         }
     }
 
-    inner class ValueEvent internal constructor(sender: Any, val value: Int) : EventObject(sender)
-
-    interface ValueChangedListener : EventListener {
-        fun onValueChanged(event: ValueEvent)
-    }
-
-    fun addValueChangedListener(listener: ValueChangedListener) {
+    fun addValueChangedListener(listener: (Int) -> Unit) {
         this.valueChangedListeners.add(listener)
     }
 
     private fun triggerValueChanged(value: Int) {
-        val event = ValueEvent(this, value)
-
         for (listener in this.valueChangedListeners) {
-            listener.onValueChanged(event)
+            listener(value)
         }
     }
 

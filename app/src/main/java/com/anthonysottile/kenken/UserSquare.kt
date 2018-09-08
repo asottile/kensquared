@@ -18,9 +18,9 @@ class UserSquare {
             }
         }
 
-    private val changedHandlers = ArrayList<UserSquareChangedListener>()
+    private val changedHandlers = ArrayList<(UserSquare) -> Unit>()
 
-    private val valueSetListeners = ArrayList<ValueSetListener>()
+    private val valueSetListeners = ArrayList<(UserSquare) -> Unit>()
 
     fun getCandidatesString(): String {
         val numbers = mutableListOf<Int>()
@@ -46,41 +46,23 @@ class UserSquare {
         }
     }
 
-    interface UserSquareChangedListener {
-        fun onUserSquareChanged(event: EventObject)
-    }
-
-    fun addChangedEventHandler(handler: UserSquareChangedListener) {
+    fun addChangedEventHandler(handler: (UserSquare) -> Unit) {
         this.changedHandlers.add(handler)
     }
 
     private fun triggerChangedEvent() {
-        val event = EventObject(this)
-
         for (listener in this.changedHandlers) {
-            listener.onUserSquareChanged(event)
+            listener(this)
         }
     }
 
-    inner class ValueSetEvent(sender: UserSquare, val x: Int, val y: Int, val value: Int) : EventObject(sender)
-
-    interface ValueSetListener : EventListener {
-        fun onValueSet(event: ValueSetEvent)
-    }
-
-    fun addValueSetListener(listener: ValueSetListener) {
+    fun addValueSetListener(listener: ((UserSquare) -> Unit)) {
         this.valueSetListeners.add(listener)
     }
 
-    fun clearValueSetListeners() {
-        this.valueSetListeners.clear()
-    }
-
     private fun triggerValueSetEvent() {
-        val event = ValueSetEvent(this, this.x, this.y, this.value)
-
         for (listener in this.valueSetListeners) {
-            listener.onValueSet(event)
+            listener(this)
         }
     }
 

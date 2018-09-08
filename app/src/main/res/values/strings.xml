@@ -10,8 +10,6 @@
 
     <!-- Game Component -->
 
-    <string name="plus">+</string>
-    <string name="minus">-</string>
     <string name="paused">Paused</string>
 
     <!-- end Game Component -->

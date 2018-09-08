@@ -10,7 +10,7 @@ class LatinSquare {
     constructor(order: Int) {
         this.order = order
 
-        // Initialize the numbers array
+        // initialize the numbers array
         //  but not the inner arrays. Those get made later.
         this.values = Array(order) { IntArray(order) }
 

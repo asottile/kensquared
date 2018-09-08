@@ -1,7 +1,6 @@
 package com.anthonysottile.kenken
 
 import android.graphics.Point
-import com.anthonysottile.kenken.UserSquare.ValueSetEvent
 import com.anthonysottile.kenken.cages.BaseCage
 import com.anthonysottile.kenken.cages.CageGenerator
 import com.anthonysottile.kenken.cages.ICage
@@ -23,13 +22,11 @@ class KenKenGame {
 
     private var cages: MutableList<ICage>
 
-    private val valueSetListener = object : UserSquare.ValueSetListener {
-        override fun onValueSet(event: ValueSetEvent) {
-            if (event.value > 0) {
-                this@KenKenGame.squaresWithValues += 1
-            } else {
-                this@KenKenGame.squaresWithValues -= 1
-            }
+    private fun valueSetListener(square: UserSquare) {
+        if (square.value > 0) {
+            this@KenKenGame.squaresWithValues += 1
+        } else {
+            this@KenKenGame.squaresWithValues -= 1
         }
     }
 
@@ -80,7 +77,7 @@ class KenKenGame {
 
         for (row in this.userSquares) {
             for (square in row) {
-                square.addValueSetListener(this.valueSetListener)
+                square.addValueSetListener(this::valueSetListener)
             }
         }
     }

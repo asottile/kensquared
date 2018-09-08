@@ -34,7 +34,7 @@ public class KenKenAndroidActivity extends Activity {
     private long gameWonTicks = -1;
 
     private final SettingsProvider.GameSizeChangedListener gameSizedListener =
-            event -> KenKenAndroidActivity.this.gameComponent.Clear();
+            event -> KenKenAndroidActivity.this.gameComponent.clear();
 
     private final GameComponent.GameWonListener gameWonListener =
             event -> {
@@ -68,7 +68,7 @@ public class KenKenAndroidActivity extends Activity {
         SettingsProvider.AddGameSizeChangedListener(this.gameSizedListener);
 
         // Give a reference to resources for Bitmap cache
-        BitmapCache.Initialize(this.getResources());
+        BitmapCache.INSTANCE.initialize(this.getResources());
 
         this.setContentView(R.layout.main);
 
@@ -82,13 +82,13 @@ public class KenKenAndroidActivity extends Activity {
         TextView timerText = (TextView) this.findViewById(R.id.timerText);
 
         // Give the gameComponent references to layouts.
-        this.gameComponent.Initialize(
+        this.gameComponent.initialize(
                 candidatesLayout,
                 valuesLayout,
                 timerText
         );
 
-        this.gameComponent.AddGameWonListener(this.gameWonListener);
+        this.gameComponent.addGameWonListener(this.gameWonListener);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class KenKenAndroidActivity extends Activity {
         super.onPause();
 
         // Pause the game since they are navigating away
-        this.gameComponent.PauseIfNotPaused();
+        this.gameComponent.pauseIfNotPaused();
     }
 
     @Override
@@ -113,7 +113,7 @@ public class KenKenAndroidActivity extends Activity {
                 if (gameJsonString.length() > 0) {
                     try {
                         JSONObject gameAsJson = new JSONObject(gameJsonString);
-                        this.gameComponent.LoadState(gameAsJson);
+                        this.gameComponent.loadState(gameAsJson);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -126,7 +126,7 @@ public class KenKenAndroidActivity extends Activity {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
 
-        JSONObject game = this.gameComponent.SaveState();
+        JSONObject game = this.gameComponent.saveState();
         if (game != null) {
             savedInstanceState.putString(
                     KenKenAndroidActivity.saveGameBundleProperty,
@@ -138,29 +138,29 @@ public class KenKenAndroidActivity extends Activity {
     private void newGame() {
         int gameSize = SettingsProvider.GetGameSize();
         StatisticsManager.GameStarted(gameSize);
-        this.gameComponent.NewGame(gameSize);
+        this.gameComponent.newGame(gameSize);
     }
 
     private void pauseGame() {
-        this.gameComponent.TogglePause();
+        this.gameComponent.togglePause();
     }
 
     private void checkGame() {
-        this.gameComponent.Check();
+        this.gameComponent.check();
     }
 
     private void showPreferences() {
-        this.gameComponent.PauseIfNotPaused();
+        this.gameComponent.pauseIfNotPaused();
         this.showDialog(KenKenAndroidActivity.PreferencesDialogId);
     }
 
     private void showStatistics() {
-        this.gameComponent.PauseIfNotPaused();
+        this.gameComponent.pauseIfNotPaused();
         this.showDialog(KenKenAndroidActivity.StatisticsDialogId);
     }
 
     private void showAbout() {
-        this.gameComponent.PauseIfNotPaused();
+        this.gameComponent.pauseIfNotPaused();
         this.showDialog(KenKenAndroidActivity.AboutDialogId);
     }
 

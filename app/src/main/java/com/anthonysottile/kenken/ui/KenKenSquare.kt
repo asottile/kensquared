@@ -32,7 +32,7 @@ class KenKenSquare(val userSquare: UserSquare) {
             this.triggerRequestRedrawEvent()
         }
 
-    private val requestRedrawListeners = ArrayList<RequestRedrawListener>()
+    private val requestRedrawListeners = ArrayList<() -> Unit>()
 
     fun drawSquare(canvas: Canvas, dimensions: SquareDrawingDimensions) {
         val x = this.userSquare.x
@@ -92,30 +92,16 @@ class KenKenSquare(val userSquare: UserSquare) {
     }
 
     init {
-        this.userSquare.addChangedEventHandler(object : UserSquare.UserSquareChangedListener {
-            override fun onUserSquareChanged(event: EventObject) {
-                this@KenKenSquare.triggerRequestRedrawEvent()
-            }
-        })
+        this.userSquare.addChangedEventHandler { _ -> this@KenKenSquare.triggerRequestRedrawEvent()}
     }
 
-    interface RequestRedrawListener : EventListener {
-        fun onRequestRedraw(event: EventObject)
-    }
-
-    fun addRequestRedrawListener(listener: RequestRedrawListener) {
+    fun addRequestRedrawListener(listener: () -> Unit) {
         this.requestRedrawListeners.add(listener)
     }
 
-    fun clearRequestRedrawListeners() {
-        this.requestRedrawListeners.clear()
-    }
-
     private fun triggerRequestRedrawEvent() {
-        val event = EventObject(this)
-
         for (listener in this.requestRedrawListeners) {
-            listener.onRequestRedraw(event)
+            listener()
         }
     }
 

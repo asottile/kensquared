@@ -111,7 +111,7 @@ class SquareDrawingDimensions(
 
         this.candidatesTextFontSize = this.squareHeight - this.cageTextFontSize
         this.candidatesTextPaint.textSize = this.candidatesTextFontSize.toFloat()
-        this.candidatesTextPaint.color = Color.rgb(0x77, 0x77, 0x77);
+        this.candidatesTextPaint.color = Color.rgb(0x77, 0x77, 0x77)
         val testMeasureString = SquareDrawingDimensions.getTestCandidateString(order)
 
         val maxWidth = this.squareWidth - 5 - (UIConstants.MaxGameSize - order) * 2

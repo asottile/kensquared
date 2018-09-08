@@ -9,43 +9,29 @@ import java.util.*
 
 class CandidatesLayout(context: Context, attrs: AttributeSet) : LinearLayout(context, attrs) {
 
-    private val candidateAddedListeners = ArrayList<CandidateAddedListener>()
+    private val candidateAddedListeners = ArrayList<(Int) -> Unit>()
 
-    private val candidateRemovedListeners = ArrayList<CandidateRemovedListener>()
+    private val candidateRemovedListeners = ArrayList<(Int) -> Unit>()
 
     private var candidates: Array<CustomButton>? = null
 
-    inner class CandidateEvent internal constructor(`object`: Any, val candidate: Int) : EventObject(`object`)
-
-    interface CandidateAddedListener : EventListener {
-        fun onCandidateAdded(event: CandidateEvent)
-    }
-
-    interface CandidateRemovedListener : EventListener {
-        fun onCandidateRemoved(event: CandidateEvent)
-    }
-
-    fun addCandidateAddedListener(listener: CandidateAddedListener) {
+    fun addCandidateAddedListener(listener: (Int) -> Unit) {
         this.candidateAddedListeners.add(listener)
     }
 
     private fun triggerCandidateAdded(candidate: Int) {
-        val event = CandidateEvent(this, candidate)
-
         for (listener in this.candidateAddedListeners) {
-            listener.onCandidateAdded(event)
+            listener(candidate)
         }
     }
 
-    fun addCandidateRemovedListener(listener: CandidateRemovedListener) {
+    fun addCandidateRemovedListener(listener: (Int) -> Unit) {
         this.candidateRemovedListeners.add(listener)
     }
 
     private fun triggerCandidateRemoved(candidate: Int) {
-        val event = CandidateEvent(this, candidate)
-
         for (listener in this.candidateRemovedListeners) {
-            listener.onCandidateRemoved(event)
+            listener(candidate)
         }
     }
 
@@ -180,7 +166,6 @@ class CandidatesLayout(context: Context, attrs: AttributeSet) : LinearLayout(con
     }
 
     companion object {
-
         private val allNoneLayoutParams = LinearLayout.LayoutParams(
                 30,
                 ViewGroup.LayoutParams.MATCH_PARENT,
