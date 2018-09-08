@@ -25,16 +25,13 @@ public class CustomButton extends View {
     // #region Check Changed Event
 
     public class CheckChangedEvent extends EventObject {
-
-        private static final long serialVersionUID = 5703235645865455757L;
-
         private boolean checked;
 
         public boolean getChecked() {
             return this.checked;
         }
 
-        public CheckChangedEvent(Object object, boolean checked) {
+        public CheckChangedEvent(CustomButton object, boolean checked) {
             super(object);
             this.checked = checked;
         }

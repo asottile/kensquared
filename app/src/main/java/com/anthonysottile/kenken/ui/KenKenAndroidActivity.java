@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,7 +13,6 @@ import com.anthonysottile.kenken.R;
 import com.anthonysottile.kenken.settings.SettingsProvider;
 import com.anthonysottile.kenken.settings.StatisticsManager;
 import com.anthonysottile.kenken.ui.GameComponent.GameState;
-import com.anthonysottile.kenken.ui.GameComponent.GameWonEvent;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,29 +36,22 @@ public class KenKenAndroidActivity extends Activity {
     private long gameWonTicks = -1;
 
     private final SettingsProvider.GameSizeChangedListener gameSizedListener =
-            new SettingsProvider.GameSizeChangedListener() {
-                public void onGameSizeChanged(EventObject event) {
-                    KenKenAndroidActivity.this.gameComponent.Clear();
-                }
-            };
+            event -> KenKenAndroidActivity.this.gameComponent.Clear();
 
     private final GameComponent.GameWonListener gameWonListener =
-            new GameComponent.GameWonListener() {
-                public void onGameWon(GameWonEvent event) {
+            event -> {
+                KenKenAndroidActivity.this.gameWonNewHighScore =
+                        StatisticsManager.GameEnded(
+                                event.getSize(),
+                                event.getTicks()
+                        );
 
-                    KenKenAndroidActivity.this.gameWonNewHighScore =
-                            StatisticsManager.GameEnded(
-                                    event.getSize(),
-                                    event.getTicks()
-                            );
+                KenKenAndroidActivity.this.gameWonGameSize = event.getSize();
+                KenKenAndroidActivity.this.gameWonTicks = event.getTicks();
 
-                    KenKenAndroidActivity.this.gameWonGameSize = event.getSize();
-                    KenKenAndroidActivity.this.gameWonTicks = event.getTicks();
-
-                    KenKenAndroidActivity.this.showDialog(
-                            KenKenAndroidActivity.GameWonDialogId
-                    );
-                }
+                KenKenAndroidActivity.this.showDialog(
+                        KenKenAndroidActivity.GameWonDialogId
+                );
             };
 
     @Override

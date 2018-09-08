@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.EventObject;
 import java.util.List;
+import java.util.Set;
 
 public class ValuesLayout extends LinearLayout {
 
@@ -21,12 +22,7 @@ public class ValuesLayout extends LinearLayout {
                     0.5f
             );
 
-    //#region Value Changed Event
-
     public class ValueEvent extends EventObject {
-
-        private static final long serialVersionUID = 4677958792610955100L;
-
         private final int value;
 
         public int getValue() {
@@ -51,10 +47,6 @@ public class ValuesLayout extends LinearLayout {
         this.valueChangedListeners.add(listener);
     }
 
-    public void RemoveValueChangedListener(ValueChangedListener listener) {
-        this.valueChangedListeners.remove(listener);
-    }
-
     private void triggerValueChanged(int value) {
         ValueEvent event = new ValueEvent(this, value);
 
@@ -63,58 +55,42 @@ public class ValuesLayout extends LinearLayout {
         }
     }
 
-    //#endregion
-
     private CustomButton[] valueButtons = null;
     private CustomButton selectedButton = null;
 
     private final CustomButton.CheckChangedListener checkChangedListener =
-            new CustomButton.CheckChangedListener() {
-                public void onCheckChanged(CheckChangedEvent event) {
-                    CustomButton valueButton = (CustomButton) event.getSource();
+            event -> {
+                CustomButton valueButton = (CustomButton) event.getSource();
 
-                    if (valueButton.getChecked()) {
-                        // Button became checked
-                        if (ValuesLayout.this.selectedButton != null) {
-                            ValuesLayout.this.selectedButton.setCheckedNoTrigger(false);
-                            ValuesLayout.this.selectedButton = null;
-                        }
-
-                        ValuesLayout.this.selectedButton = valueButton;
-                        ValuesLayout.this.triggerValueChanged(valueButton.getValue());
-
-                    } else {
-
-                        // Button became unchecked
+                if (valueButton.getChecked()) {
+                    // Button became checked
+                    if (ValuesLayout.this.selectedButton != null) {
+                        ValuesLayout.this.selectedButton.setCheckedNoTrigger(false);
                         ValuesLayout.this.selectedButton = null;
-                        ValuesLayout.this.triggerValueChanged(0);
                     }
+
+                    ValuesLayout.this.selectedButton = valueButton;
+                    ValuesLayout.this.triggerValueChanged(valueButton.getValue());
+
+                } else {
+                    // Button became unchecked
+                    ValuesLayout.this.selectedButton = null;
+                    ValuesLayout.this.triggerValueChanged(0);
                 }
             };
 
-    /**
-     * Sets the values to disabled for all in the list of numbers.
-     *
-     * @param disabled The list of Values to disable.
-     */
-    public void SetDisabled(List<Integer> disabled) {
+    public void SetDisabled(Set<Integer> disabled) {
         // First enable all the buttons
         for (CustomButton valueButton : this.valueButtons) {
             valueButton.setEnabled(true);
         }
 
-        // Then disable the guys that we are supposed to
-        int disabledSize = disabled.size();
-        for (int i = 0; i < disabledSize; i += 1) {
-            this.valueButtons[disabled.get(i) - 1].setEnabled(false);
+        for (int x : disabled) {
+            this.valueButtons[x - 1].setEnabled(false);
         }
     }
 
-    /**
-     * Disables all of the value buttons for this control.
-     */
     public void SetDisabled() {
-        // Disable all of the buttons.
         for (CustomButton valueButton : this.valueButtons) {
             valueButton.setEnabled(false);
         }
@@ -127,7 +103,6 @@ public class ValuesLayout extends LinearLayout {
      * @param value The value to set.
      */
     public void SetValue(int value) {
-
         // Do not trigger events as this should only be called from
         //  the setup/tear-down of a square being clicked.
 
@@ -144,41 +119,6 @@ public class ValuesLayout extends LinearLayout {
         }
     }
 
-    /**
-     * Attempts to set the value on the control.  Note, this does bubble an event
-     * as it should only be called from a ui element setting it (such as a key
-     * press).  A value will not be set if the target button is disabled.
-     * A value that is already set will be unset.
-     *
-     * @param value The value to attempt to set.
-     */
-    public void TrySetValue(int value) {
-        // Only set the value if it is enabled
-        // Also when checking or un-checking the target button,
-        //  trigger the check events.
-        if (this.valueButtons[value - 1].getEnabled()) {
-            if (this.valueButtons[value - 1].getChecked()) {
-                // This button is currently selected
-                // Uncheck it and set the currentSelectedButton to null
-                this.selectedButton.setChecked(false);
-                this.selectedButton = null;
-            } else {
-
-                // Uncheck the current selected button if it is checked
-                if (this.selectedButton != null) {
-                    this.selectedButton.setCheckedNoTrigger(false);
-                    this.selectedButton = null;
-                }
-
-                this.selectedButton = this.valueButtons[value - 1];
-                this.selectedButton.setChecked(true);
-            }
-        }
-    }
-
-    /**
-     * Clears the Value control removing all ui elements.
-     */
     public void Clear() {
         if (this.valueButtons != null) {
             this.removeAllViews();

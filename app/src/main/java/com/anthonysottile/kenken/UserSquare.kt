@@ -72,10 +72,6 @@ class UserSquare {
         this.valueSetListeners.add(listener)
     }
 
-    fun removeValueSetListener(listener: ValueSetListener) {
-        this.valueSetListeners.remove(listener)
-    }
-
     fun clearValueSetListeners() {
         this.valueSetListeners.clear()
     }

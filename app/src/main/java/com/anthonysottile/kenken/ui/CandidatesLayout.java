@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.EventListener;
 import java.util.EventObject;
 import java.util.List;
+import java.util.Set;
 
 public class CandidatesLayout extends LinearLayout {
 
@@ -30,11 +31,7 @@ public class CandidatesLayout extends LinearLayout {
                     0.5f
             );
 
-    //#region Events
-
     public class CandidateEvent extends EventObject {
-
-        private static final long serialVersionUID = -5538360989234256662L;
         private int candidate;
 
         public int getCandidate() {
@@ -62,10 +59,6 @@ public class CandidatesLayout extends LinearLayout {
         this.candidateAddedListeners.add(listener);
     }
 
-    public void RemoveCandidateAddedListener(CandidateAddedListener listener) {
-        this.candidateAddedListeners.remove(listener);
-    }
-
     private void triggerCandidateAdded(int candidate) {
         CandidateEvent event = new CandidateEvent(this, candidate);
 
@@ -82,10 +75,6 @@ public class CandidatesLayout extends LinearLayout {
         this.candidateRemovedListeners.add(listener);
     }
 
-    public void RemoveCandidateRemovedListener(CandidateRemovedListener listener) {
-        this.candidateRemovedListeners.remove(listener);
-    }
-
     private void triggerCandidateRemoved(int candidate) {
         CandidateEvent event = new CandidateEvent(this, candidate);
 
@@ -94,8 +83,6 @@ public class CandidatesLayout extends LinearLayout {
             this.candidateRemovedListeners.get(i).onCandidateRemoved(event);
         }
     }
-
-    //#endregion
 
     private CustomButton[] candidates = null;
 
@@ -116,14 +103,12 @@ public class CandidatesLayout extends LinearLayout {
     }
 
     private final CustomButton.CheckChangedListener checkChangedListener =
-            new CustomButton.CheckChangedListener() {
-                public void onCheckChanged(CheckChangedEvent event) {
-                    CustomButton button = (CustomButton) event.getSource();
-                    if (button.getChecked()) {
-                        CandidatesLayout.this.triggerCandidateAdded(button.getValue());
-                    } else {
-                        CandidatesLayout.this.triggerCandidateRemoved(button.getValue());
-                    }
+            event -> {
+                CustomButton button = (CustomButton) event.getSource();
+                if (button.getChecked()) {
+                    CandidatesLayout.this.triggerCandidateAdded(button.getValue());
+                } else {
+                    CandidatesLayout.this.triggerCandidateRemoved(button.getValue());
                 }
             };
 
@@ -141,27 +126,9 @@ public class CandidatesLayout extends LinearLayout {
         }
     }
 
-    /**
-     * Attempts to set the candidate of the given value.  If it is disabled it
-     * does nothing.  If it is checked it becomes unchecked.  Note: this triggers
-     * events as this should only be called from key press.
-     *
-     * @param value The value to attempt to set.
-     */
-    public void TrySetValue(int value) {
-        if (this.candidates != null && this.candidates[value - 1].getEnabled()) {
-            this.candidates[value - 1].toggleChecked();
-        }
-    }
-
-    /**
-     * Sets all of the candidate buttons to disabled.
-     */
     public void SetDisabled() {
-        if (this.candidates != null) {
-            for (CustomButton candidate : this.candidates) {
-                candidate.setEnabled(false);
-            }
+        for (CustomButton candidate : this.candidates) {
+            candidate.setEnabled(false);
         }
     }
 
@@ -170,19 +137,15 @@ public class CandidatesLayout extends LinearLayout {
      *
      * @param disabled The candidate buttons to disabled.
      */
-    public void SetDisabled(List<Integer> disabled) {
-
+    public void SetDisabled(Set<Integer> disabled) {
         for (CustomButton candidate : this.candidates) {
             candidate.setEnabled(true);
         }
 
-        int disabledSize = disabled.size();
-        for (int i = 0; i < disabledSize; i += 1) {
-            int indexToDisable = disabled.get(i) - 1;
-            this.candidates[indexToDisable].setEnabled(false);
+        for (int x : disabled) {
+            this.candidates[x - 1].setEnabled(false);
         }
     }
-
 
     /**
      * Setup method for when a new game is started.
@@ -200,11 +163,7 @@ public class CandidatesLayout extends LinearLayout {
         plusButton.setIsCheckable(false);
         plusButton.setCheckedNoTrigger(true);
         plusButton.setText(this.getContext().getString(R.string.plus));
-        plusButton.AddClickListener(new CustomButton.ClickListener() {
-            public void onClick(EventObject event) {
-                CandidatesLayout.this.populateAllClicked();
-            }
-        });
+        plusButton.AddClickListener(event -> CandidatesLayout.this.populateAllClicked());
 
         CustomButton minusButton = new CustomButton(this.getContext());
         minusButton.setEnabled(true);
@@ -213,11 +172,7 @@ public class CandidatesLayout extends LinearLayout {
         minusButton.setIsCheckable(false);
         minusButton.setCheckedNoTrigger(true);
         minusButton.setText(this.getContext().getString(R.string.minus));
-        minusButton.AddClickListener(new CustomButton.ClickListener() {
-            public void onClick(EventObject event) {
-                CandidatesLayout.this.clearAllClicked();
-            }
-        });
+        minusButton.AddClickListener(event -> CandidatesLayout.this.clearAllClicked());
 
         this.addView(plusButton, CandidatesLayout.allNoneLayoutParams);
         this.addView(new TextView(this.getContext()), 5, ViewGroup.LayoutParams.MATCH_PARENT);

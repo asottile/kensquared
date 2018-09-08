@@ -6,6 +6,8 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -19,7 +21,6 @@ import com.anthonysottile.kenken.UserSquare.ValueSetEvent;
 import com.anthonysottile.kenken.cages.ICage;
 import com.anthonysottile.kenken.settings.SettingsProvider;
 import com.anthonysottile.kenken.ui.KenKenSquare.SquareTouchState;
-import com.anthonysottile.kenken.ui.ValuesLayout.ValueEvent;
 
 import org.json.JSONObject;
 
@@ -27,7 +28,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.EventListener;
 import java.util.EventObject;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class GameComponent extends View {
 
@@ -45,18 +48,10 @@ public class GameComponent extends View {
     private TextView timerText = null;
 
     private final KenKenSquare.RequestRedrawListener redrawListener =
-            new KenKenSquare.RequestRedrawListener() {
-                public void onRequestRedraw(EventObject event) {
-                    GameComponent.this.postInvalidate();
-                }
-            };
+            event -> GameComponent.this.postInvalidate();
 
     private final UserSquare.ValueSetListener valueSetListener =
-            new UserSquare.ValueSetListener() {
-                public void onValueSet(ValueSetEvent event) {
-                    GameComponent.this.valueSetEvent(event);
-                }
-            };
+            event -> GameComponent.this.valueSetEvent(event);
 
     private int squareWidthPlusBorder;
     private int squareHeightPlusBorder;
@@ -87,13 +82,11 @@ public class GameComponent extends View {
             GameComponent.this.gameTimer.postDelayed(this, 1000);
         }
     };
-    private final Runnable checkClearer = new Runnable() {
-        public void run() {
-            if (GameComponent.this.gameState != GameState.Clear) {
-                for (KenKenSquare[] squares : GameComponent.this.uiSquares) {
-                    for (KenKenSquare square : squares) {
-                        square.setMarkedIncorrect(false);
-                    }
+    private final Runnable checkClearer = () -> {
+        if (GameComponent.this.gameState != GameState.Clear) {
+            for (KenKenSquare[] squares : GameComponent.this.uiSquares) {
+                for (KenKenSquare square : squares) {
+                    square.setMarkedIncorrect(false);
                 }
             }
         }
@@ -152,14 +145,12 @@ public class GameComponent extends View {
     }
 
     private void valueSetEvent(ValueSetEvent event) {
-
         int value = event.getValue();
 
         // ValueSet can be triggered with 0 (unset)
         // We only care about clearing out candidates and
         //  checking for game won in the case where an actual value is set
         if (value > 0) {
-
             int order = this.game.getLatinSquare().getOrder();
             UserSquare[][] userSquares = this.game.getUserSquares();
             int row = event.getY();
@@ -168,7 +159,6 @@ public class GameComponent extends View {
             // Remove the value that was set from all candidates in row and col.
             // Except for the row it was set on
             for (int i = 0; i < order; i += 1) {
-
                 if (i != row) {
                     userSquares[col][i].removeCandidate(value);
                 }
@@ -201,33 +191,31 @@ public class GameComponent extends View {
         }
     }
 
-    private List<Integer> getDisabled(UserSquare square) {
+    private Set<Integer> getDisabled(UserSquare square) {
         int order = this.game.getLatinSquare().getOrder();
         int x = square.getX();
         int y = square.getY();
         UserSquare[][] userSquares = this.game.getUserSquares();
 
-        List<Integer> returnList = new ArrayList<Integer>();
+        Set<Integer> ret = new HashSet<>();
 
         for (int i = 0; i < order; i += 1) {
-
-            if (i != y && userSquares[x][i].getValue() > 0) {
-                returnList.add(userSquares[x][i].getValue());
+            if (i != y && userSquares[x][i].getValue() != 0) {
+                ret.add(userSquares[x][i].getValue());
             }
 
-            if (i != x && userSquares[i][y].getValue() > 0) {
-                returnList.add(userSquares[i][y].getValue());
+            if (i != x && userSquares[i][y].getValue() != 0) {
+                ret.add(userSquares[i][y].getValue());
             }
         }
 
-        return returnList;
+        return ret;
     }
 
     private void setFromSquare() {
-
         UserSquare currentUserSquare = this.selectedSquare.getUserSquare();
 
-        List<Integer> disabled = this.getDisabled(currentUserSquare);
+        Set<Integer> disabled = this.getDisabled(currentUserSquare);
 
         this.valuesLayout.SetDisabled(disabled);
         this.valuesLayout.SetValue(currentUserSquare.getValue());
@@ -282,7 +270,6 @@ public class GameComponent extends View {
     }
 
     public void Check() {
-
         // Penalize the game playing time by 15 seconds
         this.game.penalizeGameStartTime(15000);
         this.updateTime();
@@ -307,7 +294,6 @@ public class GameComponent extends View {
     }
 
     private void initializeGame(int order) {
-
         this.candidatesLayout.NewGame(order);
         this.valuesLayout.NewGame(order);
 
@@ -317,6 +303,7 @@ public class GameComponent extends View {
         for (int i = 0; i < order; i += 1) {
             this.uiSquares[i] = new KenKenSquare[order];
             for (int j = 0; j < order; j += 1) {
+                userSquares[i][j].addValueSetListener(this.valueSetListener);
                 this.uiSquares[i][j] = new KenKenSquare(userSquares[i][j]);
                 this.uiSquares[i][j].addRequestRedrawListener(this.redrawListener);
             }
@@ -326,8 +313,8 @@ public class GameComponent extends View {
         List<ICage> cages = this.game.getCages();
         for (ICage cage : cages) {
             Point location = cage.getSignLocation();
-            this.uiSquares[location.x][location.y]
-                    .setCageText(cage.getSignNumber().toString());
+            String text = cage.getSignNumber().toString();
+            this.uiSquares[location.x][location.y].setCageText(text);
         }
 
         // Set the first square to be selected
@@ -369,9 +356,7 @@ public class GameComponent extends View {
         this.Clear();
         if (gameAsJson != null) {
             this.game = new KenKenGame(gameAsJson);
-
             this.initializeGame(this.game.getLatinSquare().getOrder());
-
             this.TogglePause();
         }
     }
@@ -383,12 +368,10 @@ public class GameComponent extends View {
     }
 
     public void Clear() {
-
         this.candidatesLayout.Clear();
         this.valuesLayout.Clear();
 
         if (this.game != null) {
-
             // remove event stuff
             for (KenKenSquare[] squares : this.uiSquares) {
                 for (KenKenSquare square : squares) {
@@ -396,8 +379,10 @@ public class GameComponent extends View {
                 }
             }
 
-            if (this.selectedSquare != null) {
-                this.selectedSquare.getUserSquare().clearValueSetListeners();
+            for (UserSquare[] row : this.game.getUserSquares()) {
+                for (UserSquare square : row) {
+                    square.clearValueSetListeners();
+                }
             }
 
             this.gameTimer.removeCallbacks(this.updater);
@@ -428,40 +413,27 @@ public class GameComponent extends View {
         this.timerText = timerText;
 
         this.candidatesLayout.AddCandidateAddedListener(
-                new CandidatesLayout.CandidateAddedListener() {
-                    public void onCandidateAdded(CandidatesLayout.CandidateEvent event) {
-                        GameComponent.this.selectedSquare
-                                .getUserSquare()
-                                .addCandidate(event.getCandidate());
-                    }
-                }
+                event -> GameComponent.this.selectedSquare
+                        .getUserSquare()
+                        .addCandidate(event.getCandidate())
         );
 
         this.candidatesLayout.AddCandidateRemovedListener(
-                new CandidatesLayout.CandidateRemovedListener() {
-                    public void onCandidateRemoved(CandidatesLayout.CandidateEvent event) {
-                        GameComponent.this.selectedSquare
-                                .getUserSquare()
-                                .removeCandidate(event.getCandidate());
-                    }
-                }
+                event -> GameComponent.this.selectedSquare
+                        .getUserSquare()
+                        .removeCandidate(event.getCandidate())
         );
 
         this.valuesLayout.AddValueChangedListener(
-                new ValuesLayout.ValueChangedListener() {
-                    public void onValueChanged(ValueEvent event) {
-                        GameComponent.this.selectedSquare
-                                .getUserSquare()
-                                .setValue(event.getValue());
-                    }
-                }
+                event -> GameComponent.this.selectedSquare
+                        .getUserSquare()
+                        .setValue(event.getValue())
         );
     }
 
     // #region Touch Event
 
     private KenKenSquare getSquareFromPosition(int x, int y) {
-
         int xIndex = (x - UIConstants.BorderWidth) / this.squareWidthPlusBorder;
         int yIndex = (y - UIConstants.BorderWidth) / this.squareHeightPlusBorder;
 
@@ -482,12 +454,51 @@ public class GameComponent extends View {
         return this.uiSquares[xIndex][yIndex];
     }
 
+    private void handleDoubleTap() {
+        // Set all 1-square cages
+        for (ICage cage : this.game.getCages()) {
+            List<Point> cageSquares = cage.getSquares();
+            if (cageSquares.size() == 1) {
+                Point pt = cageSquares.get(0);
+                UserSquare square = this.uiSquares[pt.x][pt.y].getUserSquare();
+                if (square.getValue() == 0) {
+                    square.setValue(cage.getSignNumber().getNumber());
+                }
+            }
+        }
+
+        // Set all values that can only be satisfied by one value
+        boolean actionTaken = true;
+        while (actionTaken) {
+            actionTaken = false;
+            for (KenKenSquare[] row : this.uiSquares) {
+                for (KenKenSquare uiSquare : row) {
+                    UserSquare square = uiSquare.getUserSquare();
+                    Set<Integer> disabled = this.getDisabled(square);
+                    int order = this.game.getLatinSquare().getOrder();
+                    if (square.getValue() == 0 && disabled.size() == order - 1) {
+                        int sum = 0;
+                        for (int x : disabled) {
+                            sum += x;
+                        }
+                        square.setValue(order * (order + 1) / 2 - sum);
+                        actionTaken = true;
+                    }
+                }
+            }
+        }
+
+        // After changing values we need to refresh the number pickers
+        this.setFromSquare();
+    }
+
+    private static final long DOUBLE_TAP_DELTA_MS = 300;
+    private long lastTapTime = 0;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
         // Only want to accept clicks if we are in game.
         if (this.gameState == GameState.InGame) {
-
             float x = event.getX();
             float y = event.getY();
 
@@ -529,17 +540,17 @@ public class GameComponent extends View {
                     // Then set the selected square and set the touched state
                     //  and rebind the event handler.
                     this.selectedSquare.setTouchState(SquareTouchState.None);
-                    this.selectedSquare.getUserSquare().removeValueSetListener(
-                            this.valueSetListener
-                    );
                     this.selectedSquare = targetSquare;
                     this.selectedSquare.setTouchState(SquareTouchState.Selected);
-                    this.selectedSquare.getUserSquare().addValueSetListener(
-                            this.valueSetListener
-                    );
 
                     // After this, set up the Candidates and Values layouts.
                     this.setFromSquare();
+
+                    long tapTime = System.currentTimeMillis();
+                    if (tapTime - lastTapTime < DOUBLE_TAP_DELTA_MS) {
+                        this.handleDoubleTap();
+                    }
+                    lastTapTime = tapTime;
 
                     break;
             }
