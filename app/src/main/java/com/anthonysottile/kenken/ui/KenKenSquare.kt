@@ -48,7 +48,7 @@ class KenKenSquare(val userSquare: UserSquare) {
             backgroundColor = incorrectColor
         }
 
-        dimensions.PaintBackgroundColor(
+        dimensions.paintBackgroundColor(
                 canvas,
                 backgroundColor,
                 x,
@@ -57,7 +57,7 @@ class KenKenSquare(val userSquare: UserSquare) {
 
         // Draw cage text
         if (this.cageText.isNotEmpty()) {
-            dimensions.PaintCageText(
+            dimensions.paintCageText(
                     canvas,
                     this.cageText,
                     x,
@@ -69,7 +69,7 @@ class KenKenSquare(val userSquare: UserSquare) {
         val squareValue = this.userSquare.value
         if (squareValue > 0) {
             // Display value
-            dimensions.PaintValueText(
+            dimensions.paintValueText(
                     canvas,
                     Integer.toString(squareValue),
                     x,
@@ -81,7 +81,7 @@ class KenKenSquare(val userSquare: UserSquare) {
 
             // Only paint if there is a string there
             if (candidatesText.isNotEmpty()) {
-                dimensions.PaintCandidatesText(
+                dimensions.paintCandidatesText(
                         canvas,
                         candidatesText,
                         x,
