@@ -15,8 +15,17 @@ import com.anthonysottile.kenken.settings.SettingsProvider
 import com.anthonysottile.kenken.ui.KenKenSquare.SquareTouchState
 import org.json.JSONObject
 import java.util.*
+import kotlin.math.max
+import kotlin.math.min
 
 class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs) {
+    enum class GameState {
+        Clear,
+        InGame,
+        Paused,
+        Won
+    }
+
     private var candidatesLayout: CandidatesLayout? = null
     private var valuesLayout: ValuesLayout? = null
     private var timerText: TextView? = null
@@ -56,13 +65,6 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
     private var lastTapTime: Long = 0
 
     private val gameWonListeners = ArrayList<GameWonListener>()
-
-    enum class GameState {
-        Clear,
-        InGame,
-        Paused,
-        Won
-    }
 
     private fun updateTime() {
         val now = Date()
@@ -190,23 +192,14 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
         this.candidatesLayout!!.setValues(currentUserSquare.candidates)
     }
 
-    /**
-     * Sets the game to paused if it is in game.
-     */
     fun pauseIfNotPaused() {
         if (this.gameState == GameState.InGame) {
             this.togglePause()
         }
     }
 
-    /**
-     * Toggles the paused state of the game.
-     * Do not call if there could be no game at the time.
-     */
     fun togglePause() {
         if (this.gameState == GameState.Paused) {
-
-            // UnPause game
             this.game!!.resetGameStartTime(this.pausedTime)
 
             this.gameState = GameState.InGame
@@ -215,8 +208,6 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
             this.gameTimer.postDelayed(this.updater, 1000)
 
         } else {
-
-            // Pause game
             val date = Date()
             this.pausedTime = date.time - this.game!!.gameStartTime.time
 
@@ -378,18 +369,8 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
         var yIndex = (y - UIConstants.BorderWidth) / this.squareHeightPlusBorder
 
         val order = this.game!!.latinSquare.order
-        if (xIndex < 0) {
-            xIndex = 0
-        }
-        if (yIndex < 0) {
-            yIndex = 0
-        }
-        if (xIndex >= order) {
-            xIndex = order - 1
-        }
-        if (yIndex >= order) {
-            yIndex = order - 1
-        }
+        xIndex = min(max(xIndex, 0), order - 1)
+        yIndex = min(max(yIndex, 0), order - 1)
 
         return this.uiSquares!![xIndex][yIndex]
     }
@@ -408,9 +389,8 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
         }
 
         // Set all values that can only be satisfied by one value
-        var actionTaken = true
-        while (actionTaken) {
-            actionTaken = false
+        do {
+            var actionTaken = false
             for (row in this.uiSquares!!) {
                 for (uiSquare in row) {
                     val square = uiSquare.userSquare
@@ -426,7 +406,7 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
                     }
                 }
             }
-        }
+        } while (actionTaken)
 
         // After changing values we need to refresh the number pickers
         this.setFromSquare()
