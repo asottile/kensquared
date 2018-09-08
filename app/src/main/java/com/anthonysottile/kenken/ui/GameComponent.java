@@ -159,12 +159,12 @@ public class GameComponent extends View {
                 }
             }
 
-            this.candidatesLayout.SetDisabled();
+            this.candidatesLayout.setDisabled();
 
             if (this.isGameWon()) {
                 // Disable stuff
-                this.valuesLayout.SetDisabled();
-                this.candidatesLayout.SetDisabled();
+                this.valuesLayout.setDisabled();
+                this.candidatesLayout.setDisabled();
                 this.gameState = GameState.Won;
 
                 this.gameTimer.removeCallbacks(this.updater);
@@ -176,7 +176,7 @@ public class GameComponent extends View {
                 this.triggerGameWon(ticks, order);
             }
         } else {
-            this.candidatesLayout.SetDisabled(
+            this.candidatesLayout.setDisabled(
                     this.getDisabled((UserSquare) event.getSource())
             );
         }
@@ -208,15 +208,15 @@ public class GameComponent extends View {
 
         Set<Integer> disabled = this.getDisabled(currentUserSquare);
 
-        this.valuesLayout.SetDisabled(disabled);
-        this.valuesLayout.SetValue(currentUserSquare.getValue());
+        this.valuesLayout.setDisabled(disabled);
+        this.valuesLayout.setValue(currentUserSquare.getValue());
 
         if (currentUserSquare.getValue() > 0) {
-            this.candidatesLayout.SetDisabled();
+            this.candidatesLayout.setDisabled();
         } else {
-            this.candidatesLayout.SetDisabled(disabled);
+            this.candidatesLayout.setDisabled(disabled);
         }
-        this.candidatesLayout.SetValues(currentUserSquare.getCandidates());
+        this.candidatesLayout.setValues(currentUserSquare.getCandidates());
     }
 
     /**
@@ -250,8 +250,8 @@ public class GameComponent extends View {
             this.pausedTime = date.getTime() - this.game.getGameStartTime().getTime();
 
             this.gameState = GameState.Paused;
-            this.candidatesLayout.SetDisabled();
-            this.valuesLayout.SetDisabled();
+            this.candidatesLayout.setDisabled();
+            this.valuesLayout.setDisabled();
             this.gameTimer.removeCallbacks(this.updater);
             this.timerText.setText(this.getContext().getString(R.string.paused));
         }
@@ -285,8 +285,8 @@ public class GameComponent extends View {
     }
 
     private void initializeGame(int order) {
-        this.candidatesLayout.NewGame(order);
-        this.valuesLayout.NewGame(order);
+        this.candidatesLayout.newGame(order);
+        this.valuesLayout.newGame(order);
 
         UserSquare[][] userSquares = this.game.getUserSquares();
 
@@ -359,8 +359,8 @@ public class GameComponent extends View {
     }
 
     public void Clear() {
-        this.candidatesLayout.Clear();
-        this.valuesLayout.Clear();
+        this.candidatesLayout.clear();
+        this.valuesLayout.clear();
 
         if (this.game != null) {
             // remove event stuff
@@ -403,19 +403,19 @@ public class GameComponent extends View {
         this.valuesLayout = valuesLayout;
         this.timerText = timerText;
 
-        this.candidatesLayout.AddCandidateAddedListener(
+        this.candidatesLayout.addCandidateAddedListener(
                 event -> GameComponent.this.selectedSquare
                         .getUserSquare()
                         .addCandidate(event.getCandidate())
         );
 
-        this.candidatesLayout.AddCandidateRemovedListener(
+        this.candidatesLayout.addCandidateRemovedListener(
                 event -> GameComponent.this.selectedSquare
                         .getUserSquare()
                         .removeCandidate(event.getCandidate())
         );
 
-        this.valuesLayout.AddValueChangedListener(
+        this.valuesLayout.addValueChangedListener(
                 event -> GameComponent.this.selectedSquare
                         .getUserSquare()
                         .setValue(event.getValue())
