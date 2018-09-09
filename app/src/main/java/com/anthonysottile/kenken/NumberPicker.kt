@@ -4,7 +4,7 @@ import java.util.*
 
 class NumberPicker(private val length: Int) {
     private var attempted = 0
-    private val collection: IntArray = IntArray(length)
+    private val collection = IntArray(length)
 
     fun getRemaining(): Int {
         return this.length - this.attempted
