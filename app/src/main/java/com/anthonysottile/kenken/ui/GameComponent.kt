@@ -510,7 +510,7 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
             return
         }
 
-        val order = SettingsProvider.getGameSize()
+        val order = SettingsProvider.gameSize
 
         var boardWidth = this.measuredWidth
         var boardHeight = this.measuredHeight

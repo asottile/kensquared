@@ -88,9 +88,8 @@ internal class PreferencesDialog(context: Context) : Dialog(context) {
         val okButton = Button(context)
         okButton.text = context.getString(R.string.ok)
         okButton.setOnClickListener { _ ->
-            SettingsProvider.setGameSize(
+            SettingsProvider.gameSize =
                     this@PreferencesDialog.dropdown.selectedItemPosition + UIConstants.MinGameSize
-            )
 
             this@PreferencesDialog.dismiss()
         }

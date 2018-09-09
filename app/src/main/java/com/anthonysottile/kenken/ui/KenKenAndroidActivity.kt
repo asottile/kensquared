@@ -106,7 +106,7 @@ class KenKenAndroidActivity : Activity() {
     }
 
     private fun newGame() {
-        val gameSize = SettingsProvider.getGameSize()
+        val gameSize = SettingsProvider.gameSize
         StatisticsManager.gameStarted(gameSize)
         this.gameComponent.newGame(gameSize)
     }
@@ -147,7 +147,7 @@ class KenKenAndroidActivity : Activity() {
     override fun onPrepareDialog(id: Int, dialog: Dialog) {
         when (id) {
             KenKenAndroidActivity.PreferencesDialogId ->
-                (dialog as PreferencesDialog).setSpinner(SettingsProvider.getGameSize())
+                (dialog as PreferencesDialog).setSpinner(SettingsProvider.gameSize)
             KenKenAndroidActivity.StatisticsDialogId ->
                 (dialog as StatisticsDialog).refresh()
             KenKenAndroidActivity.GameWonDialogId ->

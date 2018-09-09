@@ -137,11 +137,11 @@ class CustomButton(
             this.destRect.set(0, 0, 8, this.measuredHeight)
 
             val bitmap = if (!this.uiEnabled) {
-                BitmapCache.getDisabledLeft()
+                BitmapCache.disabledLeft
             } else if (this.checked) {
-                BitmapCache.getSelectedLeft()
+                BitmapCache.selectedLeft
             } else {
-                BitmapCache.getEnabledLeft()
+                BitmapCache.enabledLeft
             }
 
             // Draw left curve
@@ -163,11 +163,11 @@ class CustomButton(
             )
 
             val bitmap = if (!this.uiEnabled) {
-                BitmapCache.getDisabledRight()
+                BitmapCache.disabledRight
             } else if (this.checked) {
-                BitmapCache.getSelectedRight()
+                BitmapCache.selectedRight
             } else {
-                BitmapCache.getEnabledRight()
+                BitmapCache.enabledRight
             }
 
             // Draw right curve
@@ -186,11 +186,11 @@ class CustomButton(
 
         // Draw the background
         val bitmap = if (!this.uiEnabled) {
-            BitmapCache.getDisabledCenter()
+            BitmapCache.disabledCenter
         } else if (this.checked) {
-            BitmapCache.getSelectedCenter()
+            BitmapCache.selectedCenter
         } else {
-            BitmapCache.getEnabledCenter()
+            BitmapCache.enabledCenter
         }
 
         this.destRect.set(
