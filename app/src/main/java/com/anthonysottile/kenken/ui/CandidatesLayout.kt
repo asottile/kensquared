@@ -35,22 +35,6 @@ class CandidatesLayout(context: Context, attrs: AttributeSet) : LinearLayout(con
         }
     }
 
-    private fun populateAllClicked(unused: CustomButton) {
-        for (candidate in this.candidates!!) {
-            if (candidate.uiEnabled) {
-                candidate.checked = true
-            }
-        }
-    }
-
-    private fun clearAllClicked(unused: CustomButton) {
-        for (candidate in this.candidates!!) {
-            if (candidate.uiEnabled) {
-                candidate.checked = false
-            }
-        }
-    }
-
     private fun checkChangedListener(button: CustomButton) {
         if (button.checked) {
             this@CandidatesLayout.triggerCandidateAdded(button.value)
@@ -113,7 +97,13 @@ class CandidatesLayout(context: Context, attrs: AttributeSet) : LinearLayout(con
                 true,
                 false
         )
-        plusButton.addClickListener(this::populateAllClicked)
+        plusButton.addClickListener { _ ->
+            for (candidate in this.candidates!!) {
+                if (candidate.uiEnabled) {
+                    candidate.checked = true
+                }
+            }
+        }
 
         val minusButton = CustomButton(
                 this.context,
@@ -125,7 +115,13 @@ class CandidatesLayout(context: Context, attrs: AttributeSet) : LinearLayout(con
                 true,
                 false
         )
-        minusButton.addClickListener(this::clearAllClicked)
+        minusButton.addClickListener { _ ->
+            for (candidate in this.candidates!!) {
+                if (candidate.uiEnabled) {
+                    candidate.checked = false
+                }
+            }
+        }
 
         this.addView(plusButton, CandidatesLayout.allNoneLayoutParams)
         this.addView(TextView(this.context), 5, ViewGroup.LayoutParams.MATCH_PARENT)
@@ -161,7 +157,6 @@ class CandidatesLayout(context: Context, attrs: AttributeSet) : LinearLayout(con
     }
 
     init {
-
         this.setPadding(5, 15, 5, 15)
     }
 

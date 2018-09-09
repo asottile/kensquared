@@ -16,12 +16,12 @@ import java.util.*
 
 internal class StatisticsDialog(context: Context) : Dialog(context) {
 
-    private var dropdown: Spinner? = null
-    private var gamesPlayed: TextView? = null
-    private var gamesWon: TextView? = null
-    private var averageTime: TextView? = null
-    private var bestTime: TextView? = null
-    private var bestTimeDate: TextView? = null
+    private lateinit var dropdown: Spinner
+    private lateinit var gamesPlayed: TextView
+    private lateinit var gamesWon: TextView
+    private lateinit var averageTime: TextView
+    private lateinit var bestTime: TextView
+    private lateinit var bestTimeDate: TextView
 
     private fun makeSpacerView(): View {
         val spacerView = View(this.context)
@@ -31,32 +31,32 @@ internal class StatisticsDialog(context: Context) : Dialog(context) {
     }
 
     private fun setValues(gameSize: Int) {
-        val statistics = StatisticsManager.GetGameStatistics(gameSize)
+        val statistics = StatisticsManager.getGameStatistics(gameSize)
 
-        this.gamesPlayed!!.text = Integer.toString(statistics.gamesPlayed, 10)
-        this.gamesWon!!.text = Integer.toString(statistics.gamesWon, 10)
+        this.gamesPlayed.text = Integer.toString(statistics.gamesPlayed, 10)
+        this.gamesWon.text = Integer.toString(statistics.gamesWon, 10)
 
         if (statistics.gamesWon > 0) {
-            this.averageTime!!.text = StatisticsDialog.toTimeString(
+            this.averageTime.text = StatisticsDialog.toTimeString(
                     statistics.totalSeconds / statistics.gamesWon
             )
 
-            this.bestTime!!.text = StatisticsDialog.toTimeString(
+            this.bestTime.text = StatisticsDialog.toTimeString(
                     statistics.bestTime
             )
 
-            this.bestTimeDate!!.text = StatisticsDialog.dateFormat.format(statistics.bestTimeDate)
+            this.bestTimeDate.text = StatisticsDialog.dateFormat.format(statistics.bestTimeDate)
 
         } else {
-            this.averageTime!!.text = ""
-            this.bestTime!!.text = ""
-            this.bestTimeDate!!.text = ""
+            this.averageTime.text = ""
+            this.bestTime.text = ""
+            this.bestTimeDate.text = ""
         }
     }
 
     private fun clearStatistics() {
-        StatisticsManager.ClearGameStatistics()
-        this.setValues(this.dropdown!!.selectedItemPosition + UIConstants.MinGameSize)
+        StatisticsManager.clearGameStatistics()
+        this.setValues(this.dropdown.selectedItemPosition + UIConstants.MinGameSize)
     }
 
     /**
@@ -65,7 +65,7 @@ internal class StatisticsDialog(context: Context) : Dialog(context) {
      * games were played.
      */
     fun refresh() {
-        this.setValues(this.dropdown!!.selectedItemPosition + UIConstants.MinGameSize)
+        this.setValues(this.dropdown.selectedItemPosition + UIConstants.MinGameSize)
     }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,9 +101,9 @@ internal class StatisticsDialog(context: Context) : Dialog(context) {
                 StatisticsDialog.GameSizes
         )
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
-        this.dropdown!!.adapter = spinnerAdapter
-        this.dropdown!!.setSelection(0)
-        this.dropdown!!.onItemSelectedListener = object : OnItemSelectedListener {
+        this.dropdown.adapter = spinnerAdapter
+        this.dropdown.setSelection(0)
+        this.dropdown.onItemSelectedListener = object : OnItemSelectedListener {
 
             override fun onItemSelected(adapter: AdapterView<*>, view: View,
                                         selectedIndex: Int, id: Long) {
@@ -143,7 +143,7 @@ internal class StatisticsDialog(context: Context) : Dialog(context) {
         gamesPlayedLabel.text = context.getString(R.string.gamesPlayed)
         gamesPlayedLabel.setPadding(UIConstants.StatisticsOneIndent * 2, 5, 5, 5)
         this.gamesPlayed = TextView(context)
-        this.gamesPlayed!!.setPadding(5, 5, 5, 5)
+        this.gamesPlayed.setPadding(5, 5, 5, 5)
 
         val gamesPlayedLayout = LinearLayout(context)
         gamesPlayedLayout.addView(gamesPlayedLabel, StatisticsDialog.wrapContent)
@@ -156,7 +156,7 @@ internal class StatisticsDialog(context: Context) : Dialog(context) {
         gamesWonLabel.text = context.getString(R.string.gamesWon)
         gamesWonLabel.setPadding(UIConstants.StatisticsOneIndent * 2, 5, 5, 5)
         this.gamesWon = TextView(context)
-        this.gamesWon!!.setPadding(5, 5, 5, 5)
+        this.gamesWon.setPadding(5, 5, 5, 5)
 
         val gamesWonLayout = LinearLayout(context)
         gamesWonLayout.addView(gamesWonLabel, StatisticsDialog.wrapContent)
@@ -169,7 +169,7 @@ internal class StatisticsDialog(context: Context) : Dialog(context) {
         averageTimeLabel.text = context.getString(R.string.averageTime)
         averageTimeLabel.setPadding(UIConstants.StatisticsOneIndent * 2, 5, 5, 5)
         this.averageTime = TextView(context)
-        this.averageTime!!.setPadding(5, 5, 5, 5)
+        this.averageTime.setPadding(5, 5, 5, 5)
 
         val averageTimeLayout = LinearLayout(context)
         averageTimeLayout.addView(averageTimeLabel, StatisticsDialog.wrapContent)
@@ -182,7 +182,7 @@ internal class StatisticsDialog(context: Context) : Dialog(context) {
         bestTimeLabel.text = context.getString(R.string.bestTime)
         bestTimeLabel.setPadding(UIConstants.StatisticsOneIndent * 2, 5, 5, 5)
         this.bestTime = TextView(context)
-        this.bestTime!!.setPadding(5, 5, 5, 5)
+        this.bestTime.setPadding(5, 5, 5, 5)
 
         val bestTimeLayout = LinearLayout(context)
         bestTimeLayout.addView(bestTimeLabel, StatisticsDialog.wrapContent)
@@ -195,7 +195,7 @@ internal class StatisticsDialog(context: Context) : Dialog(context) {
         bestTimeDateLabel.text = context.getString(R.string.bestTimeDate)
         bestTimeDateLabel.setPadding(UIConstants.StatisticsOneIndent * 2, 5, 5, 5)
         this.bestTimeDate = TextView(context)
-        this.bestTimeDate!!.setPadding(5, 5, 5, 5)
+        this.bestTimeDate.setPadding(5, 5, 5, 5)
 
         val bestTimeDateLayout = LinearLayout(context)
         bestTimeDateLayout.addView(bestTimeDateLabel, StatisticsDialog.wrapContent)

@@ -64,7 +64,7 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
 
     private var lastTapTime: Long = 0
 
-    private val gameWonListeners = ArrayList<GameWonListener>()
+    private val gameWonListeners = ArrayList<(Long, Int) -> Unit>()
 
     private fun updateTime() {
         val now = Date()
@@ -510,7 +510,7 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
             return
         }
 
-        val order = SettingsProvider.GetGameSize()
+        val order = SettingsProvider.getGameSize()
 
         var boardWidth = this.measuredWidth
         var boardHeight = this.measuredHeight
@@ -586,24 +586,15 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
         }
     }
 
-    inner class GameWonEvent internal constructor(sender: GameComponent, val ticks: Long, val size: Int) : EventObject(sender)
-
-    interface GameWonListener : EventListener {
-        fun onGameWon(event: GameWonEvent)
-    }
-
     private fun triggerGameWon(ticks: Long, size: Int) {
-        val event = GameWonEvent(this, ticks, size)
-
         for (listener in this.gameWonListeners) {
-            listener.onGameWon(event)
+            listener(ticks, size)
         }
     }
 
-    fun addGameWonListener(listener: GameWonListener) {
+    fun addGameWonListener(listener: (ticks: Long, size: Int) -> Unit) {
         this.gameWonListeners.add(listener)
     }
-
 
     companion object {
         private const val defaultSize = 100

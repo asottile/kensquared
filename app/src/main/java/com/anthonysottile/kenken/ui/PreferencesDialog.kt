@@ -12,7 +12,7 @@ import com.anthonysottile.kenken.settings.SettingsProvider
 
 internal class PreferencesDialog(context: Context) : Dialog(context) {
 
-    private var dropdown: Spinner? = null
+    private lateinit var dropdown: Spinner
 
     private fun makeSpacerView(): View {
         val spacerView = View(this.context)
@@ -29,7 +29,7 @@ internal class PreferencesDialog(context: Context) : Dialog(context) {
      * and [UIConstants.MaxGameSize].
      */
     fun setSpinner(gameSize: Int) {
-        this.dropdown!!.setSelection(gameSize - UIConstants.MinGameSize)
+        this.dropdown.setSelection(gameSize - UIConstants.MinGameSize)
     }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,8 +54,8 @@ internal class PreferencesDialog(context: Context) : Dialog(context) {
                 PreferencesDialog.GameSizes
         )
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
-        this.dropdown!!.adapter = spinnerAdapter
-        this.dropdown!!.setSelection(0)
+        this.dropdown.adapter = spinnerAdapter
+        this.dropdown.setSelection(0)
 
         // Layout for Game Size
         // NOTE: Needed a little hack here to get the dialog to display nicely.
@@ -88,8 +88,8 @@ internal class PreferencesDialog(context: Context) : Dialog(context) {
         val okButton = Button(context)
         okButton.text = context.getString(R.string.ok)
         okButton.setOnClickListener { _ ->
-            SettingsProvider.SetGameSize(
-                    this@PreferencesDialog.dropdown!!.selectedItemPosition + UIConstants.MinGameSize
+            SettingsProvider.setGameSize(
+                    this@PreferencesDialog.dropdown.selectedItemPosition + UIConstants.MinGameSize
             )
 
             this@PreferencesDialog.dismiss()
