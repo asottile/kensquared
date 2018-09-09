@@ -56,9 +56,6 @@ public class KenKenAndroidActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: remove this comment when debugging
-        //new ErrorReporter().Init(this);
-
         // Give a reference to settings to our static settings manager
         // Also attach to the settings's event handler
         SharedPreferences preferences =
@@ -194,18 +191,18 @@ public class KenKenAndroidActivity extends Activity {
         switch (id) {
             case KenKenAndroidActivity.PreferencesDialogId:
 
-                ((PreferencesDialog) dialog).SetSpinner(SettingsProvider.GetGameSize());
+                ((PreferencesDialog) dialog).setSpinner(SettingsProvider.GetGameSize());
 
                 break;
             case KenKenAndroidActivity.StatisticsDialogId:
 
-                ((StatisticsDialog) dialog).Refresh();
+                ((StatisticsDialog) dialog).refresh();
 
                 break;
 
             case KenKenAndroidActivity.GameWonDialogId:
 
-                ((GameWonDialog) dialog).Setup(
+                ((GameWonDialog) dialog).setup(
                         this.gameWonGameSize,
                         this.gameWonNewHighScore,
                         this.gameWonTicks
