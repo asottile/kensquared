@@ -408,8 +408,11 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
             }
         } while (actionTaken)
 
-        // After changing values we need to refresh the number pickers
-        this.setFromSquare()
+        // #5: don't update the pickers if the game is won
+        if (this.gameState != GameState.Won) {
+            // After changing values we need to refresh the number pickers
+            this.setFromSquare()
+        }
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
