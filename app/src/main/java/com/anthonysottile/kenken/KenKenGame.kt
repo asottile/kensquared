@@ -9,13 +9,14 @@ import org.json.JSONObject
 import java.util.*
 
 class KenKenGame {
-
-    // Update this as squares obtain values
     var squaresWithValues = 0
         private set
 
-    var gameStartTime: Date
+    var gameStartTime: Date = Date()
     val latinSquare: LatinSquare
+
+    val rowValues: Array<MutableSet<Int>>
+    val colValues: Array<MutableSet<Int>>
 
     var userSquares: Array<Array<UserSquare>>
     private val cageSquareOccupied: Array<BooleanArray>
@@ -70,14 +71,15 @@ class KenKenGame {
     constructor(order: Int) {
         this.latinSquare = LatinSquare(order)
 
+        this.rowValues = Array(order) { TreeSet<Int>() }
+        this.colValues = Array(order) { TreeSet<Int>() }
+
         this.cageSquareOccupied = Array(order) { BooleanArray(order) }
         this.userSquares = Array(order) { i ->
-            Array(order) { j -> UserSquare(i, j, order) }
+            Array(order) { j -> UserSquare(this.rowValues[i], this.colValues[j]) }
         }
 
         CageGenerator.Generate(this)
-
-        this.gameStartTime = Date()
 
         this.postInitialize()
     }
@@ -85,26 +87,20 @@ class KenKenGame {
     fun toJson(): JSONObject {
         val json = JSONObject()
 
-        val now = Date()
-        val timeElapsed = now.time - this.gameStartTime.time
+        val timeElapsed = Date().time - this.gameStartTime.time
 
         val cagesJson = JSONArray()
-        for ((i, cage) in this.cages.withIndex()) {
-            cagesJson.put(i, cage.ToJson())
-        }
+        this.cages.forEach { cagesJson.put(it.ToJson()) }
 
         val userSquaresJson = JSONArray()
-        for ((i, row) in this.userSquares.withIndex()) {
+        for (row in this.userSquares) {
             val innerArray = JSONArray()
-
-            for ((j, userSquare) in row.withIndex()) {
-                innerArray.put(j, userSquare.toJson())
+            for (square in row) {
+                innerArray.put(square.toJson())
             }
-
-            userSquaresJson.put(i, innerArray)
+            userSquaresJson.put(innerArray)
         }
 
-        json.put(KenKenGame.squaresWithValuesProperty, this.squaresWithValues)
         json.put(KenKenGame.gameTimeElapsedProperty, timeElapsed)
         json.put(KenKenGame.latinSquareProperty, this.latinSquare.toJson())
         json.put(KenKenGame.cagesProperty, cagesJson)
@@ -114,11 +110,8 @@ class KenKenGame {
     }
 
     constructor(json: JSONObject) {
-        this.squaresWithValues = json.getInt(KenKenGame.squaresWithValuesProperty)
-
-        val timeElapsed = json.getLong(KenKenGame.gameTimeElapsedProperty)
-        this.gameStartTime = Date()
-        this.gameStartTime.time = this.gameStartTime.time - timeElapsed
+        val elapsed = json.getLong(KenKenGame.gameTimeElapsedProperty)
+        this.resetGameStartTime(elapsed)
 
         this.latinSquare = LatinSquare(json.getJSONObject(KenKenGame.latinSquareProperty))
         this.cageSquareOccupied = Array(this.latinSquare.order) { BooleanArray(this.latinSquare.order) }
@@ -128,18 +121,35 @@ class KenKenGame {
             this.cages.add(BaseCage.ToCage(cagesJson.getJSONObject(i)))
         }
 
+        this.rowValues = Array(this.latinSquare.order) { TreeSet<Int>() }
+        this.colValues = Array(this.latinSquare.order) { TreeSet<Int>() }
+
         val userSquareJson = json.getJSONArray(KenKenGame.userSquaresProperty)
-        val order = userSquareJson.length()
-        this.userSquares = Array(order) { i ->
+        this.userSquares = Array(this.latinSquare.order) { i ->
             val inner = userSquareJson.getJSONArray(i)
-            return@Array Array(order) { j -> UserSquare(inner.getJSONObject(j)) }
+            return@Array Array(this.latinSquare.order) { j ->
+                UserSquare(
+                        inner.getJSONObject(j),
+                        this.rowValues[i],
+                        this.colValues[j]
+                )
+            }
+        }
+
+        for ((i, row) in this.userSquares.withIndex()) {
+            for ((j, square) in row.withIndex()) {
+                if (square.value != 0) {
+                    this.squaresWithValues += 1
+                    this.rowValues[i].add(square.value)
+                    this.colValues[j].add(square.value)
+                }
+            }
         }
 
         this.postInitialize()
     }
 
     companion object {
-        private const val squaresWithValuesProperty = "SquaresWithValues"
         private const val gameTimeElapsedProperty = "GameTimeElapsed"
         private const val latinSquareProperty = "LatinSquare"
         private const val cagesProperty = "Cages"

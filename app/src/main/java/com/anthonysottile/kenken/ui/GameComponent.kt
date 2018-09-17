@@ -3,6 +3,7 @@ package com.anthonysottile.kenken.ui
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Point
 import android.os.Handler
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -26,17 +27,22 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
         Won
     }
 
-    private var candidatesLayout: CandidatesLayout? = null
-    private var valuesLayout: ValuesLayout? = null
-    private var timerText: TextView? = null
+    private lateinit var candidatesLayout: CandidatesLayout
+    private lateinit var valuesLayout: ValuesLayout
+    private lateinit var timerText: TextView
 
     private var squareWidthPlusBorder: Int = 0
     private var squareHeightPlusBorder: Int = 0
     private var dimensions: SquareDrawingDimensions? = null
 
     private var uiSquares: Array<Array<KenKenSquare>>? = null
-    private var selectedSquare: KenKenSquare? = null
-    private var hoverSquare: KenKenSquare? = null
+    private var selected: Point = Point(0, 0)
+    private var hover: Point? = null
+
+    private val selectedSquare: KenKenSquare
+        get() {
+            return this.uiSquares!![this.selected.x][this.selected.y]
+        }
 
     var gameState = GameState.Clear
         private set
@@ -52,10 +58,10 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
             this@GameComponent.gameTimer.postDelayed(this, 1000)
         }
     }
-    private val checkClearer = {
-        if (this@GameComponent.gameState != GameState.Clear) {
-            for (squares in this@GameComponent.uiSquares!!) {
-                for (square in squares) {
+    private fun checkClearer() {
+        if (this.gameState != GameState.Clear) {
+            for (row in this.uiSquares!!) {
+                for (square in row) {
                     square.markedIncorrect = false
                 }
             }
@@ -74,7 +80,7 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
         val minutes = tickSeconds / 60 % 60
         val hours = tickSeconds / 3600
 
-        this.timerText!!.text = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+        this.timerText.text = String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
 
     private fun isGameWon(): Boolean {
@@ -99,10 +105,8 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
             return false
         }
 
-        val userSquares = this.game!!.userSquares
-
         for (cage in this.game!!.cages) {
-            if (!cage.cageIsValid(userSquares)) {
+            if (!cage.cageIsValid(this.game!!.userSquares)) {
                 return false
             }
         }
@@ -118,78 +122,44 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
         //  checking for game won in the case where an actual value is set
         if (value > 0) {
             val order = this.game!!.latinSquare.order
-            val userSquares = this.game!!.userSquares
-            val row = square.y
-            val col = square.x
 
-            // Remove the value that was set from all candidates in row and col.
-            // Except for the row it was set on
-            for (i in 0 until order) {
-                if (i != row) {
-                    userSquares[col][i].removeCandidate(value)
-                }
-
-                if (i != col) {
-                    userSquares[i][row].removeCandidate(value)
-                }
-            }
-
-            this.candidatesLayout!!.setDisabled()
+            this.candidatesLayout.setDisabled()
 
             if (this.isGameWon()) {
                 // Disable stuff
-                this.valuesLayout!!.setDisabled()
-                this.candidatesLayout!!.setDisabled()
+                this.valuesLayout.setDisabled()
+                this.candidatesLayout.setDisabled()
                 this.gameState = GameState.Won
 
                 this.gameTimer.removeCallbacks(this.updater)
                 this.updateTime()
 
-                val now = Date()
-                val ticks = now.time - this.game!!.gameStartTime.time
+                val ticks = Date().time - this.game!!.gameStartTime.time
 
                 this.triggerGameWon(ticks, order)
             }
         } else {
-            this.candidatesLayout!!.setDisabled(this.getDisabled(square))
+            this.candidatesLayout.setDisabled(this.getDisabled(this.selected))
         }
     }
 
-    private fun getDisabled(square: UserSquare): Set<Int> {
-        val order = this.game!!.latinSquare.order
-        val x = square.x
-        val y = square.y
-        val userSquares = this.game!!.userSquares
-
-        val ret = HashSet<Int>()
-
-        for (i in 0 until order) {
-            if (i != y && userSquares[x][i].value != 0) {
-                ret.add(userSquares[x][i].value)
-            }
-
-            if (i != x && userSquares[i][y].value != 0) {
-                ret.add(userSquares[i][y].value)
-            }
-        }
-
-        return ret
+    private fun getDisabled(pos: Point): Set<Int> {
+        val ret = this.game!!.rowValues[pos.x] + this.game!!.colValues[pos.y]
+        return ret - this.uiSquares!![pos.x][pos.y].userSquare.value
     }
 
     private fun setFromSquare() {
-        val currentUserSquare = this.selectedSquare!!.userSquare
+        val disabled = this.getDisabled(this.selected)
 
-        val disabled = this.getDisabled(currentUserSquare)
+        this.valuesLayout.setDisabled(disabled)
+        this.valuesLayout.setValue(this.selectedSquare.userSquare.value)
 
-        this.valuesLayout!!.setDisabled(disabled)
-        this.valuesLayout!!.setValue(currentUserSquare.value)
-
-        if (currentUserSquare.value > 0) {
-            this.candidatesLayout!!.setDisabled()
+        if (this.selectedSquare.userSquare.value > 0) {
+            this.candidatesLayout.setDisabled()
         } else {
-            this.candidatesLayout!!.setDisabled(disabled)
+            this.candidatesLayout.setDisabled(disabled)
         }
-        this.candidatesLayout!!.setValues(currentUserSquare.candidates)
+        this.candidatesLayout.setValues(this.selectedSquare.userSquare.candidates)
     }
 
     fun pauseIfNotPaused() {
@@ -206,16 +176,15 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
             this.setFromSquare()
             this.updateTime()
             this.gameTimer.postDelayed(this.updater, 1000)
-
         } else {
             val date = Date()
             this.pausedTime = date.time - this.game!!.gameStartTime.time
 
             this.gameState = GameState.Paused
-            this.candidatesLayout!!.setDisabled()
-            this.valuesLayout!!.setDisabled()
+            this.candidatesLayout.setDisabled()
+            this.valuesLayout.setDisabled()
             this.gameTimer.removeCallbacks(this.updater)
-            this.timerText!!.text = this.context.getString(R.string.paused)
+            this.timerText.text = this.context.getString(R.string.paused)
         }
 
         // Redraw since paused state changed
@@ -239,12 +208,12 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
         }
 
         // Set a timer to clear the UI state change
-        this.gameTimer.postDelayed(this.checkClearer, 5000)
+        this.gameTimer.postDelayed(this::checkClearer, 5000)
     }
 
     private fun initializeGame(order: Int) {
-        this.candidatesLayout!!.newGame(order)
-        this.valuesLayout!!.newGame(order)
+        this.candidatesLayout.newGame(order)
+        this.valuesLayout.newGame(order)
 
         val userSquares = this.game!!.userSquares
 
@@ -267,8 +236,8 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
         }
 
         // Set the first square to be selected
-        this.selectedSquare = this.uiSquares!![0][0]
-        this.selectedSquare!!.touchState = SquareTouchState.Selected
+        this.selected = Point(0, 0)
+        this.selectedSquare.touchState = SquareTouchState.Selected
 
         this.updateTime()
         this.gameTimer.postDelayed(this.updater, 1000)
@@ -317,17 +286,17 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
     }
 
     fun clear() {
-        this.candidatesLayout!!.clear()
-        this.valuesLayout!!.clear()
+        this.candidatesLayout.clear()
+        this.valuesLayout.clear()
 
         if (this.game != null) {
             this.gameTimer.removeCallbacks(this.updater)
-            this.timerText!!.text = ""
+            this.timerText.text = ""
 
             this.game = null
             this.uiSquares = null
-            this.hoverSquare = null
-            this.selectedSquare = null
+            this.hover = null
+            this.selected = Point(0, 0)
         }
 
         this.gameState = GameState.Clear
@@ -348,22 +317,20 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
         this.valuesLayout = valuesLayout
         this.timerText = timerText
 
-        this.candidatesLayout!!.addCandidateAddedListener { candidate ->
-            this@GameComponent.selectedSquare!!.userSquare
-                    .addCandidate(candidate)
+        this.candidatesLayout.addCandidateAddedListener { candidate ->
+            this.selectedSquare.userSquare.addCandidate(candidate)
         }
 
-        this.candidatesLayout!!.addCandidateRemovedListener { candidate ->
-            this@GameComponent.selectedSquare!!.userSquare
-                    .removeCandidate(candidate)
+        this.candidatesLayout.addCandidateRemovedListener { candidate ->
+            this.selectedSquare.userSquare.removeCandidate(candidate)
         }
 
-        this.valuesLayout!!.addValueChangedListener { value ->
-            this@GameComponent.selectedSquare!!.userSquare.value = value
+        this.valuesLayout.addValueChangedListener { value ->
+            this.selectedSquare.userSquare.value = value
         }
     }
 
-    private fun getSquareFromPosition(x: Int, y: Int): KenKenSquare {
+    private fun getTargetFromPosition(x: Int, y: Int): Point {
         var xIndex = (x - UIConstants.BorderWidth) / this.squareWidthPlusBorder
         var yIndex = (y - UIConstants.BorderWidth) / this.squareHeightPlusBorder
 
@@ -371,7 +338,7 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
         xIndex = min(max(xIndex, 0), order - 1)
         yIndex = min(max(yIndex, 0), order - 1)
 
-        return this.uiSquares!![xIndex][yIndex]
+        return Point(xIndex, yIndex)
     }
 
     private fun handleDoubleTap() {
@@ -390,17 +357,13 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
         // Set all values that can only be satisfied by one value
         do {
             var actionTaken = false
-            for (row in this.uiSquares!!) {
-                for (uiSquare in row) {
+            for ((i, row) in this.uiSquares!!.withIndex()) {
+                for ((j, uiSquare) in row.withIndex()) {
                     val square = uiSquare.userSquare
-                    val disabled = this.getDisabled(square)
+                    val disabled = this.getDisabled(Point(i, j))
                     val order = this.game!!.latinSquare.order
                     if (square.value == 0 && disabled.size == order - 1) {
-                        var sum = 0
-                        for (x in disabled) {
-                            sum += x
-                        }
-                        square.value = order * (order + 1) / 2 - sum
+                        square.value = order * (order + 1) / 2 - disabled.sum()
                         actionTaken = true
                     }
                 }
@@ -414,13 +377,21 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
         }
     }
 
+    private fun unHover() {
+        if (this.hover != null) {
+            val square = this.uiSquares!![this.hover!!.x][this.hover!!.y]
+            square.touchState = SquareTouchState.None
+            this.hover = null
+        }
+    }
+
     override fun onTouchEvent(event: MotionEvent): Boolean {
         // Only want to accept clicks if we are in game.
         if (this.gameState == GameState.InGame) {
             val x = event.x
             val y = event.y
 
-            val targetSquare = this.getSquareFromPosition(x.toInt(), y.toInt())
+            val target = this.getTargetFromPosition(x.toInt(), y.toInt())
 
             // Move, Down are handled as "hovering"
             // Up is handled as the click
@@ -429,33 +400,31 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
 
                     // If there is a hover square and it is not this one
                     // Then make it not hovered any more.
-                    if (this.hoverSquare != null && this.hoverSquare != targetSquare) {
-                        this.hoverSquare!!.touchState = SquareTouchState.None
+                    if (this.hover != target) {
+                        this.unHover()
                     }
 
                     // If this hovering square is not selected then set
                     //  the hover state on it.
-                    if (targetSquare.touchState !== SquareTouchState.Selected) {
-                        this.hoverSquare = targetSquare
-                        this.hoverSquare!!.touchState = SquareTouchState.Touching
+                    this.hover = target
+                    val hoverSquare = this.uiSquares!![this.hover!!.x][this.hover!!.y]
+                    if (hoverSquare.touchState === SquareTouchState.None) {
+                        hoverSquare.touchState = SquareTouchState.Touching
                     }
                 }
                 MotionEvent.ACTION_UP -> {
 
-                    // On mouse up, if there was a hover square then
-                    //  clear the hovered state.
-                    if (this.hoverSquare != null) {
-                        this.hoverSquare!!.touchState = SquareTouchState.None
-                        this.hoverSquare = null
-                    }
+                    // On mouse up, if there was a hover square then clear the
+                    // hovered state.
+                    this.unHover()
 
                     // Un set the touched state of the previously touched square
                     // This includes removing its event listeners
                     // Then set the selected square and set the touched state
                     //  and rebind the event handler.
-                    this.selectedSquare!!.touchState = SquareTouchState.None
-                    this.selectedSquare = targetSquare
-                    this.selectedSquare!!.touchState = SquareTouchState.Selected
+                    this.selectedSquare.touchState = SquareTouchState.None
+                    this.selected = target
+                    this.selectedSquare.touchState = SquareTouchState.Selected
 
                     // After this, set up the Candidates and Values layouts.
                     this.setFromSquare()
@@ -514,13 +483,9 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
 
         val order = SettingsProvider.gameSize
 
-        var boardWidth = this.measuredWidth
-        var boardHeight = this.measuredHeight
-
-        // Adjust height / width for borders
         val borders = UIConstants.BorderWidth * (order + 1)
-        boardWidth -= borders
-        boardHeight -= borders
+        val boardWidth = this.measuredWidth - borders
+        val boardHeight = this.measuredHeight - borders
 
         val squareWidth = boardWidth / order
         val squareHeight = boardHeight / order
@@ -580,9 +545,9 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
             }
 
             // draw the squares themselves
-            for (squares in this.uiSquares!!) {
-                for (square in squares) {
-                    square.drawSquare(canvas, this.dimensions!!)
+            for ((i, row) in this.uiSquares!!.withIndex()) {
+                for ((j, square) in row.withIndex()) {
+                    square.drawSquare(canvas, this.dimensions!!, i, j)
                 }
             }
         }

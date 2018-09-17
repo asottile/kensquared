@@ -71,15 +71,12 @@ class LatinSquare {
         json.put(LatinSquare.orderProperty, this.order)
 
         val outerArray = JSONArray()
-
-        for (i in this.values.indices) {
+        for (row in this.values) {
             val innerArray = JSONArray()
-
-            for (j in this.values[i].indices) {
-                innerArray.put(j, this.values[i][j])
+            for (x in row) {
+                innerArray.put(x)
             }
-
-            outerArray.put(i, innerArray)
+            outerArray.put(innerArray)
         }
 
         json.put(LatinSquare.valuesProperty, outerArray)

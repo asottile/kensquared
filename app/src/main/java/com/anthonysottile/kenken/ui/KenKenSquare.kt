@@ -34,10 +34,7 @@ class KenKenSquare(val userSquare: UserSquare) {
 
     private val requestRedrawListeners = ArrayList<() -> Unit>()
 
-    fun drawSquare(canvas: Canvas, dimensions: SquareDrawingDimensions) {
-        val x = this.userSquare.x
-        val y = this.userSquare.y
-
+    fun drawSquare(canvas: Canvas, dimensions: SquareDrawingDimensions, x: Int, y: Int) {
         // Fill background
         var backgroundColor: Paint = when (this.touchState) {
             KenKenSquare.SquareTouchState.Touching -> hoveringColor

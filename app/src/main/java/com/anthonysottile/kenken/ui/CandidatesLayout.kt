@@ -44,45 +44,29 @@ class CandidatesLayout(context: Context, attrs: AttributeSet) : LinearLayout(con
     }
 
     /**
-     * Sets the values of the candidates control.  The values are passed in
-     * as booleans representing the checked state of each candidate.
      * Note: this does not trigger any events as this should only be
      * called from ui setting of a square.
-     *
-     * @param values The checked state of each candidate.
      */
-    fun setValues(values: BooleanArray) {
-        for ((i, value) in values.withIndex()) {
-            this.candidates!![i].setCheckedNoTrigger(value)
+    fun setValues(values: Set<Int>) {
+        this.candidates!!.forEach { it.setCheckedNoTrigger(false) }
+
+        for (x in values) {
+            this.candidates!![x - 1].setCheckedNoTrigger(true)
         }
     }
 
     fun setDisabled() {
-        for (candidate in this.candidates!!) {
-            candidate.uiEnabled = false
-        }
+        this.candidates!!.forEach { it.uiEnabled = false }
     }
 
-    /**
-     * Sets the specific candidate buttons to disabled.
-     *
-     * @param disabled The candidate buttons to disabled.
-     */
     fun setDisabled(disabled: Set<Int>) {
-        for (candidate in this.candidates!!) {
-            candidate.uiEnabled = true
-        }
+        this.candidates!!.forEach { it.uiEnabled = true }
 
         for (x in disabled) {
             this.candidates!![x - 1].uiEnabled = false
         }
     }
 
-    /**
-     * Setup method for when a new game is started.
-     *
-     * @param gameSize The size of the game.
-     */
     fun newGame(gameSize: Int) {
         this.clear()
 
@@ -146,9 +130,6 @@ class CandidatesLayout(context: Context, attrs: AttributeSet) : LinearLayout(con
         }
     }
 
-    /**
-     * Clears the candidates control removing all ui elements.
-     */
     fun clear() {
         if (this.candidates != null) {
             this.removeAllViews()

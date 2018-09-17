@@ -5,13 +5,21 @@ import org.json.JSONObject
 import java.util.*
 
 class UserSquare {
-    val x: Int
-    val y: Int
-    val candidates: BooleanArray
+    private val rowValues: MutableSet<Int>
+    private val colValues: MutableSet<Int>
+    val candidates: MutableSet<Int> = TreeSet()
 
     var value = 0
         set(x) {
             if (field != x) {
+                if (field == 0) {
+                    this.rowValues.add(x)
+                    this.colValues.add(x)
+                } else {
+                    this.rowValues.remove(field)
+                    this.colValues.remove(field)
+                }
+
                 field = x
                 this.triggerValueSetEvent()
                 this.triggerChangedEvent()
@@ -19,31 +27,21 @@ class UserSquare {
         }
 
     private val changedHandlers = ArrayList<(UserSquare) -> Unit>()
-
     private val valueSetListeners = ArrayList<(UserSquare) -> Unit>()
 
     fun getCandidatesString(): String {
-        val numbers = mutableListOf<Int>()
-        for ((i, v) in this.candidates.withIndex()) {
-            if (v) {
-                numbers.add(i + 1)
-            }
-        }
-        return numbers.joinToString(" ")
+        val ret = this.candidates - this.rowValues - this.colValues
+        return ret.joinToString(" ")
     }
 
     fun addCandidate(value: Int) {
-        if (!this.candidates[value - 1]) {
-            this.candidates[value - 1] = true
-            this.triggerChangedEvent()
-        }
+        this.candidates.add(value)
+        this.triggerChangedEvent()
     }
 
     fun removeCandidate(value: Int) {
-        if (this.candidates[value - 1]) {
-            this.candidates[value - 1] = false
-            this.triggerChangedEvent()
-        }
+        this.candidates.remove(value)
+        this.triggerChangedEvent()
     }
 
     fun addChangedEventHandler(handler: (UserSquare) -> Unit) {
@@ -61,49 +59,38 @@ class UserSquare {
     }
 
     private fun triggerValueSetEvent() {
-        for (listener in this.valueSetListeners) {
-            listener(this)
-        }
+        this.valueSetListeners.forEach { it(this) }
     }
 
-    constructor(x: Int, y: Int, order: Int) {
-        this.x = x
-        this.y = y
-        this.candidates = BooleanArray(order)
+    constructor(rowValues: MutableSet<Int>, colValues: MutableSet<Int>) {
+        this.rowValues = rowValues
+        this.colValues = colValues
     }
 
     fun toJson(): JSONObject {
-        val json = JSONObject()
+        val ret = JSONObject()
 
         val candidatesJson = JSONArray()
-        for (i in this.candidates.indices) {
-            candidatesJson.put(i, this.candidates[i])
-        }
+        this.candidates.forEach { candidatesJson.put(it) }
 
-        json.put(UserSquare.xProperty, this.x)
-        json.put(UserSquare.yProperty, this.y)
-        json.put(UserSquare.valueProperty, this.value)
-        json.put(UserSquare.candidatesProperty, candidatesJson)
-
-        return json
+        ret.put(UserSquare.valueProperty, this.value)
+        ret.put(UserSquare.candidatesProperty, candidatesJson)
+        return ret
     }
 
-    constructor(json: JSONObject) {
-        this.x = json.getInt(UserSquare.xProperty)
-        this.y = json.getInt(UserSquare.yProperty)
+    constructor(json: JSONObject, rowValues: MutableSet<Int>,  colValues: MutableSet<Int>) {
+        this.rowValues = rowValues
+        this.colValues = colValues
         this.value = json.getInt(UserSquare.valueProperty)
 
         val candidatesJson = json.getJSONArray(UserSquare.candidatesProperty)
-        this.candidates = BooleanArray(candidatesJson.length())
-        for (i in this.candidates.indices) {
-            this.candidates[i] = candidatesJson.getBoolean(i)
+        for (i in 0 until candidatesJson.length()) {
+            this.candidates.add(candidatesJson.getInt(i))
         }
     }
 
     companion object {
-        private const val xProperty = "X"
-        private const val yProperty = "Y"
         private const val valueProperty = "Value"
-        private const val candidatesProperty = "Candidates"
+        private const val candidatesProperty = "CandidatesV2"
     }
 }

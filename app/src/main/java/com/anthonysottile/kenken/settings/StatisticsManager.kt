@@ -21,9 +21,7 @@ object StatisticsManager {
     private fun saveGameStatistics() {
         // Create JSON array
         val array = JSONArray()
-        for (i in 0 until UIConstants.GameSizes) {
-            array.put(i, this.statistics[i].toJson())
-        }
+        this.statistics.forEach { array.put(it.toJson()) }
 
         val editor = this.preferences.edit()
         editor.putString(this.Statistics, array.toString())
