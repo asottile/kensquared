@@ -39,8 +39,8 @@ object StatisticsManager {
                         )
                 )
 
-                this.statistics = Array(UIConstants.GameSizes) {
-                    i -> GameStatistics(array.getJSONObject(i))
+                this.statistics = Array(UIConstants.GameSizes) { i ->
+                    GameStatistics(array.getJSONObject(i))
                 }
 
             } catch (e: JSONException) {
@@ -50,8 +50,8 @@ object StatisticsManager {
     }
 
     fun clearGameStatistics() {
-        this.statistics = Array (UIConstants.GameSizes) {
-            i -> GameStatistics(i + UIConstants.MinGameSize)
+        this.statistics = Array(UIConstants.GameSizes) { i ->
+            GameStatistics(i + UIConstants.MinGameSize)
         }
         this.saveGameStatistics()
     }

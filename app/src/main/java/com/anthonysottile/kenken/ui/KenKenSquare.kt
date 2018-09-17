@@ -89,7 +89,7 @@ class KenKenSquare(val userSquare: UserSquare) {
     }
 
     init {
-        this.userSquare.addChangedEventHandler { _ -> this@KenKenSquare.triggerRequestRedrawEvent()}
+        this.userSquare.addChangedEventHandler { _ -> this@KenKenSquare.triggerRequestRedrawEvent() }
     }
 
     fun addRequestRedrawListener(listener: () -> Unit) {

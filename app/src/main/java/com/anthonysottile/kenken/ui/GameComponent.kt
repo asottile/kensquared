@@ -58,6 +58,7 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
             this@GameComponent.gameTimer.postDelayed(this, 1000)
         }
     }
+
     private fun checkClearer() {
         if (this.gameState != GameState.Clear) {
             for (row in this.uiSquares!!) {

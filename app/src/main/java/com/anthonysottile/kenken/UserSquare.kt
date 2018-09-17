@@ -78,7 +78,7 @@ class UserSquare {
         return ret
     }
 
-    constructor(json: JSONObject, rowValues: MutableSet<Int>,  colValues: MutableSet<Int>) {
+    constructor(json: JSONObject, rowValues: MutableSet<Int>, colValues: MutableSet<Int>) {
         this.rowValues = rowValues
         this.colValues = colValues
         this.value = json.getInt(UserSquare.valueProperty)

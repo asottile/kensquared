@@ -45,7 +45,7 @@ class KenKenAndroidActivity : Activity() {
         val preferences = this.getSharedPreferences(KenKenAndroidActivity.preferences, 0)
         SettingsProvider.initialize(preferences)
         StatisticsManager.initialize(preferences)
-        SettingsProvider.addGameSizeChangedListener { this@KenKenAndroidActivity.gameComponent.clear()}
+        SettingsProvider.addGameSizeChangedListener { this@KenKenAndroidActivity.gameComponent.clear() }
 
         // Give a reference to resources for Bitmap cache
         BitmapCache.initialize(this.resources)
@@ -156,7 +156,8 @@ class KenKenAndroidActivity : Activity() {
                         this.gameWonNewHighScore,
                         this.gameWonTicks
                 )
-            KenKenAndroidActivity.AboutDialogId -> {}
+            KenKenAndroidActivity.AboutDialogId -> {
+            }
         }
     }
 
