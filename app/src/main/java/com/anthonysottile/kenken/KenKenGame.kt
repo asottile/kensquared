@@ -20,43 +20,29 @@ class KenKenGame {
     var userSquares: Array<Array<UserSquare>>
     private val cageSquareOccupied: Array<BooleanArray>
 
-    private var cages: MutableList<ICage>
+    val cages: MutableList<ICage> = ArrayList()
 
     private fun valueSetListener(square: UserSquare) {
         if (square.value > 0) {
-            this@KenKenGame.squaresWithValues += 1
+            this.squaresWithValues += 1
         } else {
-            this@KenKenGame.squaresWithValues -= 1
+            this.squaresWithValues -= 1
         }
     }
 
-    /**
-     * Resets the game time to the specified milliseconds.
-     *
-     * @param milliseconds The amount of elapsed time to set the game time
-     * to.
-     */
-    fun resetGameStartTime(milliseconds: Long) {
-        val date = Date()
-        date.time = date.time - milliseconds
-        this.gameStartTime = date
-    }
-
     fun penalizeGameStartTime(milliseconds: Long) {
-        this.gameStartTime.time = this.gameStartTime.time - milliseconds
+        this.gameStartTime.time -= milliseconds
     }
 
-    fun getCages(): List<ICage> {
-        return this.cages
+    fun resetGameStartTime(milliseconds: Long) {
+        this.gameStartTime = Date()
+        this.penalizeGameStartTime(milliseconds)
     }
 
     private fun squareIsOffBoard(p: Point): Boolean {
         val order = this.latinSquare.order
 
-        return p.x >= order ||
-                p.y >= order ||
-                p.x < 0 ||
-                p.y < 0
+        return p.x >= order || p.y >= order || p.x < 0 || p.y < 0
     }
 
     fun squareIsValid(p: Point): Boolean {
@@ -74,7 +60,6 @@ class KenKenGame {
         //  make sure they have a value when being selected.  This way we can count
         //  the number of squares the user has filled in and allow for a faster
         //  calculation of the winning condition.
-
         for (row in this.userSquares) {
             for (square in row) {
                 square.addValueSetListener(this::valueSetListener)
@@ -89,8 +74,6 @@ class KenKenGame {
         this.userSquares = Array(order) { i ->
             Array(order) { j -> UserSquare(i, j, order) }
         }
-
-        this.cages = ArrayList()
 
         CageGenerator.Generate(this)
 
@@ -141,7 +124,6 @@ class KenKenGame {
         this.cageSquareOccupied = Array(this.latinSquare.order) { BooleanArray(this.latinSquare.order) }
 
         val cagesJson = json.getJSONArray(KenKenGame.cagesProperty)
-        this.cages = ArrayList()
         for (i in 0 until cagesJson.length()) {
             this.cages.add(BaseCage.ToCage(cagesJson.getJSONObject(i)))
         }

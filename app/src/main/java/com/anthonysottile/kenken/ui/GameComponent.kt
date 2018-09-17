@@ -101,7 +101,7 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
 
         val userSquares = this.game!!.userSquares
 
-        for (cage in this.game!!.getCages()) {
+        for (cage in this.game!!.cages) {
             if (!cage.cageIsValid(userSquares)) {
                 return false
             }
@@ -260,8 +260,7 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
         }
 
         // Pass cage texts into the squares
-        val cages = this.game!!.getCages()
-        for (cage in cages) {
+        for (cage in this.game!!.cages) {
             val location = cage.signLocation
             val text = cage.signNumber.toString()
             this.uiSquares!![location.x][location.y].cageText = text
@@ -377,7 +376,7 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
 
     private fun handleDoubleTap() {
         // Set all 1-square cages
-        for (cage in this.game!!.getCages()) {
+        for (cage in this.game!!.cages) {
             val cageSquares = cage.squares
             if (cageSquares.size == 1) {
                 val pt = cageSquares[0]
@@ -555,7 +554,7 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
         if (this.gameState == GameState.InGame || this.gameState == GameState.Won) {
 
             // Draw Cages
-            for (cage in this.game!!.getCages()) {
+            for (cage in this.game!!.cages) {
                 for (line in cage.renderLines) {
 
                     val linePosition = line.position
