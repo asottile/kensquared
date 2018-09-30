@@ -12,10 +12,11 @@ class UserSquare {
     var value = 0
         set(x) {
             if (field != x) {
-                if (field == 0) {
+                if (x != 0) {
                     this.rowValues.add(x)
                     this.colValues.add(x)
-                } else {
+                }
+                if (field != 0) {
                     this.rowValues.remove(field)
                     this.colValues.remove(field)
                 }
