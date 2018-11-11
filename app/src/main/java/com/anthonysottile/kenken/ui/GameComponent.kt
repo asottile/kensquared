@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Point
 import android.os.Handler
+import android.provider.Settings
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -140,7 +141,9 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
                 this.triggerGameWon(ticks, order)
             }
         } else {
-            this.candidatesLayout.setDisabled(this.getDisabled(this.selected))
+            if (!SettingsProvider.hardMode) {
+                this.candidatesLayout.setDisabled(this.getDisabled(this.selected))
+            }
         }
     }
 
@@ -155,7 +158,7 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
         this.valuesLayout.setDisabled(disabled)
         this.valuesLayout.setValue(this.selectedSquare.userSquare.value)
 
-        if (this.selectedSquare.userSquare.value > 0) {
+        if (SettingsProvider.hardMode || this.selectedSquare.userSquare.value > 0) {
             this.candidatesLayout.setDisabled()
         } else {
             this.candidatesLayout.setDisabled(disabled)
@@ -214,6 +217,9 @@ class GameComponent(context: Context, attrs: AttributeSet) : View(context, attrs
 
     private fun initializeGame(order: Int) {
         this.candidatesLayout.newGame(order)
+        if (SettingsProvider.hardMode) {
+            this.candidatesLayout.setDisabled()
+        }
         this.valuesLayout.newGame(order)
 
         val userSquares = this.game!!.userSquares

@@ -27,6 +27,7 @@
     <!-- Dialog -->
 
     <string name="gameSize">Game Size</string>
+    <string name="hardMode">Hard Mode</string>
 
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
@@ -37,7 +38,7 @@
     <!-- Preferences -->
 
     <string name="preferences">Preferences</string>
-    <string name="preferencesWarning">Note: Changing game size will end the current game.</string>
+    <string name="preferencesWarning">Note: Changing preferences will end the current game.</string>
 
     <!-- end Preferences -->
 
@@ -59,6 +60,9 @@
 
     <string name="youWin">You Win!</string>
     <string name="newHighScore">New High Score!</string>
+    <string name="gameTypeColon">Game Type:</string>
+    <string name="normal">Normal</string>
+    <string name="hard">Hard</string>
     <string name="gameSizeColon">Game Size:</string>
     <string name="gameTime">Game Time:</string>
     <string name="date">Date:</string>

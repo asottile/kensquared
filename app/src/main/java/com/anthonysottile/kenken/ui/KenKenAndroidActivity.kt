@@ -19,17 +19,16 @@ class KenKenAndroidActivity : Activity() {
 
     private lateinit var gameComponent: GameComponent
 
-    private var gameWonGameSize = UIConstants.MinGameSize
     private var gameWonNewHighScore = false
     private var gameWonTicks: Long = -1
 
     private fun gameWon(ticks: Long, size: Int) {
         this@KenKenAndroidActivity.gameWonNewHighScore = StatisticsManager.gameEnded(
                 size,
+                SettingsProvider.hardMode,
                 ticks
         )
 
-        this@KenKenAndroidActivity.gameWonGameSize = size
         this@KenKenAndroidActivity.gameWonTicks = ticks
 
         this@KenKenAndroidActivity.showDialog(
@@ -46,6 +45,7 @@ class KenKenAndroidActivity : Activity() {
         SettingsProvider.initialize(preferences)
         StatisticsManager.initialize(preferences)
         SettingsProvider.addGameSizeChangedListener { this@KenKenAndroidActivity.gameComponent.clear() }
+        SettingsProvider.addHardModeChangedListener { this@KenKenAndroidActivity.gameComponent.clear() }
 
         // Give a reference to resources for Bitmap cache
         BitmapCache.initialize(this.resources)
@@ -107,7 +107,7 @@ class KenKenAndroidActivity : Activity() {
 
     private fun newGame() {
         val gameSize = SettingsProvider.gameSize
-        StatisticsManager.gameStarted(gameSize)
+        StatisticsManager.gameStarted(gameSize, SettingsProvider.hardMode)
         this.gameComponent.newGame(gameSize)
     }
 
@@ -146,13 +146,17 @@ class KenKenAndroidActivity : Activity() {
 
     override fun onPrepareDialog(id: Int, dialog: Dialog) {
         when (id) {
-            KenKenAndroidActivity.PreferencesDialogId ->
-                (dialog as PreferencesDialog).setSpinner(SettingsProvider.gameSize)
+            KenKenAndroidActivity.PreferencesDialogId -> {
+                val d = dialog as PreferencesDialog
+                d.setSpinner(SettingsProvider.gameSize)
+                d.setHardMode(SettingsProvider.hardMode)
+            }
             KenKenAndroidActivity.StatisticsDialogId ->
                 (dialog as StatisticsDialog).refresh()
             KenKenAndroidActivity.GameWonDialogId ->
                 (dialog as GameWonDialog).setup(
-                        this.gameWonGameSize,
+                        SettingsProvider.gameSize,
+                        SettingsProvider.hardMode,
                         this.gameWonNewHighScore,
                         this.gameWonTicks
                 )

@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import android.widget.*
@@ -13,6 +14,7 @@ import com.anthonysottile.kenken.settings.SettingsProvider
 internal class PreferencesDialog(context: Context) : Dialog(context) {
 
     private lateinit var dropdown: Spinner
+    private lateinit var hardModeCheckBox: CheckBox
 
     private fun makeSpacerView(): View {
         val spacerView = View(this.context)
@@ -30,6 +32,10 @@ internal class PreferencesDialog(context: Context) : Dialog(context) {
      */
     fun setSpinner(gameSize: Int) {
         this.dropdown.setSelection(gameSize - UIConstants.MinGameSize)
+    }
+
+    fun setHardMode(hard: Boolean) {
+        this.hardModeCheckBox.isChecked = hard
     }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,6 +83,30 @@ internal class PreferencesDialog(context: Context) : Dialog(context) {
                 LinearLayout.LayoutParams(1, LayoutParams.WRAP_CONTENT, 0.7f)
         )
 
+        val hardModeLabel = TextView(context)
+        hardModeLabel.text = context.getString(R.string.hardMode)
+        hardModeLabel.textSize = 18f
+        hardModeLabel.setPadding(10, 10, 10, 10)
+        hardModeLabel.setTextColor(Color.WHITE)
+
+        this.hardModeCheckBox = CheckBox(context)
+
+        val hardModeLayout = LinearLayout(context)
+        hardModeLayout.addView(
+                hardModeLabel,
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT
+        )
+        gameSizeLayout.addView(
+                View(context),
+                LinearLayout.LayoutParams(1, 1, 0.3f)
+        )
+        // TODO: when switching to xml make sure this right aligns nicely.
+        hardModeLayout.addView(
+                this.hardModeCheckBox,
+                LinearLayout.LayoutParams(1, LayoutParams.WRAP_CONTENT, 0.7f)
+        )
+
         // Warning text label.  This is warning that the current game ends when
         //  clicking on preferences.
         val warning = TextView(context)
@@ -90,6 +120,7 @@ internal class PreferencesDialog(context: Context) : Dialog(context) {
         okButton.setOnClickListener { _ ->
             SettingsProvider.gameSize =
                     this@PreferencesDialog.dropdown.selectedItemPosition + UIConstants.MinGameSize
+            SettingsProvider.hardMode = this@PreferencesDialog.hardModeCheckBox.isChecked
 
             this@PreferencesDialog.dismiss()
         }
@@ -145,6 +176,12 @@ internal class PreferencesDialog(context: Context) : Dialog(context) {
         // Add game size
         root.addView(
                 gameSizeLayout,
+                LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT
+        )
+
+        root.addView(
+                hardModeLayout,
                 LayoutParams.MATCH_PARENT,
                 LayoutParams.WRAP_CONTENT
         )

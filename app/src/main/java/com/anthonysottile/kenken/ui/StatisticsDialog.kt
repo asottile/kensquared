@@ -17,6 +17,7 @@ import java.util.*
 internal class StatisticsDialog(context: Context) : Dialog(context) {
 
     private lateinit var dropdown: Spinner
+    private lateinit var hardModeCheckBox: CheckBox
     private lateinit var gamesPlayed: TextView
     private lateinit var gamesWon: TextView
     private lateinit var averageTime: TextView
@@ -30,8 +31,11 @@ internal class StatisticsDialog(context: Context) : Dialog(context) {
         return spacerView
     }
 
-    private fun setValues(gameSize: Int) {
-        val statistics = StatisticsManager.getGameStatistics(gameSize)
+    // TODO: make this support hardMode
+    private fun setValues() {
+        val gameSize = UIConstants.MinGameSize + this.dropdown.selectedItemPosition
+        val hardMode = this.hardModeCheckBox.isChecked
+        val statistics = StatisticsManager.getGameStatistics(gameSize, hardMode)
 
         this.gamesPlayed.text = Integer.toString(statistics.gamesPlayed, 10)
         this.gamesWon.text = Integer.toString(statistics.gamesWon, 10)
@@ -55,8 +59,8 @@ internal class StatisticsDialog(context: Context) : Dialog(context) {
     }
 
     private fun clearStatistics() {
-        StatisticsManager.clearGameStatistics()
-        this.setValues(this.dropdown.selectedItemPosition + UIConstants.MinGameSize)
+        StatisticsManager.clearAllStatistics()
+        this.setValues()
     }
 
     /**
@@ -65,7 +69,7 @@ internal class StatisticsDialog(context: Context) : Dialog(context) {
      * games were played.
      */
     fun refresh() {
-        this.setValues(this.dropdown.selectedItemPosition + UIConstants.MinGameSize)
+        this.setValues()
     }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,12 +108,9 @@ internal class StatisticsDialog(context: Context) : Dialog(context) {
         this.dropdown.adapter = spinnerAdapter
         this.dropdown.setSelection(0)
         this.dropdown.onItemSelectedListener = object : OnItemSelectedListener {
-
             override fun onItemSelected(adapter: AdapterView<*>, view: View,
                                         selectedIndex: Int, id: Long) {
-                this@StatisticsDialog.setValues(
-                        UIConstants.MinGameSize + selectedIndex
-                )
+                this@StatisticsDialog.setValues()
             }
 
             override fun onNothingSelected(arg0: AdapterView<*>) {}
@@ -136,6 +137,23 @@ internal class StatisticsDialog(context: Context) : Dialog(context) {
         )
 
         root.addView(gameSizeLayout, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+
+        val hardModeLabel = TextView(context)
+        hardModeLabel.text = context.getString(R.string.hardMode)
+        hardModeLabel.textSize = 18f
+        hardModeLabel.setPadding(10, 10, 10, 10)
+        hardModeLabel.setTextColor(Color.WHITE)
+
+        this.hardModeCheckBox = CheckBox(context)
+        hardModeCheckBox.setOnCheckedChangeListener { _, _ -> this@StatisticsDialog.setValues() }
+
+        val hardModeLayout = LinearLayout(context)
+        hardModeLayout.addView(hardModeLabel, StatisticsDialog.wrapContent)
+        gameSizeLayout.addView(View(context), StatisticsDialog.middleSpacer)
+        // TODO: when switching to xml make sure this right aligns nicely.
+        hardModeLayout.addView(this.hardModeCheckBox, StatisticsDialog.wrapContent)
+
+        root.addView(hardModeLayout)
 
         root.addView(this.makeSpacerView())
 

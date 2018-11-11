@@ -6,6 +6,7 @@ import java.util.*
 
 object SettingsProvider {
     private const val GameSize = "GameSize"
+    private const val HardMode = "HardMode"
 
     private lateinit var preferences: SharedPreferences
 
@@ -19,6 +20,19 @@ object SettingsProvider {
                 editor.apply()
 
                 SettingsProvider.triggerGameSizeChanged()
+            }
+        }
+
+    var hardMode = false
+        set (hardMode) {
+            if (field != hardMode) {
+                field = hardMode
+
+                val editor = this.preferences.edit()
+                editor.putBoolean(this.HardMode, this.hardMode)
+                editor.apply()
+
+                SettingsProvider.triggerHardModeChanged()
             }
         }
 
@@ -36,6 +50,18 @@ object SettingsProvider {
         }
     }
 
+    private val hardModeChangedListeners = ArrayList<() -> Unit>()
+
+    fun addHardModeChangedListener(listener: () -> Unit) {
+        SettingsProvider.hardModeChangedListeners.add(listener)
+    }
+
+    private fun triggerHardModeChanged() {
+        for (listener in SettingsProvider.hardModeChangedListeners) {
+            listener()
+        }
+    }
+
     /**
      * Initialization method to give the manager a reference to preferences.
      *
@@ -46,6 +72,10 @@ object SettingsProvider {
         this.gameSize = SettingsProvider.preferences.getInt(
                 SettingsProvider.GameSize,
                 UIConstants.MinGameSize
+        )
+        this.hardMode = SettingsProvider.preferences.getBoolean(
+                SettingsProvider.HardMode,
+                false
         )
     }
 }

@@ -17,9 +17,9 @@ import java.util.*
 internal class GameWonDialog(context: Context) : Dialog(context) {
     private lateinit var newHighScore: TextView
     private lateinit var winTime: TextView
-    private lateinit var winDate: TextView
 
     private lateinit var gameSize: TextView
+    private lateinit var gameType: TextView
     private lateinit var gamesPlayed: TextView
     private lateinit var gamesWon: TextView
     private lateinit var averageTime: TextView
@@ -33,8 +33,8 @@ internal class GameWonDialog(context: Context) : Dialog(context) {
         return spacerView
     }
 
-    private fun setValues(gameSize: Int) {
-        val statistics = StatisticsManager.getGameStatistics(gameSize)
+    private fun setValues(gameSize: Int, hardMode: Boolean) {
+        val statistics = StatisticsManager.getGameStatistics(gameSize, hardMode)
 
         this.gamesPlayed.text = Integer.toString(statistics.gamesPlayed, 10)
         this.gamesWon.text = Integer.toString(statistics.gamesWon, 10)
@@ -50,12 +50,17 @@ internal class GameWonDialog(context: Context) : Dialog(context) {
         this.bestTimeDate.text = GameWonDialog.dateFormat.format(statistics.bestTimeDate)
     }
 
-    fun setup(gameSize: Int, newHighScore: Boolean, ticks: Long) {
-        this.setValues(gameSize)
+    fun setup(gameSize: Int, hardMode: Boolean, newHighScore: Boolean, ticks: Long) {
+        this.setValues(gameSize, hardMode)
+
+        if (hardMode) {
+            this.gameType.text = this.context.getString(R.string.hard)
+        } else {
+            this.gameType.text = this.context.getString(R.string.normal)
+        }
 
         this.gameSize.text = Integer.toString(gameSize, 10)
         this.winTime.text = GameWonDialog.toTimeString(ticks.toInt() / 1000)
-        this.winDate.text = GameWonDialog.dateFormat.format(Date())
 
         if (newHighScore) {
             this.newHighScore.text = this.context.getString(R.string.newHighScore)
@@ -106,20 +111,20 @@ internal class GameWonDialog(context: Context) : Dialog(context) {
         winTimeLayout.addView(View(context), GameWonDialog.rightPad)
         root.addView(winTimeLayout, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
 
-        val winDateLabel = TextView(context)
-        winDateLabel.text = context.getString(R.string.date)
-        winDateLabel.setPadding(UIConstants.StatisticsOneIndent * 2, 5, 5, 5)
-        this.winDate = TextView(context)
-        this.winDate.setPadding(5, 5, 5, 5)
-
-        val winDateLayout = LinearLayout(context)
-        winDateLayout.addView(winDateLabel, GameWonDialog.wrapContent)
-        winDateLayout.addView(View(context), GameWonDialog.middleSpacer)
-        winDateLayout.addView(this.winDate, GameWonDialog.wrapContent)
-        winDateLayout.addView(View(context), GameWonDialog.rightPad)
-        root.addView(winDateLayout, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
-
         root.addView(this.makeSpacerView())
+
+        val gameTypeLabel = TextView(context)
+        gameTypeLabel.text = context.getString(R.string.gameTypeColon)
+        gameTypeLabel.setPadding(UIConstants.StatisticsOneIndent * 2, 5, 5, 5)
+        this.gameType = TextView(context)
+        this.gameType.setPadding(5, 5, 5, 5)
+
+        val gameTypeLayout = LinearLayout(context)
+        gameTypeLayout.addView(gameTypeLabel, GameWonDialog.wrapContent)
+        gameTypeLayout.addView(View(context), GameWonDialog.middleSpacer)
+        gameTypeLayout.addView(this.gameType, GameWonDialog.wrapContent)
+        gameTypeLayout.addView(View(context), GameWonDialog.rightPad)
+        root.addView(gameTypeLayout, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
 
         val gameSizeLabel = TextView(context)
         gameSizeLabel.text = context.getString(R.string.gameSizeColon)
