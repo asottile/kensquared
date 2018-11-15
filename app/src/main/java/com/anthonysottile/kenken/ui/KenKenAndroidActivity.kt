@@ -14,6 +14,9 @@ import com.anthonysottile.kenken.ui.GameComponent.GameState
 
 import org.json.JSONException
 import org.json.JSONObject
+import android.app.FragmentManager
+
+
 
 class KenKenAndroidActivity : Activity() {
 
@@ -121,7 +124,7 @@ class KenKenAndroidActivity : Activity() {
 
     private fun showPreferences() {
         this.gameComponent.pauseIfNotPaused()
-        this.showDialog(KenKenAndroidActivity.PreferencesDialogId)
+        PreferencesDialog().show(this.fragmentManager, null)
     }
 
     private fun showStatistics() {
@@ -136,7 +139,6 @@ class KenKenAndroidActivity : Activity() {
 
     override fun onCreateDialog(id: Int): Dialog? {
         return when (id) {
-            PreferencesDialogId -> PreferencesDialog(this)
             StatisticsDialogId -> StatisticsDialog(this)
             GameWonDialogId -> GameWonDialog(this)
             AboutDialogId -> AboutDialog(this)
@@ -146,11 +148,6 @@ class KenKenAndroidActivity : Activity() {
 
     override fun onPrepareDialog(id: Int, dialog: Dialog) {
         when (id) {
-            KenKenAndroidActivity.PreferencesDialogId -> {
-                val d = dialog as PreferencesDialog
-                d.setSpinner(SettingsProvider.gameSize)
-                d.setHardMode(SettingsProvider.hardMode)
-            }
             KenKenAndroidActivity.StatisticsDialogId ->
                 (dialog as StatisticsDialog).refresh()
             KenKenAndroidActivity.GameWonDialogId ->
@@ -215,7 +212,6 @@ class KenKenAndroidActivity : Activity() {
     }
 
     companion object {
-        private const val PreferencesDialogId = 0
         private const val StatisticsDialogId = 1
         private const val GameWonDialogId = 2
         private const val AboutDialogId = 3

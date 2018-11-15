@@ -1,45 +1,43 @@
 package com.anthonysottile.kenken.ui
 
 import android.app.Dialog
+import android.app.DialogFragment
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.widget.*
 import com.anthonysottile.kenken.R
 import com.anthonysottile.kenken.settings.SettingsProvider
 
-internal class PreferencesDialog(context: Context) : Dialog(context) {
-
+internal class PreferencesDialog : DialogFragment() {
     private lateinit var dropdown: Spinner
     private lateinit var hardModeCheckBox: CheckBox
 
-    fun setSpinner(gameSize: Int) {
-        this.dropdown.setSelection(gameSize - UIConstants.MinGameSize)
-    }
+    override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        this.dialog.setTitle(R.string.preferences)
 
-    fun setHardMode(hard: Boolean) {
-        this.hardModeCheckBox.isChecked = hard
-    }
+        val view = inflater.inflate(R.layout.preferences_dialog, container)
 
-    public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        this.dropdown = view.findViewById(R.id.gameSizesSpinner) as Spinner
+        this.dropdown.setSelection(SettingsProvider.gameSize - UIConstants.MinGameSize)
+        this.hardModeCheckBox = view.findViewById(R.id.hardModeCheckbox) as CheckBox
+        this.hardModeCheckBox.isChecked = SettingsProvider.hardMode
 
-        this.setTitle(this.context.getString(R.string.preferences))
-
-        this.setContentView(R.layout.preferences_dialog)
-
-        this.dropdown = this.findViewById(R.id.gameSizesSpinner) as Spinner
-        this.hardModeCheckBox = this.findViewById(R.id.hardModeCheckbox) as CheckBox
-
-        (this.findViewById(R.id.okButton) as Button).setOnClickListener { _ ->
+        (view.findViewById(R.id.okButton) as Button).setOnClickListener { _ ->
             SettingsProvider.gameSize = this.dropdown.selectedItemPosition + UIConstants.MinGameSize
             SettingsProvider.hardMode = this.hardModeCheckBox.isChecked
 
             this.dismiss()
         }
-        (this.findViewById(R.id.cancelButton) as Button).setOnClickListener { _ -> this.dismiss() }
+        (view.findViewById(R.id.cancelButton) as Button).setOnClickListener { _ -> this.dismiss() }
+
+        return view
     }
 }
