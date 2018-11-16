@@ -149,7 +149,7 @@ class KenKenAndroidActivity : Activity() {
     override fun onPrepareDialog(id: Int, dialog: Dialog) {
         when (id) {
             KenKenAndroidActivity.StatisticsDialogId ->
-                (dialog as StatisticsDialog).refresh()
+                (dialog as StatisticsDialog).setValues()
             KenKenAndroidActivity.GameWonDialogId ->
                 (dialog as GameWonDialog).setup(
                         SettingsProvider.gameSize,

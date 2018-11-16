@@ -30,13 +30,13 @@ internal class PreferencesDialog : DialogFragment() {
         this.hardModeCheckBox = view.findViewById(R.id.hardModeCheckbox) as CheckBox
         this.hardModeCheckBox.isChecked = SettingsProvider.hardMode
 
-        (view.findViewById(R.id.okButton) as Button).setOnClickListener { _ ->
+        view.findViewById(R.id.okButton).setOnClickListener { _ ->
             SettingsProvider.gameSize = this.dropdown.selectedItemPosition + UIConstants.MinGameSize
             SettingsProvider.hardMode = this.hardModeCheckBox.isChecked
 
             this.dismiss()
         }
-        (view.findViewById(R.id.cancelButton) as Button).setOnClickListener { _ -> this.dismiss() }
+        view.findViewById(R.id.cancelButton).setOnClickListener { _ -> this.dismiss() }
 
         return view
     }
