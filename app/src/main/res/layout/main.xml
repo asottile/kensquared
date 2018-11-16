@@ -12,7 +12,6 @@
         android:layout_weight="0" />
 
     <FrameLayout
-        android:id="@+id/gameLayout"
         android:layout_width="fill_parent"
         android:layout_height="145dp"
         android:layout_weight="1">

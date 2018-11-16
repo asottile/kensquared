@@ -4,8 +4,8 @@
     <string name="app_name">KenSquared</string>
     <string name="version">1.0.0</string>
 
-    <string name="byAuthor">by Anthony Sottile</string>
-    <string name="versionColon">Version: </string>
+    <string name="byAuthor">%s by Anthony Sottile</string>
+    <string name="versionColon">Version: %s</string>
     <string name="aboutText">For more information and how to play please visit anthonysottile.com/android_kenken.htm for more details.</string>
 
     <!-- Game Component -->

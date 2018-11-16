@@ -83,8 +83,7 @@
             android:id="@+id/gamesWon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="" />
+            android:layout_weight="0" />
 
     </LinearLayout>
 
@@ -107,8 +106,7 @@
             android:id="@+id/gamesPlayed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="" />
+            android:layout_weight="0" />
 
     </LinearLayout>
 
@@ -131,8 +129,7 @@
             android:id="@+id/averageTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="" />
+            android:layout_weight="0" />
 
     </LinearLayout>
 
@@ -155,8 +152,7 @@
             android:id="@+id/bestTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="" />
+            android:layout_weight="0" />
 
     </LinearLayout>
 
@@ -179,8 +175,7 @@
             android:id="@+id/bestTimeDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="" />
+            android:layout_weight="0" />
 
     </LinearLayout>
 
@@ -192,7 +187,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:padding="10dp">
 
         <Button

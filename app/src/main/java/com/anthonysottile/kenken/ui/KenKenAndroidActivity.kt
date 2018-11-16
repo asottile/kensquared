@@ -135,13 +135,12 @@ class KenKenAndroidActivity : Activity() {
 
     private fun showAbout() {
         this.gameComponent.pauseIfNotPaused()
-        this.showDialog(KenKenAndroidActivity.AboutDialogId)
+        AboutDialog().show(this.fragmentManager, null)
     }
 
     override fun onCreateDialog(id: Int): Dialog? {
         return when (id) {
             GameWonDialogId -> GameWonDialog(this)
-            AboutDialogId -> AboutDialog(this)
             else -> null
         }
     }
@@ -155,7 +154,6 @@ class KenKenAndroidActivity : Activity() {
                         this.gameWonNewHighScore,
                         this.gameWonTicks
                 )
-            KenKenAndroidActivity.AboutDialogId -> {}
         }
     }
 
@@ -208,7 +206,6 @@ class KenKenAndroidActivity : Activity() {
 
     companion object {
         private const val GameWonDialogId = 2
-        private const val AboutDialogId = 3
 
         private const val preferences = "com.anthonysottile.kenken"
         private const val saveGameBundleProperty = "SavedGame"
