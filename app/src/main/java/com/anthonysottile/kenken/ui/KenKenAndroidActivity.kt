@@ -2,21 +2,16 @@ package com.anthonysottile.kenken.ui
 
 import android.app.Activity
 import android.app.Dialog
-import android.app.DialogFragment
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
-
 import com.anthonysottile.kenken.R
 import com.anthonysottile.kenken.settings.SettingsProvider
 import com.anthonysottile.kenken.settings.StatisticsManager
 import com.anthonysottile.kenken.ui.GameComponent.GameState
-
 import org.json.JSONException
 import org.json.JSONObject
-import android.app.FragmentManager
-
 
 
 class KenKenAndroidActivity : Activity() {
