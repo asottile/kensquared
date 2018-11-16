@@ -2,19 +2,23 @@ package com.anthonysottile.kenken.ui
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.app.DialogFragment
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.widget.*
 import com.anthonysottile.kenken.R
+import com.anthonysottile.kenken.settings.SettingsProvider
 import com.anthonysottile.kenken.settings.StatisticsManager
 import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.*
 
-internal class StatisticsDialog(context: Context) : Dialog(context) {
+internal class StatisticsDialog : DialogFragment() {
 
     private lateinit var dropdown: Spinner
     private lateinit var hardModeCheckBox: CheckBox
@@ -50,14 +54,13 @@ internal class StatisticsDialog(context: Context) : Dialog(context) {
         }
     }
 
-    public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, s: Bundle?): View {
+        this.dialog.setTitle(R.string.statistics)
 
-        this.setTitle(R.string.statistics)
+        val view = inflater.inflate(R.layout.statistics_dialog, container)
 
-        this.setContentView(R.layout.statistics_dialog)
-
-        this.dropdown = this.findViewById(R.id.gameSizesSpinner) as Spinner
+        this.dropdown = view.findViewById(R.id.gameSizesSpinner) as Spinner
+        this.dropdown.setSelection(SettingsProvider.gameSize - UIConstants.MinGameSize)
         this.dropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(a0: AdapterView<*>, a1: View, a2: Int, a3: Long) {
                 this@StatisticsDialog.setValues()
@@ -65,17 +68,18 @@ internal class StatisticsDialog(context: Context) : Dialog(context) {
 
             override fun onNothingSelected(a0: AdapterView<*>) {}
         }
-        this.hardModeCheckBox = this.findViewById(R.id.hardModeCheckbox) as CheckBox
+        this.hardModeCheckBox = view.findViewById(R.id.hardModeCheckbox) as CheckBox
+        this.hardModeCheckBox.isChecked = SettingsProvider.hardMode
         this.hardModeCheckBox.setOnCheckedChangeListener { _, _ -> this.setValues() }
-        this.gamesPlayed = this.findViewById(R.id.gamesPlayed) as TextView
-        this.gamesWon = this.findViewById(R.id.gamesWon) as TextView
-        this.averageTime = this.findViewById(R.id.averageTime) as TextView
-        this.bestTime = this.findViewById(R.id.bestTime) as TextView
-        this.bestTimeDate = this.findViewById(R.id.bestTimeDate) as TextView
+        this.gamesPlayed = view.findViewById(R.id.gamesPlayed) as TextView
+        this.gamesWon = view.findViewById(R.id.gamesWon) as TextView
+        this.averageTime = view.findViewById(R.id.averageTime) as TextView
+        this.bestTime = view.findViewById(R.id.bestTime) as TextView
+        this.bestTimeDate = view.findViewById(R.id.bestTimeDate) as TextView
 
-        this.findViewById(R.id.okButton).setOnClickListener { _ -> this.dismiss() }
-        this.findViewById(R.id.clearButton).setOnClickListener { _ ->
-            AlertDialog.Builder(this.context)
+        view.findViewById(R.id.okButton).setOnClickListener { _ -> this.dismiss() }
+        view.findViewById(R.id.clearButton).setOnClickListener { _ ->
+            AlertDialog.Builder(view.context)
                     .setMessage(R.string.confirmClear)
                     .setCancelable(false)
                     .setPositiveButton(R.string.yes) { dialog, _ ->
@@ -87,6 +91,10 @@ internal class StatisticsDialog(context: Context) : Dialog(context) {
                     .create()
                     .show()
         }
+
+        this.setValues()
+
+        return view
     }
 
     companion object {
@@ -97,11 +105,7 @@ internal class StatisticsDialog(context: Context) : Dialog(context) {
             val minutes = time / 60 % 60
             val hours = time / 3600
 
-            return String.format("%02d", hours) +
-                    ':'.toString() +
-                    String.format("%02d", minutes) +
-                    ':'.toString() +
-                    String.format("%02d", seconds)
+            return String.format("%02d:%02d:%02d", hours, minutes, seconds)
         }
     }
 }

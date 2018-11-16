@@ -249,11 +249,7 @@ internal class GameWonDialog(context: Context) : Dialog(context) {
             val minutes = time / 60 % 60
             val hours = time / 3600
 
-            return String.format("%02d", hours) +
-                    ':'.toString() +
-                    String.format("%02d", minutes) +
-                    ':'.toString() +
-                    String.format("%02d", seconds)
+            return String.format("%02d:%02d:%02d", hours, minutes, seconds)
         }
 
         private val middleSpacer = LinearLayout.LayoutParams(1, 1, 0.1f)

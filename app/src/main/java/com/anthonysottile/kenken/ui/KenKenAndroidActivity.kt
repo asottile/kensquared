@@ -2,6 +2,7 @@ package com.anthonysottile.kenken.ui
 
 import android.app.Activity
 import android.app.Dialog
+import android.app.DialogFragment
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -129,7 +130,7 @@ class KenKenAndroidActivity : Activity() {
 
     private fun showStatistics() {
         this.gameComponent.pauseIfNotPaused()
-        this.showDialog(KenKenAndroidActivity.StatisticsDialogId)
+        StatisticsDialog().show(this.fragmentManager, null)
     }
 
     private fun showAbout() {
@@ -139,7 +140,6 @@ class KenKenAndroidActivity : Activity() {
 
     override fun onCreateDialog(id: Int): Dialog? {
         return when (id) {
-            StatisticsDialogId -> StatisticsDialog(this)
             GameWonDialogId -> GameWonDialog(this)
             AboutDialogId -> AboutDialog(this)
             else -> null
@@ -148,8 +148,6 @@ class KenKenAndroidActivity : Activity() {
 
     override fun onPrepareDialog(id: Int, dialog: Dialog) {
         when (id) {
-            KenKenAndroidActivity.StatisticsDialogId ->
-                (dialog as StatisticsDialog).setValues()
             KenKenAndroidActivity.GameWonDialogId ->
                 (dialog as GameWonDialog).setup(
                         SettingsProvider.gameSize,
@@ -157,14 +155,12 @@ class KenKenAndroidActivity : Activity() {
                         this.gameWonNewHighScore,
                         this.gameWonTicks
                 )
-            KenKenAndroidActivity.AboutDialogId -> {
-            }
+            KenKenAndroidActivity.AboutDialogId -> {}
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = this.menuInflater
-        inflater.inflate(R.menu.menu, menu)
+        this.menuInflater.inflate(R.menu.menu, menu)
         return true
     }
 
@@ -181,7 +177,6 @@ class KenKenAndroidActivity : Activity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle item selection
         when (item.itemId) {
             R.id.newGame -> {
                 this.newGame()
@@ -212,7 +207,6 @@ class KenKenAndroidActivity : Activity() {
     }
 
     companion object {
-        private const val StatisticsDialogId = 1
         private const val GameWonDialogId = 2
         private const val AboutDialogId = 3
 

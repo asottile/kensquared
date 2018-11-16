@@ -18,9 +18,7 @@ internal class PreferencesDialog : DialogFragment() {
     private lateinit var dropdown: Spinner
     private lateinit var hardModeCheckBox: CheckBox
 
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, s: Bundle?): View {
         this.dialog.setTitle(R.string.preferences)
 
         val view = inflater.inflate(R.layout.preferences_dialog, container)
