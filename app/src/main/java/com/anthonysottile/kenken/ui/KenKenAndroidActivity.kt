@@ -22,17 +22,15 @@ class KenKenAndroidActivity : Activity() {
     private var gameWonTicks: Long = -1
 
     private fun gameWon(ticks: Long, size: Int) {
-        this@KenKenAndroidActivity.gameWonNewHighScore = StatisticsManager.gameEnded(
+        this.gameWonNewHighScore = StatisticsManager.gameEnded(
                 size,
                 SettingsProvider.hardMode,
                 ticks
         )
 
-        this@KenKenAndroidActivity.gameWonTicks = ticks
+        this.gameWonTicks = ticks
 
-        this@KenKenAndroidActivity.showDialog(
-                KenKenAndroidActivity.GameWonDialogId
-        )
+        this.showDialog(KenKenAndroidActivity.GameWonDialogId)
     }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
