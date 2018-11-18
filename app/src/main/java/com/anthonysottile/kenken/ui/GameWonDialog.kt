@@ -1,82 +1,77 @@
 package com.anthonysottile.kenken.ui
 
 import android.app.Dialog
+import android.app.DialogFragment
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.anthonysottile.kenken.R
+import com.anthonysottile.kenken.settings.SettingsProvider
 import com.anthonysottile.kenken.settings.StatisticsManager
 import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.*
 
-internal class GameWonDialog(context: Context) : Dialog(context) {
-    private lateinit var newHighScore: TextView
-    private lateinit var winTime: TextView
+internal class GameWonDialog : DialogFragment() {
+    private var highScore = false
+    private var ticks: Long = 0
 
-    private lateinit var gameSize: TextView
-    private lateinit var gameType: TextView
-    private lateinit var gamesPlayed: TextView
-    private lateinit var gamesWon: TextView
-    private lateinit var averageTime: TextView
-    private lateinit var bestTime: TextView
-    private lateinit var bestTimeDate: TextView
+    fun setup(highScore: Boolean, ticks: Long): GameWonDialog {
+        this.highScore = highScore
+        this.ticks = ticks
+        return this
+    }
 
-    fun setup(gameSize: Int, hardMode: Boolean, newHighScore: Boolean, ticks: Long) {
-        val statistics = StatisticsManager.getGameStatistics(gameSize, hardMode)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, s: Bundle?): View {
+        this.dialog.setTitle(R.string.youWin)
 
-        this.gamesPlayed.text = Integer.toString(statistics.gamesPlayed, 10)
-        this.gamesWon.text = Integer.toString(statistics.gamesWon, 10)
+        val view = inflater.inflate(R.layout.game_won_dialog, container)
 
-        this.averageTime.text = GameWonDialog.toTimeString(
-                statistics.totalSeconds / statistics.gamesWon
+        if (highScore) {
+            (view.findViewById(R.id.newHighScore) as TextView)
+                    .text = this.getString(R.string.newHighScore)
+        }
+
+        (view.findViewById(R.id.winTime) as TextView)
+                .text = GameWonDialog.toTimeString(ticks.toInt() / 1000)
+
+
+        val gameType = (view.findViewById(R.id.gameType) as TextView)
+        if (SettingsProvider.hardMode) {
+            gameType.text = this.getString(R.string.hard)
+        } else {
+            gameType.text = this.getString(R.string.normal)
+        }
+
+        (view.findViewById(R.id.gameSize) as TextView)
+                .text = Integer.toString(SettingsProvider.gameSize, 10)
+
+        val statistics = StatisticsManager.getGameStatistics(
+                SettingsProvider.gameSize, SettingsProvider.hardMode
         )
 
-        this.bestTime.text = GameWonDialog.toTimeString(statistics.bestTime)
+        (view.findViewById(R.id.gamesPlayed) as TextView)
+                .text = Integer.toString(statistics.gamesPlayed, 10)
+        (view.findViewById(R.id.gamesWon) as TextView)
+                .text = Integer.toString(statistics.gamesWon, 10)
+        (view.findViewById(R.id.averageTime) as TextView)
+                .text = GameWonDialog.toTimeString(statistics.totalSeconds / statistics.gamesWon)
+        (view.findViewById(R.id.bestTime) as TextView)
+                .text = GameWonDialog.toTimeString(statistics.bestTime)
+        (view.findViewById(R.id.bestTimeDate) as TextView)
+                .text = GameWonDialog.dateFormat.format(statistics.bestTimeDate)
 
-        this.bestTimeDate.text = GameWonDialog.dateFormat.format(statistics.bestTimeDate)
+        view.findViewById(R.id.okButton).setOnClickListener { _ -> this@GameWonDialog.dismiss() }
 
-        if (hardMode) {
-            this.gameType.text = this.context.getString(R.string.hard)
-        } else {
-            this.gameType.text = this.context.getString(R.string.normal)
-        }
-
-        this.gameSize.text = Integer.toString(gameSize, 10)
-        this.winTime.text = GameWonDialog.toTimeString(ticks.toInt() / 1000)
-
-        if (newHighScore) {
-            this.newHighScore.text = this.context.getString(R.string.newHighScore)
-        } else {
-            this.newHighScore.text = ""
-        }
+        return view
     }
-
-    public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        this.setTitle(context.getString(R.string.youWin))
-
-        this.setContentView(R.layout.game_won_dialog)
-        this.newHighScore = this.findViewById(R.id.newHighScore) as TextView
-        this.winTime = this.findViewById(R.id.winTime) as TextView
-
-        this.gameType = this.findViewById(R.id.gameType) as TextView
-        this.gameSize = this.findViewById(R.id.gameSize) as TextView
-        this.gamesPlayed = this.findViewById(R.id.gamesPlayed) as TextView
-        this.gamesWon = this.findViewById(R.id.gamesWon) as TextView
-        this.averageTime = this.findViewById(R.id.averageTime) as TextView
-        this.bestTime = this.findViewById(R.id.bestTime) as TextView
-        this.bestTimeDate = this.findViewById(R.id.bestTimeDate) as TextView
-
-        this.findViewById(R.id.okButton).setOnClickListener { _ -> this@GameWonDialog.dismiss() }
-    }
-
     companion object {
         private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
 

@@ -15,22 +15,16 @@ import org.json.JSONObject
 
 
 class KenKenAndroidActivity : Activity() {
-
     private lateinit var gameComponent: GameComponent
 
-    private var gameWonNewHighScore = false
-    private var gameWonTicks: Long = -1
-
     private fun gameWon(ticks: Long, size: Int) {
-        this.gameWonNewHighScore = StatisticsManager.gameEnded(
+        val highScore = StatisticsManager.gameEnded(
                 size,
                 SettingsProvider.hardMode,
                 ticks
         )
 
-        this.gameWonTicks = ticks
-
-        this.showDialog(KenKenAndroidActivity.GameWonDialogId)
+        GameWonDialog().setup(highScore, ticks).show(this.fragmentManager, null)
     }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
@@ -129,25 +123,6 @@ class KenKenAndroidActivity : Activity() {
     private fun showAbout() {
         this.gameComponent.pauseIfNotPaused()
         AboutDialog().show(this.fragmentManager, null)
-    }
-
-    override fun onCreateDialog(id: Int): Dialog? {
-        return when (id) {
-            GameWonDialogId -> GameWonDialog(this)
-            else -> null
-        }
-    }
-
-    override fun onPrepareDialog(id: Int, dialog: Dialog) {
-        when (id) {
-            KenKenAndroidActivity.GameWonDialogId ->
-                (dialog as GameWonDialog).setup(
-                        SettingsProvider.gameSize,
-                        SettingsProvider.hardMode,
-                        this.gameWonNewHighScore,
-                        this.gameWonTicks
-                )
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
