@@ -1,7 +1,6 @@
 package com.anthonysottile.kenken.ui
 
 import android.app.Activity
-import android.app.Dialog
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -173,8 +172,6 @@ class KenKenAndroidActivity : Activity() {
     }
 
     companion object {
-        private const val GameWonDialogId = 2
-
         private const val preferences = "com.anthonysottile.kenken"
         private const val saveGameBundleProperty = "SavedGame"
     }

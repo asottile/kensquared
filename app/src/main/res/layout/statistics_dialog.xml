@@ -12,7 +12,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:padding="10dp">
 
         <TextView
@@ -26,15 +25,14 @@
             android:id="@+id/gameSizesSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:entries="@array/gameSizes"
-            android:padding="10dp" />
+            android:layout_weight=".1"
+            android:entries="@array/gameSizes" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:padding="10dp">
 
         <TextView
@@ -45,7 +43,7 @@
             android:textSize="18sp" />
 
         <LinearLayout
-            android:layout_width="0dip"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".20"
             android:gravity="center">
@@ -67,7 +65,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
         android:paddingTop="3dp"
@@ -90,7 +87,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
         android:paddingTop="3dp"
@@ -113,7 +109,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
         android:paddingTop="3dp"
@@ -136,7 +131,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
         android:paddingTop="3dp"
@@ -159,7 +153,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
         android:paddingTop="3dp"

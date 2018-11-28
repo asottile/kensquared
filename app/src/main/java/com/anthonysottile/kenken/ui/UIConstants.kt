@@ -11,8 +11,6 @@ object UIConstants {
 
     const val BorderWidth = 2
 
-    const val StatisticsOneIndent = 20
-
     private var gridColor: Paint? = null
 
     private var cageColor: Paint? = null
