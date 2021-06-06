@@ -4,9 +4,7 @@
     android:versionCode="1"
     android:versionName="@string/version">
 
-    <!-- TODO: uncomment when debugging
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    -->
 
     <application
         android:icon="@drawable/ic_launcher"

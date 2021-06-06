@@ -1,16 +1,20 @@
 package com.anthonysottile.kenken.ui
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import android.widget.Toast
 import com.anthonysottile.kenken.R
 import com.anthonysottile.kenken.settings.SettingsProvider
 import com.anthonysottile.kenken.settings.StatisticsManager
 import com.anthonysottile.kenken.ui.GameComponent.GameState
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.FileInputStream
+import java.io.FileOutputStream
 
 
 class KenKenAndroidActivity : Activity() {
@@ -163,6 +167,28 @@ class KenKenAndroidActivity : Activity() {
                 this.showStatistics()
                 return true
             }
+            R.id.exportStatistics -> {
+                this.gameComponent.pauseIfNotPaused()
+                val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                    type = "application/json"
+                    putExtra(Intent.EXTRA_TITLE, "kensquared-statistics.json")
+                }
+                if (intent.resolveActivity(packageManager) != null) {
+                    startActivityForResult(intent, requestExportStatistics)
+                }
+                return true
+            }
+            R.id.importStatistics -> {
+                this.gameComponent.pauseIfNotPaused()
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+                    type = "application/json"
+                    putExtra(Intent.EXTRA_TITLE, "kensquared-statistics.json")
+                }
+                if (intent.resolveActivity(packageManager) != null) {
+                    startActivityForResult(intent, requestImportStatistics)
+                }
+                return true
+            }
             R.id.about -> {
                 this.showAbout()
                 return true
@@ -171,7 +197,33 @@ class KenKenAndroidActivity : Activity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (data == null) {
+            return
+        }
+        if (requestCode == requestExportStatistics && resultCode == Activity.RESULT_OK) {
+            this.contentResolver.openFileDescriptor(data.data, "w").use {
+                FileOutputStream(it.fileDescriptor).use {
+                    it.write(StatisticsManager.exportStatistics().toByteArray())
+                }
+            }
+        } else if (requestCode == requestImportStatistics && resultCode == Activity.RESULT_OK) {
+            this.contentResolver.openFileDescriptor(data.data, "r").use {
+                FileInputStream(it.fileDescriptor).use {
+                    if (StatisticsManager.importStatistics(it.bufferedReader().readText())) {
+                        this.gameComponent.clear()
+                        Toast.makeText(this, "statistics imported!", Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(this, "could not import statistics", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+        }
+    }
+
     companion object {
+        private const val requestExportStatistics = 1
+        private const val requestImportStatistics = 2
         private const val preferences = "com.anthonysottile.kenken"
         private const val saveGameBundleProperty = "SavedGame"
     }

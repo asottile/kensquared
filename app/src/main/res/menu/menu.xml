@@ -5,5 +5,7 @@
     <item android:id="@+id/pause" android:title="@string/pause" />
     <item android:id="@+id/preferences" android:title="@string/preferences" />
     <item android:id="@+id/statistics" android:title="@string/statistics" />
+    <item android:id="@+id/exportStatistics" android:title="@string/exportStatistics" />
+    <item android:id="@+id/importStatistics" android:title="@string/importStatistics" />
     <item android:id="@+id/about" android:title="@string/about" />
 </menu>

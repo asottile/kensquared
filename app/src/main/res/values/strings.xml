@@ -20,6 +20,8 @@
     <string name="check">Check</string>
     <string name="pause">Pause</string>
     <string name="resume">Resume</string>
+    <string name="exportStatistics">Export Statistics</string>
+    <string name="importStatistics">Import Statistics</string>
     <string name="about">About</string>
 
     <!-- end Menus -->

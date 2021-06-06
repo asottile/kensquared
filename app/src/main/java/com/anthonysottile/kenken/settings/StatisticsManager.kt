@@ -6,6 +6,7 @@ import com.anthonysottile.kenken.ui.UIConstants
 
 import org.json.JSONArray
 import org.json.JSONException
+import org.json.JSONObject
 
 object StatisticsManager {
     private const val Statistics = "Statistics"
@@ -20,16 +21,22 @@ object StatisticsManager {
         return gameSize - UIConstants.MinGameSize
     }
 
-    private fun saveGameStatistics() {
-        // Create JSON array
+    private fun statsJson(): JSONArray {
         val statsArray = JSONArray()
         this.statistics.forEach { statsArray.put(it.toJson()) }
+        return statsArray
+    }
+
+    private fun hardStatsJson(): JSONArray {
         val hardStatsArray = JSONArray()
         this.hardStatistics.forEach { hardStatsArray.put(it.toJson()) }
+        return hardStatsArray
+    }
 
+    private fun saveGameStatistics() {
         val editor = this.preferences.edit()
-        editor.putString(this.Statistics, statsArray.toString())
-        editor.putString(this.HardStatistics, hardStatsArray.toString())
+        editor.putString(this.Statistics, this.statsJson().toString())
+        editor.putString(this.HardStatistics, this.hardStatsJson().toString())
         editor.apply()
     }
 
@@ -74,6 +81,36 @@ object StatisticsManager {
     private fun clearHardStatistics() {
         this.hardStatistics = Array(UIConstants.GameSizes) { i ->
             GameStatistics(i + UIConstants.MinGameSize)
+        }
+    }
+
+    fun exportStatistics(): String {
+        val obj = JSONObject()
+        obj.put("stats", this.statsJson())
+        obj.put("hardStats", this.hardStatsJson())
+        return obj.toString()
+    }
+
+    fun importStatistics(statsString: String): Boolean {
+        try {
+            val obj = JSONObject(statsString)
+            val statsJson = obj.getJSONArray("stats")
+            val stats = Array(UIConstants.GameSizes) { i ->
+                GameStatistics(statsJson.getJSONObject(i))
+            }
+            val hardStatsJson = obj.getJSONArray("hardStats")
+            val hardStats = Array(UIConstants.GameSizes) { i ->
+                GameStatistics(hardStatsJson.getJSONObject(i))
+            }
+
+            this.statistics = stats
+            this.hardStatistics = hardStats
+            this.saveGameStatistics()
+
+            return true
+        } catch (e: JSONException) {
+            e.printStackTrace()
+            return false
         }
     }
 
