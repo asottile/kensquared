@@ -1,4 +1,4 @@
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/asottile/kenken/master.svg)](https://results.pre-commit.ci/latest/github/asottile/kenken/master)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/asottile/kenken/main.svg)](https://results.pre-commit.ci/latest/github/asottile/kenken/main)
 
 ## kensquared (kenken for android)
 
