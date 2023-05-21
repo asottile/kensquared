@@ -27,7 +27,7 @@ class KenKenAndroidActivity : Activity() {
                 ticks
         )
 
-        GameWonDialog().setup(highScore, ticks).show(this.fragmentManager, null)
+        GameWonDialog().setup(highScore, ticks, this).show(this.fragmentManager, null)
     }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,7 +99,7 @@ class KenKenAndroidActivity : Activity() {
         }
     }
 
-    private fun newGame() {
+    fun newGame() {
         val gameSize = SettingsProvider.gameSize
         StatisticsManager.gameStarted(gameSize, SettingsProvider.hardMode)
         this.gameComponent.newGame(gameSize)
