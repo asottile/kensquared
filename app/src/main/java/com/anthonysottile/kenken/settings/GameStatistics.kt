@@ -52,17 +52,17 @@ class GameStatistics {
 
     fun toJson(): JSONObject {
         val json = JSONObject()
-        json.put(GameStatistics.GameSize, this.gameSize)
-        json.put(GameStatistics.GamesPlayed, this.gamesPlayed)
-        json.put(GameStatistics.GamesWon, this.gamesWon)
-        json.put(GameStatistics.TotalSeconds, this.totalSeconds)
+        json.put(GameSize, this.gameSize)
+        json.put(GamesPlayed, this.gamesPlayed)
+        json.put(GamesWon, this.gamesWon)
+        json.put(TotalSeconds, this.totalSeconds)
 
         if (this.bestTimeDate != null) {
-            json.put(GameStatistics.BestTime, this.bestTime)
+            json.put(BestTime, this.bestTime)
             json.put(
-                    GameStatistics.BestTimeDate,
-                    GameStatistics.dateFormatter.format(
-                            this.bestTimeDate
+                    BestTimeDate,
+                    dateFormatter.format(
+                            this.bestTimeDate!!
                     )
             )
         }
@@ -71,15 +71,15 @@ class GameStatistics {
     }
 
     constructor(json: JSONObject) {
-        this.gameSize = json.getInt(GameStatistics.GameSize)
-        this.gamesPlayed = json.getInt(GameStatistics.GamesPlayed)
-        this.gamesWon = json.getInt(GameStatistics.GamesWon)
-        this.totalSeconds = json.getInt(GameStatistics.TotalSeconds)
+        this.gameSize = json.getInt(GameSize)
+        this.gamesPlayed = json.getInt(GamesPlayed)
+        this.gamesWon = json.getInt(GamesWon)
+        this.totalSeconds = json.getInt(TotalSeconds)
 
-        if (json.has(GameStatistics.BestTimeDate)) {
-            this.bestTime = json.getInt(GameStatistics.BestTime)
-            this.bestTimeDate = GameStatistics.dateFormatter.parse(
-                    json.getString(GameStatistics.BestTimeDate)
+        if (json.has(BestTimeDate)) {
+            this.bestTime = json.getInt(BestTime)
+            this.bestTimeDate = dateFormatter.parse(
+                    json.getString(BestTimeDate)
             )
         }
     }

@@ -68,19 +68,19 @@ class KenKenAndroidActivity : Activity() {
         this.gameComponent.pauseIfNotPaused()
     }
 
-    public override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+    public override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
 
         // Restore the saved state if applicable
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(KenKenAndroidActivity.saveGameBundleProperty)) {
-                val gameJsonString = savedInstanceState.getString(KenKenAndroidActivity.saveGameBundleProperty)
+        if (savedInstanceState.containsKey(KenKenAndroidActivity.saveGameBundleProperty)) {
+            val gameJsonString = savedInstanceState.getString(KenKenAndroidActivity.saveGameBundleProperty)
 
+            if (gameJsonString != null) {
                 if (gameJsonString.isNotEmpty()) {
                     try {
                         val gameAsJson = JSONObject(gameJsonString)
                         this.gameComponent.loadState(gameAsJson)
-                    } catch (e: JSONException) {
+                    } catch (_: JSONException) {
                     }
                 }
             }
@@ -202,14 +202,14 @@ class KenKenAndroidActivity : Activity() {
             return
         }
         if (requestCode == requestExportStatistics && resultCode == Activity.RESULT_OK) {
-            this.contentResolver.openFileDescriptor(data.data, "w").use {
-                FileOutputStream(it.fileDescriptor).use {
+            this.contentResolver.openFileDescriptor(data.data!!, "w").use {
+                FileOutputStream(it!!.fileDescriptor).use {
                     it.write(StatisticsManager.exportStatistics().toByteArray())
                 }
             }
         } else if (requestCode == requestImportStatistics && resultCode == Activity.RESULT_OK) {
-            this.contentResolver.openFileDescriptor(data.data, "r").use {
-                FileInputStream(it.fileDescriptor).use {
+            this.contentResolver.openFileDescriptor(data.data!!, "r").use {
+                FileInputStream(it!!.fileDescriptor).use {
                     if (StatisticsManager.importStatistics(it.bufferedReader().readText())) {
                         this.gameComponent.clear()
                         Toast.makeText(this, "statistics imported!", Toast.LENGTH_LONG).show()
