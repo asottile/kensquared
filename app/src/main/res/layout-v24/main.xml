@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:forceDarkAllowed="true"
+    android:background="#303030"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
@@ -26,6 +26,7 @@
 
     <TextView
         android:id="@+id/timerText"
+        android:textColor="#c1c1c1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"

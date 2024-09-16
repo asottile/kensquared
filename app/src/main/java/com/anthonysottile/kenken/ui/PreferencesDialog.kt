@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.Spinner
 import com.anthonysottile.kenken.R
@@ -21,13 +22,13 @@ internal class PreferencesDialog : DialogFragment() {
         val hardModeCheckBox = view.findViewById(R.id.hardModeCheckbox) as CheckBox
         hardModeCheckBox.isChecked = SettingsProvider.hardMode
 
-        view.findViewById(R.id.okButton).setOnClickListener { _ ->
+        view.findViewById<Button>(R.id.okButton).setOnClickListener { _ ->
             SettingsProvider.gameSize = dropdown.selectedItemPosition + UIConstants.MinGameSize
             SettingsProvider.hardMode = hardModeCheckBox.isChecked
 
             this.dismiss()
         }
-        view.findViewById(R.id.cancelButton).setOnClickListener { _ -> this.dismiss() }
+        view.findViewById<Button>(R.id.cancelButton).setOnClickListener { _ -> this.dismiss() }
 
         return view
     }

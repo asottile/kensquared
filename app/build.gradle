@@ -1,15 +1,14 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 android {
-    compileSdkVersion 19
-    buildToolsVersion '28.0.3'
+    compileSdk 33
     defaultConfig {
         applicationId "com.anthonysottile.kenken"
         minSdkVersion 19
-        targetSdkVersion 19
+        targetSdkVersion 33
         compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_8
-            targetCompatibility JavaVersion.VERSION_1_8
+            sourceCompatibility JavaVersion.VERSION_17
+            targetCompatibility JavaVersion.VERSION_17
         }
 
         testApplicationId "com.anthonysottile.kenken.test"
@@ -21,13 +20,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+    namespace 'com.anthonysottile.kenken'
     productFlavors {
     }
 }
 dependencies {
     androidTestImplementation 'junit:junit:4.12'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-}
-repositories {
-    mavenCentral()
 }
