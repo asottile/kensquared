@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import com.anthonysottile.kenken.R
 import com.anthonysottile.kenken.settings.SettingsProvider
@@ -15,10 +16,12 @@ import java.util.*
 internal class GameWonDialog : DialogFragment() {
     private var highScore = false
     private var ticks: Long = 0
+    private var kenKenAndroidActivity: KenKenAndroidActivity? = null
 
-    fun setup(highScore: Boolean, ticks: Long): GameWonDialog {
+    fun setup(highScore: Boolean, ticks: Long, kenKenAndroidActivity: KenKenAndroidActivity): GameWonDialog {
         this.highScore = highScore
         this.ticks = ticks
+        this.kenKenAndroidActivity = kenKenAndroidActivity
         return this
     }
 
@@ -33,7 +36,7 @@ internal class GameWonDialog : DialogFragment() {
         }
 
         (view.findViewById(R.id.winTime) as TextView)
-                .text = GameWonDialog.toTimeString(ticks.toInt() / 1000)
+                .text = toTimeString(ticks.toInt() / 1000)
 
 
         val gameType = (view.findViewById(R.id.gameType) as TextView)
@@ -55,13 +58,15 @@ internal class GameWonDialog : DialogFragment() {
         (view.findViewById(R.id.gamesWon) as TextView)
                 .text = Integer.toString(statistics.gamesWon, 10)
         (view.findViewById(R.id.averageTime) as TextView)
-                .text = GameWonDialog.toTimeString(statistics.totalSeconds / statistics.gamesWon)
+                .text = toTimeString(statistics.totalSeconds / statistics.gamesWon)
         (view.findViewById(R.id.bestTime) as TextView)
-                .text = GameWonDialog.toTimeString(statistics.bestTime)
+                .text = toTimeString(statistics.bestTime)
         (view.findViewById(R.id.bestTimeDate) as TextView)
-                .text = GameWonDialog.dateFormat.format(statistics.bestTimeDate)
+                .text = dateFormat.format(statistics.bestTimeDate!!)
 
-        view.findViewById(R.id.okButton).setOnClickListener { _ -> this@GameWonDialog.dismiss() }
+        view.findViewById<Button>(R.id.newGameButton).setOnClickListener { _ -> this@GameWonDialog.dismiss()
+            this.kenKenAndroidActivity!!.newGame() }
+        view.findViewById<Button>(R.id.okButton).setOnClickListener { _ -> this@GameWonDialog.dismiss() }
 
         return view
     }

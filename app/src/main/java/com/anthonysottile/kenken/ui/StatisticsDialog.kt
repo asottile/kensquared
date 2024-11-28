@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.Spinner
 import android.widget.TextView
@@ -75,8 +76,8 @@ internal class StatisticsDialog : DialogFragment() {
         this.bestTime = view.findViewById(R.id.bestTime) as TextView
         this.bestTimeDate = view.findViewById(R.id.bestTimeDate) as TextView
 
-        view.findViewById(R.id.okButton).setOnClickListener { _ -> this.dismiss() }
-        view.findViewById(R.id.clearButton).setOnClickListener { _ ->
+        view.findViewById<Button>(R.id.okButton).setOnClickListener { _ -> this.dismiss() }
+        view.findViewById<Button>(R.id.clearButton).setOnClickListener { _ ->
             AlertDialog.Builder(view.context)
                     .setMessage(R.string.confirmClear)
                     .setCancelable(false)
